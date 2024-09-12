@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>UART通信 | GBY's Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="">
+  <meta name="theme-color" content="#10b981">
+
+  <link rel="canonical" href="https://skina.cn/UART/">
+
+  <link rel="shortcut icon" href="/">
+
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+
+  
+  <meta name="description" content="2.5 UART通信理论知识物理信号硬件电路引脚 实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND） Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线    接地方式   设备一 设备二">
+<meta property="og:type" content="article">
+<meta property="og:title" content="UART通信">
+<meta property="og:url" content="https://skina.cn/UART/index.html">
+<meta property="og:site_name" content="GBY&#39;s Blog">
+<meta property="og:description" content="2.5 UART通信理论知识物理信号硬件电路引脚 实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND） Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线    接地方式   设备一 设备二">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-09-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-12T13:41:24.926Z">
+<meta property="article:author" content="GBYYY.">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="单片机">
+<meta name="twitter:card" content="summary">
+
+  <style>
+    :root {
+      --sea-color-primary: #10b981;
+    }
+  </style>
+
+  
+<script src="/js/theme_mode.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <header class="sea-header">
+    <nav class="sea-nav-wrap">
+  <h1 class="sea-nav-logo" title="">
+    <a href="/">GBY's Blog</a>
+  </h1>
+  <div class="sea-nav-menus">
+    <div id="sea-nav-toggle">
+      <svg t="1716965724278" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10878" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M950.857143 768v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429v-73.142857c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z m0-292.571429v73.142858c0 20.004571-16.566857 36.571429-36.571429 36.571428H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571428v-73.142858c0-20.004571 16.566857-36.571429 36.571429-36.571428h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571428z m0-292.571428v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429V182.857143c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z" p-id="10879"></path></svg>
+    </div>
+
+    <div class="sea-menu-wrap">
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/"
+    >
+      Home
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/links"
+    >
+      Links
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/archives/"
+    >
+      Archives
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/categories/"
+    >
+      Categories
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/tags/"
+    >
+      Tags
+    </a>
+  
+
+  <span class="sea-menu-sep">|</span>
+
+  
+
+  <span class="sea-menu-icon" id="sea-theme-dark">
+    <svg t="1725413107294" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10118" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M557.553778 976.355556c-257.265778 0-466.56-207.160889-466.56-464.426667 0-253.923556 206.577778-464.284444 460.501333-464.284445h0.355556c10.766222 0 20.622222 3.953778 25.443555 13.610667 4.878222 9.756444 3.740444 20.394667-2.915555 29.027556-55.722667 72.220444-85.162667 158.108444-85.162667 249.372444 0 225.891556 183.779556 409.386667 409.671111 409.386667l5.248-0.256c10.325333-0.142222 20.977778 5.859556 25.841778 15.644444a28.302222 28.302222 0 0 1-2.915556 30.051556C837.902222 910.08 703.203556 976.355556 557.553778 976.355556zM495.274667 105.016889C299.192889 135.281778 147.882667 306.161778 147.882667 509.809778c0 225.877333 183.779556 409.656889 409.671111 409.656889 108.686222 0 210.403556-42.055111 286.577778-116.977778-231.566222-27.192889-411.804444-224.625778-411.804445-463.36 0-83.427556 21.617778-163.299556 62.947556-234.112z" fill="" p-id="10119"></path><path d="M578.830222 879.132444c-186.865778 0-345.784889-133.418667-377.841778-317.269333a14.222222 14.222222 0 1 1 28.017778-4.878222c29.681778 170.183111 176.810667 293.703111 349.824 293.703111a14.222222 14.222222 0 1 1 0 28.444444zM209.991111 531.2c-7.537778 0-13.838222-6.997333-14.193778-14.606222-0.312889-6.584889-0.483556-13.795556-0.483555-20.465778 0-7.864889 6.357333-14.492444 14.222222-14.492444s14.222222 6.229333 14.222222 14.094222c0 6.229333 0.170667 13.425778 0.455111 19.584 0.369778 7.850667-5.674667 15.886222-13.525333 15.886222h-0.696889z" fill="" p-id="10120"></path><path d="M622.350222 309.930667m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10121"></path><path d="M787.072 188.273778m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10122"></path><path d="M731.960889 415.303111m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" p-id="10123"></path></svg>
+  </span>
+  <span class="sea-menu-icon" id="sea-theme-light">
+    <svg t="1725410359322" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4274" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 768c-141.376 0-256-114.624-256-256s114.624-256 256-256 256 114.624 256 256-114.624 256-256 256z m0-85.333333a170.666667 170.666667 0 1 0 0-341.333334 170.666667 170.666667 0 0 0 0 341.333334zM469.333333 85.333333a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0V85.333333z m0 768a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0v-85.333334zM85.333333 554.666667a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334H85.333333z m768 0a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334h-85.333334zM161.834667 222.165333a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m576 576a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m-515.669334 64a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z m576-576a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z" p-id="4275"></path></svg>
+  </span>
+
+  <span id="sea-menu-close-icon">
+    <svg t="1725435896874" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4408" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M556.8 512l265.6-265.6c12.8-12.8 12.8-32 0-44.8s-32-12.8-44.8 0L512 467.2 246.4 201.6c-12.8-12.8-32-12.8-44.8 0s-12.8 32 0 44.8l265.6 265.6-265.6 265.6c-12.8 12.8-12.8 32 0 44.8 6.4 6.4 12.8 9.6 22.4 9.6s16-3.2 22.4-9.6l265.6-265.6 265.6 265.6c6.4 6.4 16 9.6 22.4 9.6s16-3.2 22.4-9.6c12.8-12.8 12.8-32 0-44.8L556.8 512z" p-id="4409"></path></svg>
+  </span>
+</div>
+<div id="sea-nav-dimmer"></div>
+  </div>
+</nav>
+  </header>
+  <main id="sea-main-wrapper">
+    <article class="sea-page-card-wrapper">
+  <header class="sea-article-header">
+    <h1 class="sea-article-title">UART通信</h1>
+    
+      <div class="sea-post-meta sea-post-meta__center">
+        <div class="sea-post-time">
+  <svg t="1716964550804" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2621" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M805.49888 981.49888l-602.3168-0.76288c-86.59456-8.192-154.56768-81.3056-154.56768-170.01472L48.6144 291.73248c0-94.1568 76.60032-170.75712 170.7776-170.75712l586.10176 0c94.1568 0 170.73152 76.60032 170.73152 170.75712L976.22528 810.7008C976.2304 904.87296 899.63008 981.49888 805.49888 981.49888L805.49888 981.49888zM219.3664 190.57152c-55.79776 0-101.20192 45.38368-101.20192 101.18144l0 518.96832c0 55.79776 45.40416 101.20704 101.20192 101.20704l586.13248 0c55.77728 0 101.16096-45.40928 101.16096-101.20704L906.65984 291.73248c0-55.79776-45.38368-101.18656-101.16096-101.18656L219.3664 190.54592 219.3664 190.57152zM698.84416 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L745.22624 244.1216C745.22624 269.7472 724.46976 290.51904 698.84416 290.51904L698.84416 290.51904zM315.65824 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L362.04032 244.1216C362.04032 269.7472 341.28896 290.51904 315.65824 290.51904L315.65824 290.51904zM534.8864 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C581.26848 774.01088 560.4864 794.78784 534.8864 794.78784L534.8864 794.78784zM930.79552 452.608 121.24672 452.608c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l809.5744 0c25.6 0 46.38208 20.77696 46.38208 46.38208C977.2032 431.82592 956.42624 452.608 930.79552 452.608L930.79552 452.608zM327.92576 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208C374.30784 628.25472 353.52576 649.03168 327.92576 649.03168L327.92576 649.03168zM534.8864 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208S560.4864 649.03168 534.8864 649.03168L534.8864 649.03168zM741.27872 649.03168l-44.26752 0c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.77696 46.38208 46.38208C787.6608 628.25472 766.90944 649.03168 741.27872 649.03168L741.27872 649.03168zM327.92576 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C374.30784 774.01088 353.52576 794.78784 327.92576 794.78784L327.92576 794.78784zM741.27872 794.78784l-44.26752 0c-25.60512 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.78208 46.38208 46.38208C787.6608 774.01088 766.90944 794.78784 741.27872 794.78784L741.27872 794.78784z" p-id="2622"></path></svg>
+  <time datetime="2024-09-09T16:00:00.000Z">2024-09-10</time>
+</div>
+        
+        
+  <div class="sea-post-tags">
+    <svg t="1716964811431" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6117" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M384 977.152c-20.5312 0-39.8336-7.9872-54.3232-22.4256l-260.4032-260.4032c-14.4896-14.4896-22.4256-33.7408-22.4256-54.3232s7.9872-39.8336 22.4256-54.3232l439.6032-439.6032c24.9344-24.9344 70.2464-43.7248 105.5232-43.7248h230.4c42.3424 0 76.8 34.4576 76.8 76.8v230.4c0 35.2256-18.7904 80.5888-43.6736 105.5232l-439.6032 439.6032a76.1856 76.1856 0 0 1-54.3232 22.4256zM614.4 153.6c-21.248 0-54.272 13.6704-69.2736 28.7232l-439.6032 439.6032c-4.8128 4.8128-7.424 11.2128-7.424 18.1248s2.6624 13.312 7.424 18.0736l260.4032 260.4032c4.8128 4.8128 11.2128 7.424 18.1248 7.424s13.312-2.6624 18.1248-7.424l439.6032-439.6032c15.0016-15.0016 28.7232-48.0768 28.7232-69.3248V179.2a25.6 25.6 0 0 0-25.6-25.6h-230.4z" p-id="6118"></path><path d="M742.4 358.4c-42.3424 0-76.8-34.4576-76.8-76.8S700.0576 204.8 742.4 204.8s76.8 34.4576 76.8 76.8S784.7424 358.4 742.4 358.4z m0-102.4a25.6 25.6 0 1 0 0 51.2 25.6 25.6 0 0 0 0-51.2z" p-id="6119"></path></svg>
+    <a class="tag-link" href="/tags/STM32/" rel="tag">STM32</a> , <a class="tag-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a> , <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a>
+  </div>
+
+      </div>
+    
+  </header>
+  <div class="sea-article-content sea-doc">
+    <h1 id="2-5-UART通信"><a href="#2-5-UART通信" class="headerlink" title="2.5 UART通信"></a>2.5 UART通信</h1><h2 id="理论知识"><a href="#理论知识" class="headerlink" title="理论知识"></a>理论知识</h2><h3 id="物理信号"><a href="#物理信号" class="headerlink" title="物理信号"></a>物理信号</h3><h4 id="硬件电路引脚"><a href="#硬件电路引脚" class="headerlink" title="硬件电路引脚"></a>硬件电路引脚</h4><ul>
+<li>实现模块点对点通信</li>
+<li>在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND）<ul>
+<li>Rx，Receiver，接收端</li>
+<li>Tx，Transmitter，发送端</li>
+<li>GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低</li>
+<li>部分具有流控策略的设备还需 RTS &amp; CTS 两根线</li>
+</ul>
+</li>
+</ul>
+<h4 id="接地方式"><a href="#接地方式" class="headerlink" title="接地方式"></a>接地方式</h4><table>
+<thead>
+<tr>
+<th>设备一</th>
+<th>设备二</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RXD</td>
+<td>TXD</td>
+</tr>
+<tr>
+<td>TXD</td>
+<td>RXD</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>GND</td>
+</tr>
+</tbody></table>
+<h4 id="信号与电平格式"><a href="#信号与电平格式" class="headerlink" title="信号与电平格式"></a>信号与电平格式</h4><ul>
+<li>传输0&#x2F;1码元</li>
+<li>高电平为1（3.3V），低电平为0（0V）</li>
+</ul>
+<h4 id="比特率与波特率"><a href="#比特率与波特率" class="headerlink" title="比特率与波特率"></a>比特率与波特率</h4><ul>
+<li>比特率（ bit&#x2F;s，bps ）：每秒钟传输二进制码元数量</li>
+<li>波特率（ symbol&#x2F;s )：每秒钟传输有效信息码元的数量</li>
+<li>UART通信中，比特率&#x3D;波特率</li>
+<li><strong>例</strong> 十六进制字符编码中，如果一秒传输1000个字符，每个字符对应一种唯一的电平信号，那么波特率就是1000symbol&#x2F;s；由于一个十六进制字符要用四位二进制编码表示，那么它的比特率就是4000bit&#x2F;s</li>
+</ul>
+<h4 id="异步通信（Async）"><a href="#异步通信（Async）" class="headerlink" title="异步通信（Async）"></a>异步通信（Async）</h4><p>不需等待某一方时钟信号同步后再发送，但通信内容较长时可能会因时钟不统一而错位。</p>
+<p><em>如何解决错位问题呢？</em></p>
+<p>可通过多次采样发现甚至解决错位问题（常见采样次数为8和16）</p>
+<p>* 对于USART（即UART &amp; SART）通信，这种SART具有时钟线同步策略。</p>
+<h4 id="收发模式"><a href="#收发模式" class="headerlink" title="收发模式"></a>收发模式</h4><p>仅接受、仅发送、收发双向。</p>
+<h3 id="链路传输"><a href="#链路传输" class="headerlink" title="链路传输"></a>链路传输</h3><h4 id="UART协议"><a href="#UART协议" class="headerlink" title="UART协议"></a>UART协议</h4><ul>
+<li>点到点通信</li>
+<li>仅有校验与帧格式</li>
+<li>没有地址或ID的概念</li>
+<li>没有冲突检测、避免和仲裁的说法</li>
+<li>没有地址便没有滤波器与掩码</li>
+</ul>
+<h4 id="误码校验"><a href="#误码校验" class="headerlink" title="误码校验"></a>误码校验</h4><p><em>Why?</em></p>
+<p>减少硬件偶然错误的信息编码被解析利用</p>
+<p>但仍可能存在强干扰化境导致信道电压波动而改变电平</p>
+<p><em>如何实现？</em></p>
+<p><strong>奇偶校验算法</strong></p>
+<ul>
+<li>对已发送的一段比特流进行计算，统计1的个数决定1bit的校验位<ul>
+<li>偶数个1为0，奇数个1为1，则是偶校验</li>
+<li>奇数个1为0，偶数个1为1，则是奇校验</li>
+</ul>
+</li>
+<li>等效于异或操作，对前面的比特流进行异或<ul>
+<li>异或结果直接作为校验位，是偶校验</li>
+<li>异或结果取反作为校验位，是奇校验</li>
+</ul>
+</li>
+<li><strong>例</strong> 01010101，偶校验位为0，奇校验位为1</li>
+</ul>
+<h4 id="UART帧数据格式"><a href="#UART帧数据格式" class="headerlink" title="UART帧数据格式"></a>UART帧数据格式</h4><table>
+<thead>
+<tr>
+<th>分段</th>
+<th>长度 bit</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>起始位</td>
+<td>1</td>
+<td>标志帧起始，必须为低电平0</td>
+</tr>
+<tr>
+<td>数据位</td>
+<td>5~8</td>
+<td>先发低位后发高位，一般常见的都是8位，也就是一个字节.  也有7位的,相当于发ASCII码</td>
+</tr>
+<tr>
+<td>校验位</td>
+<td>1</td>
+<td>将数据位通过奇偶校验算法得到的值放入该位</td>
+</tr>
+<tr>
+<td>停止位</td>
+<td>1</td>
+<td>标志帧结束，必须为高电平1</td>
+</tr>
+<tr>
+<td>空闲位</td>
+<td>%</td>
+<td>链路上不传输任何信息，必须为高电平1</td>
+</tr>
+</tbody></table>
+<h3 id="通信方式"><a href="#通信方式" class="headerlink" title="通信方式"></a>通信方式</h3><h4 id="阻塞式通信"><a href="#阻塞式通信" class="headerlink" title="阻塞式通信"></a>阻塞式通信</h4><p>发送一段数据，在没有发送完所有数据之前，一直停留在此发送函数（可设定阻塞时间），这个过程中会阻塞别的程序运行；</p>
+<h4 id="中断式通信"><a href="#中断式通信" class="headerlink" title="中断式通信"></a>中断式通信</h4><p>发送数据的过程在中断中进行，这个中断实际上是发送数据寄存器空的中断。</p>
+<p>比如说你要发送10个字节的数据，那么这10个字节肯定不会一次性发送完，只能是一个一个字节地发送。每发送一个字节，发送数据寄存器就会有一个为空的标志，以提示可以发送下一个字节了，这样在发送数据的过程中CPU不会一直在等待，而是用中断来提示需要进行发送的时候再发送。不影响主程序进行。</p>
+<h4 id="DMA中断通信"><a href="#DMA中断通信" class="headerlink" title="DMA中断通信"></a>DMA中断通信</h4><p>DMA（Direct Memory Access，直接内存访问）是一种计算机系统中用于数据传输的机制。它允许数据在外设和内存之间直接传输，而不需要CPU的介入，从而减轻了CPU的负担，提高了数据传输的效率。</p>
+<p>举个栗子：</p>
+<blockquote>
+<p>想象一下我们搬家的场景：你要把家里的一些东西从旧房子搬到新房子。在传统的情况下，你可能要亲自搬每一箱东西，把它们从旧房子搬到新房子。这就相当于CPU传统地处理数据传输的方式。<br>现在，有一支搬家队，他们专门负责搬家。你只需要告诉他们从哪里搬，搬到哪里，然后他们就会自己完成这项任务。而你可以利用这段时间去做其他事情，不需要亲自动手。这就有点类似于DMA的工作原理。<br>在计算机中，CPU通常会处理数据的传输工作，就像你亲自搬家一样。但有了DMA，就好比有了一支专门负责数据传输的队伍。CPU只需要告诉DMA从哪里搬，搬到哪里，然后就可以去处理其他任务了。DMA负责在外设和内存之间直接传输数据，而不需要CPU一直参与。</p>
+</blockquote>
+<p>简而言之，DMA就像是一支搬家队伍，负责在不需要CPU亲自操劳的情况下完成数据传输任务，从而提高了系统的效率。</p>
+<p><em>该内容摘抄自CSDN<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_54015326/article/details/135753656">TM32CubeMx+HAL库：USART串口收发数据的三种方式</a></em></p>
+<h4 id="空闲中断"><a href="#空闲中断" class="headerlink" title="空闲中断"></a>空闲中断</h4><p>当单片机的UART歇下来的时候，会把之前连续接收的内容自动拼装成一段有效的信息存到缓冲区中</p>
+<h4 id="DMA空闲中断"><a href="#DMA空闲中断" class="headerlink" title="DMA空闲中断"></a>DMA空闲中断</h4><h3 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h3><h4 id="阻塞式"><a href="#阻塞式" class="headerlink" title="阻塞式"></a>阻塞式</h4><ul>
+<li>配置UART通信模块USART1</li>
+<li>设置USART1为 asynchronous 模式<ul>
+<li>设置波特率为115200</li>
+<li>设置数据长度为8bit</li>
+<li>不需要奇偶校验</li>
+<li>一位停止位</li>
+<li>收发双向通信</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明变量以存储UART的收发数据</span></span><br><span class="line"><span class="type">uint8_t</span> RxData[<span class="number">10</span>];</span><br><span class="line"><span class="type">uint8_t</span> TxData[<span class="number">10</span>]=<span class="string">&quot;test&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);</span><br><span class="line">HAL_Delay(<span class="number">500</span>);</span><br><span class="line">HAL_UART_Transmit(&amp;huart1, TxData, <span class="number">3</span>, <span class="number">1000</span>);</span><br><span class="line">HAL_UART_Receive(&amp;huart1, RxData, <span class="number">3</span>, <span class="number">1000</span>);</span><br><span class="line"><span class="keyword">if</span>(RxData[<span class="number">0</span>] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">&#123;</span><br><span class="line">  HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_5);</span><br><span class="line">  RxData[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="中断式"><a href="#中断式" class="headerlink" title="中断式"></a>中断式</h4><ul>
+<li>注意要配置 使能 USART1 global interrupt</li>
+<li>主函数负责发送，中断回调函数负责就收</li>
+<li>随意收发长数据</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明变量以存储UART的收发数据</span></span><br><span class="line"><span class="type">uint8_t</span> RxData[<span class="number">10</span>];</span><br><span class="line"><span class="type">uint8_t</span> TxData[<span class="number">10</span>]=<span class="string">&quot;test&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);</span><br><span class="line">	HAL_UART_Transmit_IT(&amp;huart1, TxData, <span class="number">5</span>);</span><br><span class="line">	HAL_Delay(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义中断实函数</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UART_RxCpltCallback</span><span class="params">(UART_HandleTypeDef *huart)</span> &#123;</span><br><span class="line">	<span class="type">uint8_t</span> ReceiveData[<span class="number">10</span>]=<span class="string">&quot;okkk&quot;</span>;</span><br><span class="line">	<span class="keyword">if</span>(huart==&amp;huart1) &#123;</span><br><span class="line">		HAL_UART_Transmit_IT(&amp;huart1, ReceiveData, <span class="number">5</span>);</span><br><span class="line">		HAL_UART_Receive_IT(&amp;huart1, RxData, <span class="number">5</span>);</span><br><span class="line">		<span class="keyword">if</span>(RxData[<span class="number">0</span>]==<span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">			HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_5);</span><br><span class="line">			RxData[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="空闲中断-1"><a href="#空闲中断-1" class="headerlink" title="空闲中断"></a>空闲中断</h4><ul>
+<li>实现UART随意发送定长数据，可接收一定长度以内的数据</li>
+<li>主函数只负责发送，中断回调函数负责接收</li>
+</ul>
+<p>代码在 中断式 的程序基础上修改</p>
+<ul>
+<li><code>HAL_UART_Receive_IT(&amp;huart1,ExData,5);</code> 换成<code> HAL_UARTEx_ReceiveToIdle_IT(&amp;huart1, RxData, 5);</code></li>
+<li>中断回调函数名称改为 <code>void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)</code></li>
+</ul>
+<h4 id="DMA中断"><a href="#DMA中断" class="headerlink" title="DMA中断"></a>DMA中断</h4><ul>
+<li><p>配置USART的DMA中断</p>
+<ul>
+<li>Cube使能UART中断</li>
+<li>添加发送DMA</li>
+<li>添加接收DMA</li>
+<li>DMA选项<ul>
+<li>普通模式：支持定时搬运或代码主动调用搬运</li>
+<li>循环模式：一直搬运</li>
+<li>搬运时，内存需要<strong>自增地址</strong>，否则一段话会搬运到同一个地方去造成覆盖</li>
+<li>FIFO（First In First Out）<ul>
+<li>当接收信息太多时，DMA可能搬不过来。FIFO队列可以先把来不及搬运的内容缓存下来排队，一个一个让DMA搬运，但代价是让信息的时效性降低</li>
+<li>代价比较：信息丢失 vs 信息时效性差，根据这个来决定是否使用FIFO以及FIFO的长度</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>实现UART随意收发定长数据</p>
+</li>
+<li><p>主函数只负责发送，中断回调函数负责接收</p>
+</li>
+</ul>
+<p>代码在 中断式 的基础上进行修改（即 将 IT 换为 DMA ）</p>
+<ul>
+<li>将 <code>HAL_UART_Transmit_IT(&amp;huart1, TxData, 5);</code>换为<code>HAL_UART_ Transmit_DMA(&amp;huart1, TxData, 5);</code></li>
+<li>将<code>HAL_UART_Receive_IT(&amp;huart1, RxData, 5);</code>换成<code>HAL_UART_Receive_DMA(&amp;huart1, RxData, 5);</code></li>
+</ul>
+<h4 id="DMA空闲中断-1"><a href="#DMA空闲中断-1" class="headerlink" title="DMA空闲中断"></a>DMA空闲中断</h4><ul>
+<li>UART随意收发定长数据，可接收一定长度内的数据</li>
+<li>主函数只负责发送，中断回调函数负责接收</li>
+</ul>
+<p>代码在 DMA中断 的基础上进行修改</p>
+<ul>
+<li>将 <code>HAL_UART_Receive_DMA(&amp;huart1, TxData, 5);</code>换为<code>HAL_UARTEx_ReceiveToIdle_DMA(&amp;huart1, TxData, 5);</code></li>
+<li>将中断回调函数名改为<code>HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)</code></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>阻塞式<ul>
+<li><code>HAL_UART_Transmit(&amp;huart1, TxData, 5, 1000);</code></li>
+<li><code>HAL_UART_Receive(&amp;huart1, RxData, 5, 1000);</code></li>
+</ul>
+</li>
+<li>中断式（使能中断）<ul>
+<li><code>void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)&#123;&#125;</code></li>
+<li><code>HAL_UART_Transmit_IT(&amp;huart1, TxData, 5);</code></li>
+<li><code>HAL_UART_Receive_IT(&amp;huart1, RxData, 5);</code></li>
+</ul>
+</li>
+<li>空闲中断（使能中断）<ul>
+<li><code>void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)&#123;&#125;</code></li>
+<li><code>HAL_UART_Transmit_IT(&amp;huart1, TxData, 5);</code></li>
+<li><code>HAL_UARTEx_ReceiveToIdle_IT(&amp;huart1, RxData, 5);</code></li>
+</ul>
+</li>
+<li>DMA中断（配置DMA且使能中断）<ul>
+<li><code>void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)&#123;&#125;</code></li>
+<li><code>HAL_UART_Transmit_DMA(&amp;huart1, TxData, 5);</code></li>
+<li><code>HAL_UART_Receive_DMA(&amp;huart1, RxData, 5);</code></li>
+</ul>
+</li>
+<li>DMA空闲中断（配置DMA且使能中断）<ul>
+<li><code>void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)&#123;&#125;</code></li>
+<li><code>HAL_UART_Transmit_DMA(&amp;huart1, TxData, 5);</code></li>
+<li><code>HAL_UARTEx_ReceiveToIdle_DMA(&amp;huart1, RxData, 5);</code></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+
+  
+    
+  <div class="sea-prev-next-wrapper">
+    
+      <div class="prev">
+        <span><</span>
+        <a class="link" href="/binary_and_code/">
+          进制与编码
+        </a>
+      </div>
+    
+    
+      <div class="next">
+        <a class="link" href="/TIM_timer_interrupt/">
+          TIM定时器中断
+        </a>
+        <span>></span>
+      </div>
+    
+  </div>
+
+  
+</article>
+
+
+  </main>
+  <footer id="sea-footer-container">
+  <div class="sea-footer-row">
+    <div class="sea-footer-menu-link">
+      
+        <a
+          class="sea-footer-link"
+          
+            target="_blank"
+          
+          href="https://github.com/SkinCrab"
+        >
+          Github
+        </a>
+        <span class="sea-footer-link__dot">·</span>
+      
+        <a
+          class="sea-footer-link"
+          
+            target="_blank"
+          
+          href="https://t.me/aDeleted_user"
+        >
+          Telegram
+        </a>
+        <span class="sea-footer-link__dot">·</span>
+      
+    </div>
+  </div>
+  
+  
+  <div class="sea-footer-row">
+    <div class="sea-footer-copyright">
+      <span>©</span>
+      
+        2024
+      
+      <span>·</span>
+      GBYYY.
+    </div>
+    <span class="split-line">|</span>
+    <div class="sea-footer-theme-by">
+      Theme by <a class="theme" href="https://github.com/hai-zou/hexo-theme-sea" target="_blank">Sea</a>
+    </div>
+  </div>
+</footer>
+
+  
+<script src="/js/main.js"></script>
+
+
+<script src="/js/theme.js"></script>
+
+</body>
+</html>
