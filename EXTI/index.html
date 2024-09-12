@@ -18,12 +18,12 @@
 
 
   
-  <meta name="description" content="2.3 外部中断EXTI单片机代码执行原理中断 抢占优先级 子优先级  虚函数前缀 __weak  若实函数存在则用实函数，否则使用虚函数 工程配置 按键 查找引脚 设置外部中断通道  检测模式选择 输入模式选择 使能    12345678910void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)&#123;	switch(GPIO_Pin)&#123;">
+  <meta name="description" content="2.3 外部中断EXTI 单片机代码执行原理 中断  抢占优先级 子优先级  虚函数 前缀 __weak 若实函数存在则用实函数，否则使用虚函数 工程配置  按键  查找引脚 设置外部中断通道 检测模式选择 输入模式选择 使能   12345678910void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)&#123;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="外部中断EXTI">
 <meta property="og:url" content="https://skina.cn/EXTI/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="2.3 外部中断EXTI单片机代码执行原理中断 抢占优先级 子优先级  虚函数前缀 __weak  若实函数存在则用实函数，否则使用虚函数 工程配置 按键 查找引脚 设置外部中断通道  检测模式选择 输入模式选择 使能    12345678910void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)&#123;	switch(GPIO_Pin)&#123;">
+<meta property="og:description" content="2.3 外部中断EXTI 单片机代码执行原理 中断  抢占优先级 子优先级  虚函数 前缀 __weak 若实函数存在则用实函数，否则使用虚函数 工程配置  按键  查找引脚 设置外部中断通道 检测模式选择 输入模式选择 使能   12345678910void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)&#123;">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-02T16:00:00.000Z">
 <meta property="article:modified_time" content="2024-09-12T13:39:50.867Z">
@@ -44,6 +44,8 @@
 
 <!-- hexo injector head_end start -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
 <!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
 <body>
   <header class="sea-header">
@@ -131,29 +133,39 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="2-3-外部中断EXTI"><a href="#2-3-外部中断EXTI" class="headerlink" title="2.3 外部中断EXTI"></a>2.3 外部中断EXTI</h1><h2 id="单片机代码执行原理"><a href="#单片机代码执行原理" class="headerlink" title="单片机代码执行原理"></a>单片机代码执行原理</h2><h2 id="中断"><a href="#中断" class="headerlink" title="中断"></a>中断</h2><ul>
+    <h1 id="外部中断exti">2.3 外部中断EXTI</h1>
+<h2 id="单片机代码执行原理">单片机代码执行原理</h2>
+<h2 id="中断">中断</h2>
+<ul>
 <li>抢占优先级</li>
 <li>子优先级</li>
 </ul>
-<h2 id="虚函数"><a href="#虚函数" class="headerlink" title="虚函数"></a>虚函数</h2><p>前缀 <code>__weak</code> </p>
+<h2 id="虚函数">虚函数</h2>
+<p>前缀 <code>__weak</code></p>
 <p>若实函数存在则用实函数，否则使用虚函数</p>
-<h2 id="工程配置"><a href="#工程配置" class="headerlink" title="工程配置"></a>工程配置</h2><ul>
-<li>按键<ul>
+<h2 id="工程配置">工程配置</h2>
+<ul>
+<li>按键
+<ul>
 <li>查找引脚</li>
-<li>设置外部中断通道 </li>
+<li>设置外部中断通道</li>
 <li>检测模式选择</li>
 <li>输入模式选择</li>
 <li>使能</li>
-</ul>
-</li>
+</ul></li>
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_GPIO_EXTI_Callback</span><span class="params">(<span class="type">uint16_t</span> GPIO_Pin)</span>&#123;</span><br><span class="line">	<span class="keyword">switch</span>(GPIO_Pin)&#123;</span><br><span class="line">         <span class="comment">//3号外部中断通道</span></span><br><span class="line">		<span class="keyword">case</span> GPIO_PIN_3:&#123;</span><br><span class="line">			HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_5);</span><br><span class="line">            <span class="comment">//亮灯灭灯</span></span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="中断代码分析"><a href="#中断代码分析" class="headerlink" title="中断代码分析"></a>中断代码分析</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_GPIO_EXTI_IRQHandler</span><span class="params">(<span class="type">uint16_t</span> GPIO_Pin)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* EXTI line interrupt detected */</span></span><br><span class="line">  <span class="keyword">if</span> (__HAL_GPIO_EXTI_GET_IT(GPIO_Pin) != <span class="number">0x00</span>u)</span><br><span class="line">  &#123;</span><br><span class="line">    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);<span class="comment">//重置</span></span><br><span class="line">    HAL_GPIO_EXTI_Callback(GPIO_Pin);<span class="comment">//调用中断函数 若无则运行虚函数</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="按键消抖"><a href="#按键消抖" class="headerlink" title="按键消抖"></a>按键消抖</h2><h3 id="在中断函数中延时检测"><a href="#在中断函数中延时检测" class="headerlink" title="在中断函数中延时检测"></a>在中断函数中延时检测</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_GPIO_EXTI_Callback</span><span class="params">(<span class="type">uint16_t</span> GPIO_Pin)</span>&#123;</span><br><span class="line">	<span class="keyword">switch</span>(GPIO_Pin)&#123;</span><br><span class="line">         <span class="comment">//3号外部中断通道</span></span><br><span class="line">		<span class="keyword">case</span> GPIO_PIN_3:&#123;</span><br><span class="line">         	 HAL_Delay(<span class="number">50</span>);<span class="comment">//消抖</span></span><br><span class="line">             <span class="keyword">if</span>(HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_3)==RESET) &#123;</span><br><span class="line">				HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_5);</span><br><span class="line">             &#125;</span><br><span class="line">            <span class="comment">//亮灯灭灯</span></span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="中断代码分析">中断代码分析</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_GPIO_EXTI_IRQHandler</span><span class="params">(<span class="type">uint16_t</span> GPIO_Pin)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">/* EXTI line interrupt detected */</span></span><br><span class="line">  <span class="keyword">if</span> (__HAL_GPIO_EXTI_GET_IT(GPIO_Pin) != <span class="number">0x00</span>u)</span><br><span class="line">  &#123;</span><br><span class="line">    __HAL_GPIO_EXTI_CLEAR_IT(GPIO_Pin);<span class="comment">//重置</span></span><br><span class="line">    HAL_GPIO_EXTI_Callback(GPIO_Pin);<span class="comment">//调用中断函数 若无则运行虚函数</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="按键消抖">按键消抖</h2>
+<h3 id="在中断函数中延时检测">在中断函数中延时检测</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_GPIO_EXTI_Callback</span><span class="params">(<span class="type">uint16_t</span> GPIO_Pin)</span>&#123;</span><br><span class="line">	<span class="keyword">switch</span>(GPIO_Pin)&#123;</span><br><span class="line">         <span class="comment">//3号外部中断通道</span></span><br><span class="line">		<span class="keyword">case</span> GPIO_PIN_3:&#123;</span><br><span class="line">         	 HAL_Delay(<span class="number">50</span>);<span class="comment">//消抖</span></span><br><span class="line">             <span class="keyword">if</span>(HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_3)==RESET) &#123;</span><br><span class="line">				HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_5);</span><br><span class="line">             &#125;</span><br><span class="line">            <span class="comment">//亮灯灭灯</span></span><br><span class="line">		&#125;<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>略过了不稳定时间</p>
 <p>很不优雅，而且会影响其他线程执行</p>
-<h3 id="硬件消抖"><a href="#硬件消抖" class="headerlink" title="硬件消抖"></a>硬件消抖</h3><p>外部并联电容器，消除高频杂波</p>
-<h3 id="TIM定时器"><a href="#TIM定时器" class="headerlink" title="TIM定时器"></a>TIM定时器</h3><p>定时检测按键状态，在下一课进行讲解</p>
+<h3 id="硬件消抖">硬件消抖</h3>
+<p>外部并联电容器，消除高频杂波</p>
+<h3 id="tim定时器">TIM定时器</h3>
+<p>定时检测按键状态，在下一课进行讲解</p>
 
   </div>
 
