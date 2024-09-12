@@ -42,7 +42,9 @@
   
 <script src="/js/theme_mode.js"></script>
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
 <body>
   <header class="sea-header">
     <nav class="sea-nav-wrap">
@@ -141,14 +143,14 @@
 <p>？ $ \Rightarrow $ 10：<strong>例</strong> $ {(xyz)}_n \Rightarrow x<em>n^2+y</em>n^1+z*n^0 $ </p>
 <p>16 $ \Leftrightarrow $ 2 ：每四位分隔，8421</p>
 <h2 id="原码、反码、补码和偏移码"><a href="#原码、反码、补码和偏移码" class="headerlink" title="原码、反码、补码和偏移码"></a>原码、反码、补码和偏移码</h2><h3 id="原码"><a href="#原码" class="headerlink" title="原码"></a>原码</h3><p>即 该数所对应的二进制编码</p>
-<h3 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h3><p>正数：反码 &#x3D; 原码</p>
-<p>负数：反码 &#x3D; 除符号位外，其余位取反</p>
+<h3 id="反码"><a href="#反码" class="headerlink" title="反码"></a>反码</h3><p>正数：反码 = 原码</p>
+<p>负数：反码 = 除符号位外，其余位取反</p>
 <p>起中介作用</p>
-<h3 id="补码"><a href="#补码" class="headerlink" title="补码"></a>补码</h3><p>正数：补码 &#x3D; 原码</p>
-<p>负数：补码 &#x3D; 反码+1</p>
+<h3 id="补码"><a href="#补码" class="headerlink" title="补码"></a>补码</h3><p>正数：补码 = 原码</p>
+<p>负数：补码 = 反码+1</p>
 <p>可用于加减运算，符号位也可参与运算</p>
 <p><strong>负数用补码存储</strong></p>
-<h3 id="偏移码"><a href="#偏移码" class="headerlink" title="偏移码"></a>偏移码</h3><p>正数、负数：偏移码 &#x3D; 补码符号位取反</p>
+<h3 id="偏移码"><a href="#偏移码" class="headerlink" title="偏移码"></a>偏移码</h3><p>正数、负数：偏移码 = 补码符号位取反</p>
 <p>可用于加减运算，所得结果为补码。</p>
 
   </div>

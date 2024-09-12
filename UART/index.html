@@ -18,12 +18,12 @@
 
 
   
-  <meta name="description" content="2.5 UART通信理论知识物理信号硬件电路引脚 实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND） Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线    接地方式   设备一 设备二">
+  <meta name="description" content="2.5 UART通信理论知识物理信号硬件电路引脚 实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND） Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线    接地方式    设备一 设备二">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UART通信">
 <meta property="og:url" content="https://skina.cn/UART/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="2.5 UART通信理论知识物理信号硬件电路引脚 实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND） Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线    接地方式   设备一 设备二">
+<meta property="og:description" content="2.5 UART通信理论知识物理信号硬件电路引脚 实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND） Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线    接地方式    设备一 设备二">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-09T16:00:00.000Z">
 <meta property="article:modified_time" content="2024-09-12T13:41:24.926Z">
@@ -42,7 +42,9 @@
   
 <script src="/js/theme_mode.js"></script>
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
 <body>
   <header class="sea-header">
     <nav class="sea-nav-wrap">
@@ -147,14 +149,16 @@
 </ul>
 </li>
 </ul>
-<h4 id="接地方式"><a href="#接地方式" class="headerlink" title="接地方式"></a>接地方式</h4><table>
+<h4 id="接地方式"><a href="#接地方式" class="headerlink" title="接地方式"></a>接地方式</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>设备一</th>
 <th>设备二</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>RXD</td>
 <td>TXD</td>
 </tr>
@@ -166,16 +170,18 @@
 <td>GND</td>
 <td>GND</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h4 id="信号与电平格式"><a href="#信号与电平格式" class="headerlink" title="信号与电平格式"></a>信号与电平格式</h4><ul>
-<li>传输0&#x2F;1码元</li>
+<li>传输0/1码元</li>
 <li>高电平为1（3.3V），低电平为0（0V）</li>
 </ul>
 <h4 id="比特率与波特率"><a href="#比特率与波特率" class="headerlink" title="比特率与波特率"></a>比特率与波特率</h4><ul>
-<li>比特率（ bit&#x2F;s，bps ）：每秒钟传输二进制码元数量</li>
-<li>波特率（ symbol&#x2F;s )：每秒钟传输有效信息码元的数量</li>
-<li>UART通信中，比特率&#x3D;波特率</li>
-<li><strong>例</strong> 十六进制字符编码中，如果一秒传输1000个字符，每个字符对应一种唯一的电平信号，那么波特率就是1000symbol&#x2F;s；由于一个十六进制字符要用四位二进制编码表示，那么它的比特率就是4000bit&#x2F;s</li>
+<li>比特率（ bit/s，bps ）：每秒钟传输二进制码元数量</li>
+<li>波特率（ symbol/s )：每秒钟传输有效信息码元的数量</li>
+<li>UART通信中，比特率=波特率</li>
+<li><strong>例</strong> 十六进制字符编码中，如果一秒传输1000个字符，每个字符对应一种唯一的电平信号，那么波特率就是1000symbol/s；由于一个十六进制字符要用四位二进制编码表示，那么它的比特率就是4000bit/s</li>
 </ul>
 <h4 id="异步通信（Async）"><a href="#异步通信（Async）" class="headerlink" title="异步通信（Async）"></a>异步通信（Async）</h4><p>不需等待某一方时钟信号同步后再发送，但通信内容较长时可能会因时钟不统一而错位。</p>
 <p><em>如何解决错位问题呢？</em></p>
@@ -207,7 +213,8 @@
 </li>
 <li><strong>例</strong> 01010101，偶校验位为0，奇校验位为1</li>
 </ul>
-<h4 id="UART帧数据格式"><a href="#UART帧数据格式" class="headerlink" title="UART帧数据格式"></a>UART帧数据格式</h4><table>
+<h4 id="UART帧数据格式"><a href="#UART帧数据格式" class="headerlink" title="UART帧数据格式"></a>UART帧数据格式</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th>分段</th>
@@ -215,7 +222,8 @@
 <th>备注</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>起始位</td>
 <td>1</td>
 <td>标志帧起始，必须为低电平0</td>
@@ -240,7 +248,9 @@
 <td>%</td>
 <td>链路上不传输任何信息，必须为高电平1</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h3 id="通信方式"><a href="#通信方式" class="headerlink" title="通信方式"></a>通信方式</h3><h4 id="阻塞式通信"><a href="#阻塞式通信" class="headerlink" title="阻塞式通信"></a>阻塞式通信</h4><p>发送一段数据，在没有发送完所有数据之前，一直停留在此发送函数（可设定阻塞时间），这个过程中会阻塞别的程序运行；</p>
 <h4 id="中断式通信"><a href="#中断式通信" class="headerlink" title="中断式通信"></a>中断式通信</h4><p>发送数据的过程在中断中进行，这个中断实际上是发送数据寄存器空的中断。</p>
 <p>比如说你要发送10个字节的数据，那么这10个字节肯定不会一次性发送完，只能是一个一个字节地发送。每发送一个字节，发送数据寄存器就会有一个为空的标志，以提示可以发送下一个字节了，这样在发送数据的过程中CPU不会一直在等待，而是用中断来提示需要进行发送的时候再发送。不影响主程序进行。</p>
@@ -264,32 +274,26 @@
 </li>
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明变量以存储UART的收发数据</span></span><br><span class="line"><span class="type">uint8_t</span> RxData[<span class="number">10</span>];</span><br><span class="line"><span class="type">uint8_t</span> TxData[<span class="number">10</span>]=<span class="string">&quot;test&quot;</span>;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);</span><br><span class="line">HAL_Delay(<span class="number">500</span>);</span><br><span class="line">HAL_UART_Transmit(&amp;huart1, TxData, <span class="number">3</span>, <span class="number">1000</span>);</span><br><span class="line">HAL_UART_Receive(&amp;huart1, RxData, <span class="number">3</span>, <span class="number">1000</span>);</span><br><span class="line"><span class="keyword">if</span>(RxData[<span class="number">0</span>] == <span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">&#123;</span><br><span class="line">  HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_5);</span><br><span class="line">  RxData[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h4 id="中断式"><a href="#中断式" class="headerlink" title="中断式"></a>中断式</h4><ul>
 <li>注意要配置 使能 USART1 global interrupt</li>
 <li>主函数负责发送，中断回调函数负责就收</li>
 <li>随意收发长数据</li>
 </ul>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//声明变量以存储UART的收发数据</span></span><br><span class="line"><span class="type">uint8_t</span> RxData[<span class="number">10</span>];</span><br><span class="line"><span class="type">uint8_t</span> TxData[<span class="number">10</span>]=<span class="string">&quot;test&quot;</span>;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_5);</span><br><span class="line">	HAL_UART_Transmit_IT(&amp;huart1, TxData, <span class="number">5</span>);</span><br><span class="line">	HAL_Delay(<span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义中断实函数</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_UART_RxCpltCallback</span><span class="params">(UART_HandleTypeDef *huart)</span> &#123;</span><br><span class="line">	<span class="type">uint8_t</span> ReceiveData[<span class="number">10</span>]=<span class="string">&quot;okkk&quot;</span>;</span><br><span class="line">	<span class="keyword">if</span>(huart==&amp;huart1) &#123;</span><br><span class="line">		HAL_UART_Transmit_IT(&amp;huart1, ReceiveData, <span class="number">5</span>);</span><br><span class="line">		HAL_UART_Receive_IT(&amp;huart1, RxData, <span class="number">5</span>);</span><br><span class="line">		<span class="keyword">if</span>(RxData[<span class="number">0</span>]==<span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">			HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_5);</span><br><span class="line">			RxData[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h4 id="空闲中断-1"><a href="#空闲中断-1" class="headerlink" title="空闲中断"></a>空闲中断</h4><ul>
 <li>实现UART随意发送定长数据，可接收一定长度以内的数据</li>
 <li>主函数只负责发送，中断回调函数负责接收</li>
 </ul>
 <p>代码在 中断式 的程序基础上修改</p>
 <ul>
-<li><code>HAL_UART_Receive_IT(&amp;huart1,ExData,5);</code> 换成<code> HAL_UARTEx_ReceiveToIdle_IT(&amp;huart1, RxData, 5);</code></li>
+<li><code>HAL_UART_Receive_IT(&amp;huart1,ExData,5);</code> 换成<code>HAL_UARTEx_ReceiveToIdle_IT(&amp;huart1, RxData, 5);</code></li>
 <li>中断回调函数名称改为 <code>void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)</code></li>
 </ul>
 <h4 id="DMA中断"><a href="#DMA中断" class="headerlink" title="DMA中断"></a>DMA中断</h4><ul>
-<li><p>配置USART的DMA中断</p>
-<ul>
+<li>配置USART的DMA中断<ul>
 <li>Cube使能UART中断</li>
 <li>添加发送DMA</li>
 <li>添加接收DMA</li>
@@ -306,10 +310,10 @@
 </li>
 </ul>
 </li>
-<li><p>实现UART随意收发定长数据</p>
-</li>
-<li><p>主函数只负责发送，中断回调函数负责接收</p>
-</li>
+</ul>
+<ul>
+<li>实现UART随意收发定长数据</li>
+<li>主函数只负责发送，中断回调函数负责接收</li>
 </ul>
 <p>代码在 中断式 的基础上进行修改（即 将 IT 换为 DMA ）</p>
 <ul>

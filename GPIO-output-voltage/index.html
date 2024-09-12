@@ -42,7 +42,9 @@
   
 <script src="/js/theme_mode.js"></script>
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
 <body>
   <header class="sea-header">
     <nav class="sea-nav-wrap">
@@ -154,11 +156,9 @@
 </li>
 </ul>
 <h3 id="几个常用的GPIO输出指令"><a href="#几个常用的GPIO输出指令" class="headerlink" title="几个常用的GPIO输出指令"></a>几个常用的GPIO输出指令</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HAL_GPIO_WritePin(GPIOx,GPIO_PIN_x,GPIO_PinState);</span><br></pre></td></tr></table></figure>
-
 <p>写入引脚状态 <code>GPIO_PinState</code> 可为 <code>GPIO_PIN_SET</code> or <code>GPIO_PIN_RESET</code></p>
 <p>（注：SET 与 RESET 对应高低电平取决于 STM32CubeMX 中的定义）</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">HAL_GPIO_TogglePin(GPIOx,GPIO_PIN_x);</span><br></pre></td></tr></table></figure>
-
 <p>反转电平</p>
 <h2 id="工程配置"><a href="#工程配置" class="headerlink" title="工程配置"></a>工程配置</h2><ul>
 <li>配置复位时钟控制器（RCC）</li>

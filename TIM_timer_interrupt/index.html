@@ -42,7 +42,9 @@
   
 <script src="/js/theme_mode.js"></script>
 
-<meta name="generator" content="Hexo 7.3.0"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
 <body>
   <header class="sea-header">
     <nav class="sea-nav-wrap">
@@ -181,14 +183,13 @@
 <li>配置时钟树HSE输出主频50MHz（便于后续计算）</li>
 <li>配置定时器TIMx<ul>
 <li>设定为内部时钟 并调整PSC与ARR</li>
-<li>溢出事件频率 $ frequency&#x3D;\dfrac{(main \underline{} frequency)}{((PSC+1)∗(ARR+1))} $</li>
+<li>溢出事件频率 $ frequency=\dfrac{(main \underline{} frequency)}{((PSC+1)∗(ARR+1))} $</li>
 </ul>
 </li>
 </ul>
 <h2 id="使用TIM定时器"><a href="#使用TIM定时器" class="headerlink" title="使用TIM定时器"></a>使用TIM定时器</h2><p>使能定时器中断 <code>Hal_TIM_Base_Start_IT(&amp;htimx);</code></p>
 <p>定义中断回调函数的实函数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span> &#123;</span><br><span class="line">	<span class="keyword">if</span>(htim==&amp;htim5) &#123;</span><br><span class="line">        HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_5);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="利用TIM定时器中断实现按键检测消抖"><a href="#利用TIM定时器中断实现按键检测消抖" class="headerlink" title="利用TIM定时器中断实现按键检测消抖"></a>利用TIM定时器中断实现按键检测消抖</h2><h3 id="1-修改定时器配置"><a href="#1-修改定时器配置" class="headerlink" title="1. 修改定时器配置"></a>1. 修改定时器配置</h3><p>HSE输出主频 50MHz</p>
 <p>PSC：999</p>
 <p>ARR：499</p>
@@ -196,7 +197,6 @@
 <h3 id="2-修改按键配置"><a href="#2-修改按键配置" class="headerlink" title="2. 修改按键配置"></a>2. 修改按键配置</h3><p>依据原理图定义相关按键为上拉输入</p>
 <h3 id="3-代码部分"><a href="#3-代码部分" class="headerlink" title="3. 代码部分"></a>3. 代码部分</h3><p>同上使能定时器中断，并定义实函数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span> &#123;</span><br><span class="line">	<span class="keyword">if</span>(htim==&amp;htim5)&#123;</span><br><span class="line">		<span class="type">static</span> GPIO_PinState pre_status = GPIO_PIN_SET;	<span class="comment">//记录上次检测时的电平状态</span></span><br><span class="line">		GPIO_PinState now_status= HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_3);	<span class="comment">//记录此次检测时的电平状态</span></span><br><span class="line">		<span class="keyword">if</span>(pre_status == GPIO_PIN_SET &amp;&amp; now_status == GPIO_PIN_RESET)&#123;	</span><br><span class="line">            <span class="comment">/* 	当上次为高电平（未被按下)</span></span><br><span class="line"><span class="comment">            	且此次为低电平（已被按下）*/</span></span><br><span class="line">			HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_5); <span class="comment">//反转LED电平</span></span><br><span class="line">		&#125;</span><br><span class="line">		pre_status = now_status;	<span class="comment">//更新记录的电平状态</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 
   </div>
 
