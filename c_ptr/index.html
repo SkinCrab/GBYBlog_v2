@@ -26,7 +26,7 @@
 <meta property="og:description" content="指针 杂  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a[i]+j)  动态内存的申请与释放 malloc()函数 函数原型 void *malloc(bit_num) 从 内存堆 上申请指定字节数的内存块，并返回该内存块">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-12T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-09-13T12:47:26.257Z">
+<meta property="article:modified_time" content="2024-09-13T12:52:52.228Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -155,12 +155,12 @@
 <p>一般需搭配 <code>free()</code> 在使用后倒序释放内存</p>
 <p><strong>注意：</strong> 若内存申请不成功 <code>malloc()</code>
 将返回空指针（ NULL ）以作标识</p>
-<h2 id="calloc函数">calloc()函数</h2>
+<h3 id="calloc函数">calloc()函数</h3>
 <p>函数原型 <code>void *calloc(size_t n, size_t size);</code></p>
 <p>在内存的动态存储区申请 n 块长度为size的连续空间</p>
 <p>调用格式 <strong>例</strong>
 <code>指针名 = (数据类型 *)calloc(n, size);</code></p>
-<h2 id="realloc函数">realloc()函数</h2>
+<h3 id="realloc函数">realloc()函数</h3>
 <p>函数原型
 <code>void *realloc(void *mem_address, size_t newsize);</code></p>
 <p>在原已申请的内存块 <code>mem_address</code> 上再申请一块内存块</p>
@@ -170,7 +170,7 @@
 <code>NULL</code></p>
 <p>调用格式 <strong>例</strong>
 <code>指针名 = (数据类型 *)realloc(指针名, 新内存长度);</code></p>
-<h2 id="free函数">free()函数</h2>
+<h3 id="free函数">free()函数</h3>
 <p><code>void free(void *ptr)</code></p>
 <p>释放顺序最好与申请顺序相反，以免产生内存碎块。</p>
 
