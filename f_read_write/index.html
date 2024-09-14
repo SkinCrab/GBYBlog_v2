@@ -8,7 +8,7 @@
   <meta name="keywords" content="">
   <meta name="theme-color" content="#10b981">
 
-  <link rel="canonical" href="https://skina.cn/union_enum_typedef/">
+  <link rel="canonical" href="https://skina.cn/f_read_write/">
 
   <link rel="shortcut icon" href="/">
 
@@ -18,15 +18,15 @@
 
 
   
-  <meta name="description" content="联合体&amp;枚举&amp;自定义类型 联合体 形如 1234567union Union_name &#123;    int a;    double b;    char c;&#125;;union Union_name demo; 和 结构体 struct 有什么区别？ 结构体 各成员各自拥有自己的内存，各自使用互不干涉，同时存在的，遵循内存对齐原则。一个struct变量的">
+  <meta name="description" content="4 文件的读写 文件的打开与关闭 12FILE *fp;fp&#x3D;fopen(&quot;File name&quot;,&quot;Method&quot;);    Method 访问形式 说明     r 只读 只读不写，不存在则返回 NULL   w 只写 只写不读，若文件已存在则删去原有内容，否则新建   a 追加写 在文件尾部追加数据，若文">
 <meta property="og:type" content="article">
 <meta property="og:title" content="联合体&amp;枚举&amp;自定义类型">
-<meta property="og:url" content="https://skina.cn/union_enum_typedef/index.html">
+<meta property="og:url" content="https://skina.cn/f_read_write/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="联合体&amp;枚举&amp;自定义类型 联合体 形如 1234567union Union_name &#123;    int a;    double b;    char c;&#125;;union Union_name demo; 和 结构体 struct 有什么区别？ 结构体 各成员各自拥有自己的内存，各自使用互不干涉，同时存在的，遵循内存对齐原则。一个struct变量的">
+<meta property="og:description" content="4 文件的读写 文件的打开与关闭 12FILE *fp;fp&#x3D;fopen(&quot;File name&quot;,&quot;Method&quot;);    Method 访问形式 说明     r 只读 只读不写，不存在则返回 NULL   w 只写 只写不读，若文件已存在则删去原有内容，否则新建   a 追加写 在文件尾部追加数据，若文">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-09-13T14:14:23.000Z">
-<meta property="article:modified_time" content="2024-09-13T14:14:37.621Z">
+<meta property="article:published_time" content="2024-09-14T02:55:20.000Z">
+<meta property="article:modified_time" content="2024-09-14T02:55:31.710Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -124,7 +124,7 @@
       <div class="sea-post-meta sea-post-meta__center">
         <div class="sea-post-time">
   <svg t="1716964550804" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2621" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M805.49888 981.49888l-602.3168-0.76288c-86.59456-8.192-154.56768-81.3056-154.56768-170.01472L48.6144 291.73248c0-94.1568 76.60032-170.75712 170.7776-170.75712l586.10176 0c94.1568 0 170.73152 76.60032 170.73152 170.75712L976.22528 810.7008C976.2304 904.87296 899.63008 981.49888 805.49888 981.49888L805.49888 981.49888zM219.3664 190.57152c-55.79776 0-101.20192 45.38368-101.20192 101.18144l0 518.96832c0 55.79776 45.40416 101.20704 101.20192 101.20704l586.13248 0c55.77728 0 101.16096-45.40928 101.16096-101.20704L906.65984 291.73248c0-55.79776-45.38368-101.18656-101.16096-101.18656L219.3664 190.54592 219.3664 190.57152zM698.84416 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L745.22624 244.1216C745.22624 269.7472 724.46976 290.51904 698.84416 290.51904L698.84416 290.51904zM315.65824 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L362.04032 244.1216C362.04032 269.7472 341.28896 290.51904 315.65824 290.51904L315.65824 290.51904zM534.8864 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C581.26848 774.01088 560.4864 794.78784 534.8864 794.78784L534.8864 794.78784zM930.79552 452.608 121.24672 452.608c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l809.5744 0c25.6 0 46.38208 20.77696 46.38208 46.38208C977.2032 431.82592 956.42624 452.608 930.79552 452.608L930.79552 452.608zM327.92576 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208C374.30784 628.25472 353.52576 649.03168 327.92576 649.03168L327.92576 649.03168zM534.8864 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208S560.4864 649.03168 534.8864 649.03168L534.8864 649.03168zM741.27872 649.03168l-44.26752 0c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.77696 46.38208 46.38208C787.6608 628.25472 766.90944 649.03168 741.27872 649.03168L741.27872 649.03168zM327.92576 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C374.30784 774.01088 353.52576 794.78784 327.92576 794.78784L327.92576 794.78784zM741.27872 794.78784l-44.26752 0c-25.60512 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.78208 46.38208 46.38208C787.6608 774.01088 766.90944 794.78784 741.27872 794.78784L741.27872 794.78784z" p-id="2622"></path></svg>
-  <time datetime="2024-09-13T14:14:23.000Z">2024-09-13</time>
+  <time datetime="2024-09-14T02:55:20.000Z">2024-09-14</time>
 </div>
         
         
@@ -137,25 +137,139 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="联合体枚举自定义类型">联合体&amp;枚举&amp;自定义类型</h1>
-<h2 id="联合体">联合体</h2>
-<p>形如</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">Union_name</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">double</span> b;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">Union_name</span> <span class="title">demo</span>;</span></span><br></pre></td></tr></table></figure>
-<p><em>和 结构体 <code>struct</code> 有什么区别？</em></p>
-<p><strong>结构体</strong></p>
-<p>各成员各自拥有自己的内存，各自使用互不干涉，同时存在的，遵循内存对齐原则。一个struct变量的总长度等于所有成员的长度之和。</p>
-<p><strong>联合体</strong></p>
-<p>各成员共用一块内存空间，并且同时只有一个成员可以得到这块内存的使用权(对该内存的读写)，各变量共用一个内存首地址。任一时刻只有一个成员的数据是有意义的，即
-a、b、c不能同时存在。</p>
-<h2 id="枚举">枚举</h2>
-<p>形如</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">color</span>&#123;</span>red,orange,yellow,green,blue,purple&#125;;</span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">color</span> <span class="title">x</span>,<span class="title">y</span>,<span class="title">z</span>;</span></span><br></pre></td></tr></table></figure>
-<p>不可对枚举元素赋值，因为枚举元素本身就是常量。</p>
-<p>合法赋值 <code>x=red y=(enum color)4</code> 等价于
-<code>x=red y=green</code> 非法赋值 <code>z=Monday</code></p>
-<h2 id="自定义类别">自定义类别</h2>
-<p>形如 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> 原类型名 新类型名</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">char</span> <span class="type">unint8_t</span>;</span><br></pre></td></tr></table></figure> 即 <code>char a;</code> 等价于
-<code>uint8_t a;</code></p>
+    <h1 id="文件的读写">4 文件的读写</h1>
+<h2 id="文件的打开与关闭">文件的打开与关闭</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FILE *fp;</span><br><span class="line">fp=fopen(<span class="string">&quot;File name&quot;</span>,<span class="string">&quot;Method&quot;</span>);</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>访问形式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r</td>
+<td>只读</td>
+<td>只读不写，不存在则返回 NULL</td>
+</tr>
+<tr>
+<td>w</td>
+<td>只写</td>
+<td>只写不读，若文件已存在则删去原有内容，否则新建</td>
+</tr>
+<tr>
+<td>a</td>
+<td>追加写</td>
+<td>在文件尾部追加数据，若文件不存在则新建</td>
+</tr>
+<tr>
+<td>r+</td>
+<td>读写</td>
+<td>可读可写，不存在则返回 NULL</td>
+</tr>
+<tr>
+<td>w+</td>
+<td>读写</td>
+<td>可写可读，若文件已存在则删去原有内容，否则新建</td>
+</tr>
+<tr>
+<td>a+</td>
+<td>读与追加写</td>
+<td>可读，可在尾部追加写，若文件不存在则新建</td>
+</tr>
+</tbody>
+</table>
+<p>默认在后面附加 t ，即以文本形式打开文件。</p>
+<p>若在后面附加 b ，如 "rb", "wb", "r+b" 则以二进制打开</p>
+<p>使用完文件后必须关闭，否则可能导致数据丢失。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">fclose</span><span class="params">(FILE *p)</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="文件的读写-1">文件的读写</h2>
+<ul>
+<li>字符读 <code>char c; c=fgetc(fp);</code></li>
+<li>字符写 <code>int fputc(int c, FILE *p);</code></li>
+<li>读字符串函数 <code>fgets(内存区首地址, 读入字符数+1, fp);</code>
+<strong>如</strong> <code>char c[20]; fgets(c, n, fp);</code> 则从 fp
+文件中读取 n-1 个字符存入 c</li>
+<li>写字符串函数 <code>fputs(str, fp)</code> 如 <code>fputs(c,fp)</code>
+则将字符串 c 写入 fp</li>
+<li>判断文件是否结束 <code>feof()</code> ，结束返回非0，否则返回0</li>
+</ul>
+<h2 id="数据块读写适用于二进制文件">数据块读写（适用于二进制文件）</h2>
+<h3 id="数据块读-fread">数据块读 fread()</h3>
+<p><code>size_t fread(void *buffer, size_t size, size_t count,FILE *fp)</code></p>
+<p>解释：</p>
+<ul>
+<li><code>buffer</code> 存放读入数据的内存首地址</li>
+<li><code>size</code> 字节数，常用 <code>sizeof(data_type)</code></li>
+<li><code>count</code> 读入数据项个数</li>
+<li><code>fp</code> 指向文件</li>
+</ul>
+<p><strong>例</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x[<span class="number">4</span>];</span><br><span class="line">FILE *fp;</span><br><span class="line">fp=fopen(<span class="string">&quot;test.bat&quot;</span>,<span class="string">&quot;rb&quot;</span>);</span><br><span class="line">fread(x,<span class="keyword">sizeof</span>(<span class="type">int</span>),<span class="number">4</span>,fp);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure>
+<h3 id="数据块写-fwrite">数据块写 fwrite()</h3>
+<p><code>size_t fwrite(void *buffer, size_t size, size_t count,FILE *fp)</code></p>
+<p>解释同上</p>
+<p><strong>例</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x[<span class="number">5</span>]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line">FILE *fp;</span><br><span class="line">fp=fopen(<span class="string">&quot;test.bat&quot;</span>,<span class="string">&quot;rb&quot;</span>);</span><br><span class="line">fread(x,<span class="keyword">sizeof</span>(<span class="type">int</span>),<span class="number">5</span>,fp);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure>
+<h2 id="格式读写函数">格式读写函数</h2>
+<h3 id="fscanf">fscanf()</h3>
+<p>类似 <code>scanf</code> 但多一个文件地址 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a,b;</span><br><span class="line">FILE *fp;</span><br><span class="line"><span class="keyword">if</span>((fp=fopen(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;r+&quot;</span>))==<span class="literal">NULL</span>)&#123;</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">fscanf</span>(fp,<span class="string">&quot;%d %d\n&quot;</span>,&amp;a,&amp;b);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure></p>
+<h3 id="fprintf">fprintf()</h3>
+<p>类似 <code>printf</code> 但多一个文件地址 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a=<span class="number">1</span>;</span><br><span class="line"><span class="type">double</span> b=<span class="number">2.33</span>;</span><br><span class="line">FILE *fp;</span><br><span class="line"><span class="keyword">if</span>((fp=fopen(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>))==<span class="literal">NULL</span>)&#123;</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">fprintf</span>(fp,<span class="string">&quot;%d %lf\n&quot;</span>,&amp;a,&amp;b);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure></p>
+<h2 id="文件定位">文件定位</h2>
+<h3 id="rewind">rewind()</h3>
+<p><code>void rewind(FILE *fp)</code></p>
+<p>无返回值，将读写指针移动到开头</p>
+<h3 id="fseek">fseek()</h3>
+<p><code>void fseek(FILE *fp, long offset, int origin)</code></p>
+<ul>
+<li><code>origin</code> 移动文件指针的相对起始位置
+<ul>
+<li><code>SEEK_SET</code> or <code>0</code> ：文件首</li>
+<li><code>SEEK_CUR</code> or <code>1</code> ：当前文件读写位置</li>
+<li><code>SEEK_END</code> or <code>2</code> ：文件尾</li>
+</ul></li>
+<li><code>offset</code> 以 <code>origin</code>
+为起始点的指针偏移量，类型要求为长整型
+<ul>
+<li><strong>例</strong> <code>fseek(fp,100L,SEEK_SET)</code>
+从文件首开始 指针向文件尾移动100字节 &gt; [!warning] &gt; &gt;
+如果成功定位则返回0，否则返回非零，对于不能重定位的设备，返回值不确定
+&gt; 可将指针定位到文件之外，若定位到文件之外，则将清除文件结束符 &gt;
+若以追加方式打开文件，当前文件指针由上次I/O操作决定，若还未进行I/O操作，则指针在开头
+&gt; 若 <code>Ctrl+Z</code>
+被作为文件结束符，fopen打开时将会删除该字符，否则会导致<code>fseek()</code>
+和 <code>ftell()</code> 的定位失常</li>
+</ul></li>
+</ul>
+<h3 id="ftell">ftell()</h3>
+<p>返回当前文件读写位置（出错则返回 -IL ）</p>
+<p><code>long ftell(FILE *fp)</code></p>
+<h3 id="文件缓冲区清除">文件缓冲区清除</h3>
+<h3 id="fflush">fflush()</h3>
+<p><code>int fflush(FILE *fp)</code></p>
+<p>可用于文件缓冲区清除，也可以用于标准输入输出缓冲区清除</p>
+<p><em>why?</em></p>
+<p>文件输入输出要现在缓冲区存放才会写入文件，清除缓冲区的目的是让缓冲区数据写入磁盘文件中</p>
+<h3 id="其他">其他</h3>
+<p><code>feek()</code> <code>rewind()</code> <code>fclose()</code>
+也具备清除缓冲区的功能</p>
+<h2 id="指针错误状态清除">指针错误状态清除</h2>
+<p><em>为什么会出现这种情况？</em></p>
+<p>由于读写等操作失败引起文件输入输出缓冲区错误</p>
+<h3 id="clearerr">clearerr()</h3>
+<p><code>void clearerr(FILE *fp)</code></p>
+<h3 id="其他-1">其他</h3>
+<p>建议 <code>clearerr</code> 和 <code>fflush</code> 配对使用</p>
+<blockquote>
+<p>[!warning]</p>
+<p>以二进制打开文件仅可用 <code>fread</code> 和 <code>fwrite</code> 读写
+用文本方式打开的文件不应用 <code>fread</code> 和 <code>fwrite</code>
+读写，而应用 <code>fputc, fgetc, fgets, fputs, fscanf, fprintf</code>
+等读写 简而言之，打开方式与读写函数方式应匹配</p>
+</blockquote>
 
   </div>
 
@@ -163,17 +277,10 @@ a、b、c不能同时存在。</p>
     
   <div class="sea-prev-next-wrapper">
     
-      <div class="prev">
-        <span><</span>
-        <a class="link" href="/f_read_write/">
-          联合体&枚举&自定义类型
-        </a>
-      </div>
-    
     
       <div class="next">
-        <a class="link" href="/c_ptr/">
-          指针
+        <a class="link" href="/union_enum_typedef/">
+          联合体&枚举&自定义类型
         </a>
         <span>></span>
       </div>
