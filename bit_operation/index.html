@@ -26,7 +26,7 @@
 <meta property="og:description" content="位运算 二进制位运算 （注：以下例子如无特别标注均为 short 类型） 按位与 &quot;&amp;&quot; 同1为1，否则为0 也可以理解为 有0则0 or &amp;1得原值 0&amp;0&#x3D;0 0&amp;1&#x3D;0 1&amp;0&#x3D;0 1&amp;1&#x3D;1 用途  取指定位   取 short x 的低8位： x &amp; 0x00ff （ 0x00ff 为二进制 0000 00">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-14T16:03:11.000Z">
-<meta property="article:modified_time" content="2024-09-14T16:05:53.187Z">
+<meta property="article:modified_time" content="2024-09-14T16:11:28.706Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -242,10 +242,18 @@
 <blockquote>
 <p>大家应该都接触过 <code>bool</code> 型变量，只存储 0 与 1，但是否想过
 <code>bool</code> 型所占空间是多少呢？</p>
+</blockquote>
+<blockquote>
 <p>答案是1字节，即 8位。</p>
+</blockquote>
+<blockquote>
 <p>这时候就有人会问了，欸 0 与 1
 的存储不是只需要占用1位吗，为什么需要用到 8 位呢？</p>
+</blockquote>
+<blockquote>
 <p>很简单，因为C语言对内存的存取大部分情况下使用的是指针，但指针只能精确到字节，无法精确到位。所以bool类型的空间占用远超实际占用，只能使用最小字节单位。</p>
+</blockquote>
+<blockquote>
 <p>怎么解决这个问题呢？C语言为此提供了位段（ bit-field ）操作。</p>
 </blockquote>
 <h3 id="如何定义-位段">如何定义 位段 ？</h3>
