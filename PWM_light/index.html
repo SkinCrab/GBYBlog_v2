@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>位运算 | GBY's Blog</title>
+  <title>PWM呼吸灯 | GBY's Blog</title>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="keywords" content="">
   <meta name="theme-color" content="#10b981">
 
-  <link rel="canonical" href="https://skina.cn/bit_operation/">
+  <link rel="canonical" href="https://skina.cn/PWM_light/">
 
   <link rel="shortcut icon" href="/">
 
@@ -18,20 +18,22 @@
 
 
   
-  <meta name="description" content="位运算 二进制位运算 （注：以下例子如无特别标注均为 short 类型） 按位与 &quot;&amp;&quot; 同1为1，否则为0 也可以理解为 有0则0 or &amp;1得原值 0&amp;0&#x3D;0 0&amp;1&#x3D;0 1&amp;0&#x3D;0 1&amp;1&#x3D;1 用途  取指定位   取 short x 的低8位： x &amp; 0x00ff （ 0x00ff 为二进制 0000 00">
+  <meta name="description" content="2.6 PWM呼吸灯 理论知识 何为PWM PWM (Pulse Width Modulation) 即 脉宽调制，改变脉冲信号的宽度并输出。 高频PWM波可以让设备进行频繁开关通断。 PWM波的参数  周期：PWM波形中相邻的高低电平持续时间总和 频率：略 占空比：高电平持续时间占总时间的比值 电平：高低电平之间电压差  PWM波在TIM定时器中的形成方式  先将输">
 <meta property="og:type" content="article">
-<meta property="og:title" content="位运算">
-<meta property="og:url" content="https://skina.cn/bit_operation/index.html">
+<meta property="og:title" content="PWM呼吸灯">
+<meta property="og:url" content="https://skina.cn/PWM_light/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="位运算 二进制位运算 （注：以下例子如无特别标注均为 short 类型） 按位与 &quot;&amp;&quot; 同1为1，否则为0 也可以理解为 有0则0 or &amp;1得原值 0&amp;0&#x3D;0 0&amp;1&#x3D;0 1&amp;0&#x3D;0 1&amp;1&#x3D;1 用途  取指定位   取 short x 的低8位： x &amp; 0x00ff （ 0x00ff 为二进制 0000 00">
+<meta property="og:description" content="2.6 PWM呼吸灯 理论知识 何为PWM PWM (Pulse Width Modulation) 即 脉宽调制，改变脉冲信号的宽度并输出。 高频PWM波可以让设备进行频繁开关通断。 PWM波的参数  周期：PWM波形中相邻的高低电平持续时间总和 频率：略 占空比：高电平持续时间占总时间的比值 电平：高低电平之间电压差  PWM波在TIM定时器中的形成方式  先将输">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-09-14T16:03:11.000Z">
-<meta property="article:modified_time" content="2024-09-14T16:11:28.706Z">
+<meta property="og:image" content="https://skina.cn/Public/Image/PWM&amp;CCR.png">
+<meta property="article:published_time" content="2024-09-16T15:59:59.000Z">
+<meta property="article:modified_time" content="2024-09-16T16:02:10.930Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
-<meta property="article:tag" content="C&#x2F;C++">
-<meta property="article:tag" content="计科">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="单片机">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://skina.cn/Public/Image/PWM&amp;CCR.png">
 
   <style>
     :root {
@@ -119,167 +121,84 @@
   <main id="sea-main-wrapper">
     <article class="sea-page-card-wrapper">
   <header class="sea-article-header">
-    <h1 class="sea-article-title">位运算</h1>
+    <h1 class="sea-article-title">PWM呼吸灯</h1>
     
       <div class="sea-post-meta sea-post-meta__center">
         <div class="sea-post-time">
   <svg t="1716964550804" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2621" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M805.49888 981.49888l-602.3168-0.76288c-86.59456-8.192-154.56768-81.3056-154.56768-170.01472L48.6144 291.73248c0-94.1568 76.60032-170.75712 170.7776-170.75712l586.10176 0c94.1568 0 170.73152 76.60032 170.73152 170.75712L976.22528 810.7008C976.2304 904.87296 899.63008 981.49888 805.49888 981.49888L805.49888 981.49888zM219.3664 190.57152c-55.79776 0-101.20192 45.38368-101.20192 101.18144l0 518.96832c0 55.79776 45.40416 101.20704 101.20192 101.20704l586.13248 0c55.77728 0 101.16096-45.40928 101.16096-101.20704L906.65984 291.73248c0-55.79776-45.38368-101.18656-101.16096-101.18656L219.3664 190.54592 219.3664 190.57152zM698.84416 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L745.22624 244.1216C745.22624 269.7472 724.46976 290.51904 698.84416 290.51904L698.84416 290.51904zM315.65824 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L362.04032 244.1216C362.04032 269.7472 341.28896 290.51904 315.65824 290.51904L315.65824 290.51904zM534.8864 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C581.26848 774.01088 560.4864 794.78784 534.8864 794.78784L534.8864 794.78784zM930.79552 452.608 121.24672 452.608c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l809.5744 0c25.6 0 46.38208 20.77696 46.38208 46.38208C977.2032 431.82592 956.42624 452.608 930.79552 452.608L930.79552 452.608zM327.92576 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208C374.30784 628.25472 353.52576 649.03168 327.92576 649.03168L327.92576 649.03168zM534.8864 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208S560.4864 649.03168 534.8864 649.03168L534.8864 649.03168zM741.27872 649.03168l-44.26752 0c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.77696 46.38208 46.38208C787.6608 628.25472 766.90944 649.03168 741.27872 649.03168L741.27872 649.03168zM327.92576 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C374.30784 774.01088 353.52576 794.78784 327.92576 794.78784L327.92576 794.78784zM741.27872 794.78784l-44.26752 0c-25.60512 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.78208 46.38208 46.38208C787.6608 774.01088 766.90944 794.78784 741.27872 794.78784L741.27872 794.78784z" p-id="2622"></path></svg>
-  <time datetime="2024-09-14T16:03:11.000Z">2024-09-15</time>
+  <time datetime="2024-09-16T15:59:59.000Z">2024-09-16</time>
 </div>
         
         
   <div class="sea-post-tags">
     <svg t="1716964811431" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6117" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M384 977.152c-20.5312 0-39.8336-7.9872-54.3232-22.4256l-260.4032-260.4032c-14.4896-14.4896-22.4256-33.7408-22.4256-54.3232s7.9872-39.8336 22.4256-54.3232l439.6032-439.6032c24.9344-24.9344 70.2464-43.7248 105.5232-43.7248h230.4c42.3424 0 76.8 34.4576 76.8 76.8v230.4c0 35.2256-18.7904 80.5888-43.6736 105.5232l-439.6032 439.6032a76.1856 76.1856 0 0 1-54.3232 22.4256zM614.4 153.6c-21.248 0-54.272 13.6704-69.2736 28.7232l-439.6032 439.6032c-4.8128 4.8128-7.424 11.2128-7.424 18.1248s2.6624 13.312 7.424 18.0736l260.4032 260.4032c4.8128 4.8128 11.2128 7.424 18.1248 7.424s13.312-2.6624 18.1248-7.424l439.6032-439.6032c15.0016-15.0016 28.7232-48.0768 28.7232-69.3248V179.2a25.6 25.6 0 0 0-25.6-25.6h-230.4z" p-id="6118"></path><path d="M742.4 358.4c-42.3424 0-76.8-34.4576-76.8-76.8S700.0576 204.8 742.4 204.8s76.8 34.4576 76.8 76.8S784.7424 358.4 742.4 358.4z m0-102.4a25.6 25.6 0 1 0 0 51.2 25.6 25.6 0 0 0 0-51.2z" p-id="6119"></path></svg>
-    <a class="tag-link" href="/tags/C-C/" rel="tag">C/C++</a> , <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a> , <a class="tag-link" href="/tags/%E8%AE%A1%E7%A7%91/" rel="tag">计科</a>
+    <a class="tag-link" href="/tags/STM32/" rel="tag">STM32</a> , <a class="tag-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a> , <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a>
   </div>
 
       </div>
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="位运算">位运算</h1>
-<h2 id="二进制位运算">二进制位运算</h2>
-<p>（注：以下例子如无特别标注均为 <code>short</code> 类型）</p>
-<h3 id="按位与">按位与 "&amp;"</h3>
-<p>同1为1，否则为0</p>
-<p>也可以理解为 有0则0 or &amp;1得原值</p>
-<p><code>0&amp;0=0 0&amp;1=0 1&amp;0=0 1&amp;1=1</code></p>
-<h4 id="用途">用途</h4>
-<ol type="1">
-<li><strong>取指定位</strong></li>
-</ol>
+    <h1 id="pwm呼吸灯">2.6 PWM呼吸灯</h1>
+<h2 id="理论知识">理论知识</h2>
+<h3 id="何为pwm">何为PWM</h3>
+<p>PWM (Pulse Width Modulation) 即
+脉宽调制，改变脉冲信号的宽度并输出。</p>
+<p>高频PWM波可以让设备进行频繁开关通断。</p>
+<h3 id="pwm波的参数">PWM波的参数</h3>
 <ul>
-<li>取 <code>short x</code> 的低8位： <code>x &amp; 0x00ff</code> （
-<code>0x00ff</code> 为二进制 <code>0000 0000 1111 1111</code> ）</li>
-<li>取 <code>short x</code> 的高8位： <code>x &amp; 0xff00</code> （
-<code>0xff00</code> 为二进制 <code>1111 1111 0000 0000</code> ）</li>
-<li>判断 <code>short x</code> 的第3位是否为 1 ：
-<code>x&amp; 0x08</code> （ <code>0x08</code> 为二进制
-<code>0000 1000</code> ）</li>
+<li>周期：PWM波形中相邻的高低电平持续时间总和</li>
+<li>频率：略</li>
+<li>占空比：<strong>高</strong>电平持续时间占总时间的比值</li>
+<li>电平：高低电平之间电压差</li>
 </ul>
-<blockquote>
-<p>[!tip]</p>
-<p>取第x位即 第x位&amp;1 其余位&amp;0</p>
-<p>判断第x位是否为1即 第x位&amp;1 其余位&amp;0</p>
-<p>16进制中 <code>f</code> 表示 <code>1111</code> ， <code>0</code> 表示
-<code>0000</code></p>
-</blockquote>
-<blockquote>
-<p>[!warning]</p>
-<p>二进制位数从右往左数分别是 第0位 第1位 第2位 第3位 以此类推</p>
-</blockquote>
-<ol start="2" type="1">
-<li><strong>将指定位清零</strong></li>
-</ol>
+<h3 id="pwm波在tim定时器中的形成方式">PWM波在TIM定时器中的形成方式</h3>
 <ul>
-<li>将 <code>short x</code> 的低8位清零：
-<code>x &amp; 0xff00</code></li>
-<li>将 <code>short x</code> 的高8位清零：
-<code>x &amp; 0x00ff</code></li>
-<li>将 <code>short x</code> 的第8位清零：
-<code>x &amp; 0xffef</code></li>
-</ul>
-<blockquote>
-<p>[!tip]</p>
-<p>清零第x位 就让 第x位&amp;0 其余位&amp;1</p>
-</blockquote>
-<h3 id="按位或">按位或 "|"</h3>
-<p>有1为1，否则为0</p>
-<p><code>0|0=0 0|1=1 1|0=0 1|1=1</code></p>
-<h4 id="用途-1">用途</h4>
-<p>将指定位 置1，其余位不变 如
-<code>x = x|0x00ff or x|= 0x00ff</code></p>
-<blockquote>
-<p>[!tip]</p>
-<p>将第x位 置1，就让 第x位 |1</p>
-</blockquote>
-<h3 id="按位异或">按位异或"^"</h3>
-<p>相同为0，不同为1</p>
-<p><code>0^0=0 0^1=1 ,1^0=1 1^1=0</code></p>
-<h4 id="用途-2">用途</h4>
-<ol type="1">
-<li><p><strong>某些位取反</strong></p>
+<li>先将输入频率依据PSC进行分频得定时器主频</li>
+<li>以向上计数为例，即CNT：0-&gt;ARR</li>
+<li>引入新比较值CCR (Capture Compare Register) ，需在代码中设定
 <ul>
-<li>低字节取反，高字节不变 <code>x = x^0x00ff</code></li>
-<li>高字节取反，低字节不变 <code>x = x^0xff00</code></li>
-<li>第0位和第4位取反，其余位不变 <code>x = x^0x0011</code></li>
-</ul>
-<blockquote>
-<p>[!tip]</p>
-<p>将第x位取反，就将第x位 ^1</p>
-</blockquote></li>
-<li><p>变量清零</p>
-<p><code>x = x^x</code></p></li>
-<li><p>若 <code>x y</code> 均为整型，则
-<code>(x^y)^y = x</code></p></li>
-<li><p>若 <code>x y</code> 均为整型，可交换变量
-<code>x = x^y; y = x^y; x= x^y;</code></p></li>
-</ol>
-<h3 id="按位取反">按位取反"~"</h3>
-<p><code>~0 == 1, ~1 == 0</code></p>
-<p><em>只有这个用途了吗？取反后的数和原数有什么关系呢？</em></p>
-<p>我们之前讲了进制与编码，不难发现</p>
-<p>按位取反后得到的是这个数的反码，反码+1=相反数的补码</p>
-<p>故可知 <strong>一个数按位取反=该数的相反数 - 1</strong></p>
-<h3 id="左移">左移"&lt;&lt;"</h3>
-<p>向左移动n位，多余的高位丢弃，低位补0</p>
-<p><strong>例</strong> <code>x&lt;&lt;3</code> 将x的二进制位左移3位</p>
-<h3 id="右移">右移"&gt;&gt;"</h3>
-<p>向右移动n位，多余的低位丢弃，高位遵循以下规则增补</p>
-<ol type="1">
-<li>若右移对象为 无符号整数 ，高位补0</li>
-<li>若为 整型 或 字符型 ：
-<ul>
-<li>最高位为0时补0，</li>
-<li>最高位为1时，若编译系统采用“算数右移”，则高位补1，若编译系统采用“逻辑右移”，则高位补0.</li>
+<li>CNT&lt;CCR 输出一种电平</li>
+<li>CNT&gt;=CRR输出另外一种电平</li>
 </ul></li>
-</ol>
-<blockquote>
-<p>[!warning]</p>
-<p>在32位微软编译系统中，采用“算术右移”的形式</p>
-</blockquote>
-<h2 id="位段">位段</h2>
-<blockquote>
-<p>大家应该都接触过 <code>bool</code> 型变量，只存储 0 与 1，但是否想过
-<code>bool</code> 型所占空间是多少呢？</p>
-</blockquote>
-<blockquote>
-<p>答案是1字节，即 8位。</p>
-</blockquote>
-<blockquote>
-<p>这时候就有人会问了，欸 0 与 1
-的存储不是只需要占用1位吗，为什么需要用到 8 位呢？</p>
-</blockquote>
-<blockquote>
-<p>很简单，因为C语言对内存的存取大部分情况下使用的是指针，但指针只能精确到字节，无法精确到位。所以bool类型的空间占用远超实际占用，只能使用最小字节单位。</p>
-</blockquote>
-<blockquote>
-<p>怎么解决这个问题呢？C语言为此提供了位段（ bit-field ）操作。</p>
-</blockquote>
-<h3 id="如何定义-位段">如何定义 位段 ？</h3>
-<p>与结构体类似的定义方式</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">name</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    member_list  </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">e.g. </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">packed_d</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f1:<span class="number">1</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f2:<span class="number">2</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f3:<span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>如此定义，f1占用1个二进制位，f2占用2个二进制位，f3占用4个二进制位，以上位段共需占用1字节。</p>
-<p>定义了结构后便可定义位段结构类型的变量，<strong>如</strong>
-<code>struct packed_d x,y</code></p>
-<h3 id="如何使用">如何使用？</h3>
-<p>与结构体类似 <code>x.f1=1; x.f2=3;</code></p>
-<blockquote>
-<p>[!warning]</p>
-<p>所赋值需考虑所占用的二进制位数，若超出则取低位舍高位</p>
-</blockquote>
-<h3 id="注意">注意</h3>
+</ul>
+<figure>
+<img src="../..\Public\Image\PWM&amp;CCR.png"
+alt="image-20240916142021165" />
+<figcaption aria-hidden="true">image-20240916142021165</figcaption>
+</figure>
+<h2 id="工程配置">工程配置</h2>
+<p>MCU HSE等配置过程略去。</p>
+<p>下面以正点原子F103ZET6精英板为例。</p>
+<p>该开发板使用通用定时器TIM3产生PWM控制DS0的亮度。</p>
 <ol type="1">
-<li><p>位段成员需位 unsigned 型</p></li>
-<li><p>可定义无名位段
-如下所示，无名位段起占位作用。若无名位段宽度为0，则表明下一位段从一个新字节开始存放
-如下所示，该位段结构占2字节。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f1:<span class="number">1</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f2:<span class="number">2</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> :<span class="number">1</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f3:<span class="number">1</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> :<span class="number">0</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f4:<span class="number">3</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>位段成员所占二进制位数不超过编译器字长</p></li>
-<li><p>位段不能说明为数组，也不可用指针指向位段成员。</p></li>
-<li><p>不可用 <code>sizeof()</code> 求位段成员大小</p></li>
-<li><p>定义位段结构类型时，可包含非位段成员</p></li>
-<li><p>结构体类型变量的位段成员可在一般表达式中被引用，并自动转换为对应整数。</p></li>
+<li>按照原理图，找到DS0对应的引脚，使能TIM3_CH2功能</li>
+<li>配置TIM3并将其设置为内部时钟模式
+<ol type="1">
+<li>Clock Sourse: Internal Clock</li>
+<li>PSC=0</li>
+<li>ARR=499</li>
+<li>Counter Mode: Up</li>
+<li>内部时钟不分频</li>
+<li>auto-reload preload: Disable
+（此项是否使能无影响，如使能则新的ARR配置后会延迟到当次溢出中断发生后再改为新值</li>
+<li>通道极性 (CH Polarity) 设置成有效电平（一般高电平为有效电平）</li>
+<li>PWM mode, mode
+1表示CNT小于CCR则输出有效电平，即CCR为多少则有多少个计数器时间为有效电平。mode2反之</li>
+<li>Pulse （脉冲），为0表示一直输出脉冲，若非0，则输出指定数量脉冲</li>
+<li>Fast Mode: Disable,
+若使能会让波形驱动能力强、响应快速，但耗电高</li>
+</ol></li>
+</ol>
+<h2 id="具体实现">具体实现</h2>
+<ol type="1">
+<li><p>声明比较寄存器变量 <code>uint16_t pwmVal=0;</code>
+（在此实验中可设为全局变量）</p></li>
+<li><p>使能PWM输出通道
+<code>HAL_TIM_PWM_Start(&amp;htim3,TIM_CHANNEL_2);</code> （配置为 TIM3
+的 CH2通道）</p></li>
+<li><p>呼吸灯具体实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span>(pwmVal&lt;<span class="number">500</span>)&#123;</span><br><span class="line">	pwmVal++;</span><br><span class="line">	__HAL_TIM_SetCompare(&amp;htim3,TIM_CHANNEL_2,pwmVal);</span><br><span class="line">	HAL_Delay(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">while</span>(pwmVal&gt;<span class="number">0</span>)&#123;</span><br><span class="line">	pwmVal--;</span><br><span class="line">	__HAL_TIM_SetCompare(&amp;htim3,TIM_CHANNEL_2,pwmVal);</span><br><span class="line">	HAL_Delay(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
 </ol>
 
   </div>
@@ -288,17 +207,10 @@
     
   <div class="sea-prev-next-wrapper">
     
-      <div class="prev">
-        <span><</span>
-        <a class="link" href="/PWM_light/">
-          PWM呼吸灯
-        </a>
-      </div>
-    
     
       <div class="next">
-        <a class="link" href="/f_read_write/">
-          文件的读写
+        <a class="link" href="/bit_operation/">
+          位运算
         </a>
         <span>></span>
       </div>
