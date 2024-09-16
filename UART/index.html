@@ -26,7 +26,7 @@
 <meta property="og:description" content="2.5 UART通信 理论知识 物理信号 硬件电路引脚  实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND）  Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-09-12T13:41:24.926Z">
+<meta property="article:modified_time" content="2024-09-16T03:58:04.229Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="STM32">
@@ -317,11 +317,13 @@ target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_54015326/artic
 <li>实现UART随意发送定长数据，可接收一定长度以内的数据</li>
 <li>主函数只负责发送，中断回调函数负责接收</li>
 </ul>
-<p>代码在 中断式 的程序基础上修改 -
-<code>HAL_UART_Receive_IT(&amp;huart1,ExData,5);</code>
-换成<code>HAL_UARTEx_ReceiveToIdle_IT(&amp;huart1, RxData, 5);</code> -
-中断回调函数名称改为
-<code>void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)</code></p>
+<p>代码在 中断式 的程序基础上修改</p>
+<ul>
+<li>将 <code>HAL_UART_Receive_IT(&amp;huart1,ExData,5);</code>
+换成<code>HAL_UARTEx_ReceiveToIdle_IT(&amp;huart1, RxData, 5);</code></li>
+<li>中断回调函数名称改为
+<code>void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)</code></li>
+</ul>
 <h4 id="dma中断">DMA中断</h4>
 <ul>
 <li>配置USART的DMA中断
