@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CAN通信 | GBY's Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="">
+  <meta name="theme-color" content="#10b981">
+
+  <link rel="canonical" href="https://skina.cn/CAN_communication/">
+
+  <link rel="shortcut icon" href="/">
+
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+
+  
+  <meta name="description" content="CAN通信 何为CAN总线 多电控单元间交换数据使用的多主机局部网络串行通信协议 总的来说，就是一条通信线路上连接多个节点，各个节点都通过这条线路来发送信息，当一个节点发送消息时，其他节点监听；当多个节点发送消息是，按照优先级发送。 可实现 点对点，点对多点，全局广播的功能。 一般认为有两个层级： 数据链路层 和 物理层 通信基础知识-链路  地址 冲突检测与避免 误码校验">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CAN通信">
+<meta property="og:url" content="https://skina.cn/CAN_communication/index.html">
+<meta property="og:site_name" content="GBY&#39;s Blog">
+<meta property="og:description" content="CAN通信 何为CAN总线 多电控单元间交换数据使用的多主机局部网络串行通信协议 总的来说，就是一条通信线路上连接多个节点，各个节点都通过这条线路来发送信息，当一个节点发送消息时，其他节点监听；当多个节点发送消息是，按照优先级发送。 可实现 点对点，点对多点，全局广播的功能。 一般认为有两个层级： 数据链路层 和 物理层 通信基础知识-链路  地址 冲突检测与避免 误码校验">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://skina.cn/images/CAN-bus_node_states.png">
+<meta property="og:image" content="https://skina.cn/images/Can-bus_overload.png">
+<meta property="og:image" content="https://skina.cn/images/CAN_Bus_Line.png">
+<meta property="og:image" content="https://skina.cn/images/CAN_electrical_level.png">
+<meta property="og:image" content="https://skina.cn/images/mod2operation.png">
+<meta property="og:image" content="https://skina.cn/images/STM32_CAN_hardware.png">
+<meta property="article:published_time" content="2024-09-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-09-21T07:24:42.460Z">
+<meta property="article:author" content="GBYYY.">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="单片机">
+<meta property="article:tag" content="通信">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://skina.cn/images/CAN-bus_node_states.png">
+
+  <style>
+    :root {
+      --sea-color-primary: #10b981;
+    }
+  </style>
+
+  
+<script src="/js/theme_mode.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <header class="sea-header">
+    <nav class="sea-nav-wrap">
+  <h1 class="sea-nav-logo" title="">
+    <a href="/">GBY's Blog</a>
+  </h1>
+  <div class="sea-nav-menus">
+    <div id="sea-nav-toggle">
+      <svg t="1716965724278" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10878" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M950.857143 768v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429v-73.142857c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z m0-292.571429v73.142858c0 20.004571-16.566857 36.571429-36.571429 36.571428H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571428v-73.142858c0-20.004571 16.566857-36.571429 36.571429-36.571428h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571428z m0-292.571428v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429V182.857143c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z" p-id="10879"></path></svg>
+    </div>
+
+    <div class="sea-menu-wrap">
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/"
+    >
+      Home
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/links"
+    >
+      Links
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/archives/"
+    >
+      Archives
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/tags/"
+    >
+      Tags
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/about"
+    >
+      About
+    </a>
+  
+
+  <span class="sea-menu-sep">|</span>
+
+  
+
+  <span class="sea-menu-icon" id="sea-theme-dark">
+    <svg t="1725413107294" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10118" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M557.553778 976.355556c-257.265778 0-466.56-207.160889-466.56-464.426667 0-253.923556 206.577778-464.284444 460.501333-464.284445h0.355556c10.766222 0 20.622222 3.953778 25.443555 13.610667 4.878222 9.756444 3.740444 20.394667-2.915555 29.027556-55.722667 72.220444-85.162667 158.108444-85.162667 249.372444 0 225.891556 183.779556 409.386667 409.671111 409.386667l5.248-0.256c10.325333-0.142222 20.977778 5.859556 25.841778 15.644444a28.302222 28.302222 0 0 1-2.915556 30.051556C837.902222 910.08 703.203556 976.355556 557.553778 976.355556zM495.274667 105.016889C299.192889 135.281778 147.882667 306.161778 147.882667 509.809778c0 225.877333 183.779556 409.656889 409.671111 409.656889 108.686222 0 210.403556-42.055111 286.577778-116.977778-231.566222-27.192889-411.804444-224.625778-411.804445-463.36 0-83.427556 21.617778-163.299556 62.947556-234.112z" fill="" p-id="10119"></path><path d="M578.830222 879.132444c-186.865778 0-345.784889-133.418667-377.841778-317.269333a14.222222 14.222222 0 1 1 28.017778-4.878222c29.681778 170.183111 176.810667 293.703111 349.824 293.703111a14.222222 14.222222 0 1 1 0 28.444444zM209.991111 531.2c-7.537778 0-13.838222-6.997333-14.193778-14.606222-0.312889-6.584889-0.483556-13.795556-0.483555-20.465778 0-7.864889 6.357333-14.492444 14.222222-14.492444s14.222222 6.229333 14.222222 14.094222c0 6.229333 0.170667 13.425778 0.455111 19.584 0.369778 7.850667-5.674667 15.886222-13.525333 15.886222h-0.696889z" fill="" p-id="10120"></path><path d="M622.350222 309.930667m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10121"></path><path d="M787.072 188.273778m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10122"></path><path d="M731.960889 415.303111m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" p-id="10123"></path></svg>
+  </span>
+  <span class="sea-menu-icon" id="sea-theme-light">
+    <svg t="1725410359322" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4274" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 768c-141.376 0-256-114.624-256-256s114.624-256 256-256 256 114.624 256 256-114.624 256-256 256z m0-85.333333a170.666667 170.666667 0 1 0 0-341.333334 170.666667 170.666667 0 0 0 0 341.333334zM469.333333 85.333333a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0V85.333333z m0 768a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0v-85.333334zM85.333333 554.666667a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334H85.333333z m768 0a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334h-85.333334zM161.834667 222.165333a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m576 576a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m-515.669334 64a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z m576-576a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z" p-id="4275"></path></svg>
+  </span>
+
+  <span id="sea-menu-close-icon">
+    <svg t="1725435896874" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4408" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M556.8 512l265.6-265.6c12.8-12.8 12.8-32 0-44.8s-32-12.8-44.8 0L512 467.2 246.4 201.6c-12.8-12.8-32-12.8-44.8 0s-12.8 32 0 44.8l265.6 265.6-265.6 265.6c-12.8 12.8-12.8 32 0 44.8 6.4 6.4 12.8 9.6 22.4 9.6s16-3.2 22.4-9.6l265.6-265.6 265.6 265.6c6.4 6.4 16 9.6 22.4 9.6s16-3.2 22.4-9.6c12.8-12.8 12.8-32 0-44.8L556.8 512z" p-id="4409"></path></svg>
+  </span>
+</div>
+<div id="sea-nav-dimmer"></div>
+  </div>
+</nav>
+  </header>
+  <main id="sea-main-wrapper">
+    <article class="sea-page-card-wrapper">
+  <header class="sea-article-header">
+    <h1 class="sea-article-title">CAN通信</h1>
+    
+      <div class="sea-post-meta sea-post-meta__center">
+        <div class="sea-post-time">
+  <svg t="1716964550804" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2621" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M805.49888 981.49888l-602.3168-0.76288c-86.59456-8.192-154.56768-81.3056-154.56768-170.01472L48.6144 291.73248c0-94.1568 76.60032-170.75712 170.7776-170.75712l586.10176 0c94.1568 0 170.73152 76.60032 170.73152 170.75712L976.22528 810.7008C976.2304 904.87296 899.63008 981.49888 805.49888 981.49888L805.49888 981.49888zM219.3664 190.57152c-55.79776 0-101.20192 45.38368-101.20192 101.18144l0 518.96832c0 55.79776 45.40416 101.20704 101.20192 101.20704l586.13248 0c55.77728 0 101.16096-45.40928 101.16096-101.20704L906.65984 291.73248c0-55.79776-45.38368-101.18656-101.16096-101.18656L219.3664 190.54592 219.3664 190.57152zM698.84416 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L745.22624 244.1216C745.22624 269.7472 724.46976 290.51904 698.84416 290.51904L698.84416 290.51904zM315.65824 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L362.04032 244.1216C362.04032 269.7472 341.28896 290.51904 315.65824 290.51904L315.65824 290.51904zM534.8864 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C581.26848 774.01088 560.4864 794.78784 534.8864 794.78784L534.8864 794.78784zM930.79552 452.608 121.24672 452.608c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l809.5744 0c25.6 0 46.38208 20.77696 46.38208 46.38208C977.2032 431.82592 956.42624 452.608 930.79552 452.608L930.79552 452.608zM327.92576 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208C374.30784 628.25472 353.52576 649.03168 327.92576 649.03168L327.92576 649.03168zM534.8864 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208S560.4864 649.03168 534.8864 649.03168L534.8864 649.03168zM741.27872 649.03168l-44.26752 0c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.77696 46.38208 46.38208C787.6608 628.25472 766.90944 649.03168 741.27872 649.03168L741.27872 649.03168zM327.92576 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C374.30784 774.01088 353.52576 794.78784 327.92576 794.78784L327.92576 794.78784zM741.27872 794.78784l-44.26752 0c-25.60512 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.78208 46.38208 46.38208C787.6608 774.01088 766.90944 794.78784 741.27872 794.78784L741.27872 794.78784z" p-id="2622"></path></svg>
+  <time datetime="2024-09-20T16:00:00.000Z">2024-09-21</time>
+</div>
+        
+        
+  <div class="sea-post-tags">
+    <svg t="1716964811431" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6117" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M384 977.152c-20.5312 0-39.8336-7.9872-54.3232-22.4256l-260.4032-260.4032c-14.4896-14.4896-22.4256-33.7408-22.4256-54.3232s7.9872-39.8336 22.4256-54.3232l439.6032-439.6032c24.9344-24.9344 70.2464-43.7248 105.5232-43.7248h230.4c42.3424 0 76.8 34.4576 76.8 76.8v230.4c0 35.2256-18.7904 80.5888-43.6736 105.5232l-439.6032 439.6032a76.1856 76.1856 0 0 1-54.3232 22.4256zM614.4 153.6c-21.248 0-54.272 13.6704-69.2736 28.7232l-439.6032 439.6032c-4.8128 4.8128-7.424 11.2128-7.424 18.1248s2.6624 13.312 7.424 18.0736l260.4032 260.4032c4.8128 4.8128 11.2128 7.424 18.1248 7.424s13.312-2.6624 18.1248-7.424l439.6032-439.6032c15.0016-15.0016 28.7232-48.0768 28.7232-69.3248V179.2a25.6 25.6 0 0 0-25.6-25.6h-230.4z" p-id="6118"></path><path d="M742.4 358.4c-42.3424 0-76.8-34.4576-76.8-76.8S700.0576 204.8 742.4 204.8s76.8 34.4576 76.8 76.8S784.7424 358.4 742.4 358.4z m0-102.4a25.6 25.6 0 1 0 0 51.2 25.6 25.6 0 0 0 0-51.2z" p-id="6119"></path></svg>
+    <a class="tag-link" href="/tags/STM32/" rel="tag">STM32</a> , <a class="tag-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a> , <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a> , <a class="tag-link" href="/tags/%E9%80%9A%E4%BF%A1/" rel="tag">通信</a>
+  </div>
+
+      </div>
+    
+  </header>
+  <div class="sea-article-content sea-doc">
+    <h1 id="can通信">CAN通信</h1>
+<h2 id="何为can总线">何为CAN总线</h2>
+<p>多电控单元间交换数据使用的<strong>多主机局部网络串行通信协议</strong></p>
+<p>总的来说，就是一条通信线路上连接多个节点，各个节点都通过这条线路来发送信息，当一个节点发送消息时，其他节点监听；当多个节点发送消息是，按照优先级发送。</p>
+<p>可实现 点对点，点对多点，全局广播的功能。 一般认为有两个层级：
+<code>数据链路层</code> 和 <code>物理层</code></p>
+<h2 id="通信基础知识-链路">通信基础知识-链路</h2>
+<ul>
+<li>地址</li>
+<li>冲突检测与避免</li>
+<li>误码校验</li>
+<li>滤波器与掩码（此部分内容摘抄自中科大RM系列教程之CAN通信）
+<ul>
+<li>用于配置接收设备，注意，是过滤通过，而非过滤排除机制。即符合条件的报文会接收</li>
+<li>滤波器用于过滤出想要接收的信息，掩码Mask用于匹配想要接收的信息ID</li>
+<li>如何过滤与匹配？以CAN ID作为匹配规则。标准格式中的CAN
+ID长度为11b，也就是CAN ID最大为0x7ff</li>
+<li><strong>例</strong>
+<ul>
+<li>一个CAN ID为0x114，如果我要配置一个滤波器只接收这个CAN
+ID的帧的话，就需要配置滤波器过滤目标为0x114，掩码为0x7ff。流程就是把掩码变成二进制01串，为1的位要与过滤目标一致</li>
+<li>一段CAN_ID为0x114~0x117，如果我要配置一个滤波器只接收这一段CAN
+ID的帧的话，就需要配置滤波器过滤目标为0x114，掩码为0x7fc。也就是把掩码变成二进制01串，为1的位要与过滤目标一致</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="数据格式">数据格式</h2>
+<h3 id="帧类型">帧类型</h3>
+<h4 id="数据帧">数据帧</h4>
+<p>数据帧包含以下部分</p>
+<ul>
+<li>帧起始（SOF）：单个显性位组成，总线空闲时，发送节点发送帧起始。其他节点同步于该帧起始位</li>
+<li>仲裁域：决定发送优先级
+<ul>
+<li>ID：顾名思义，所发送数据的身份标识，大小为11字节。</li>
+<li>SRR：替代远程帧请求位，为显性</li>
+<li>IDE：识别符扩展位，在整个数据格式中处于第14位。在标准帧格式中位于控制域，为显性；在扩展帧格式中位于仲裁域，为隐性</li>
+<li>RTR：远程帧发送标识位，为显性</li>
+</ul></li>
+<li>控制域
+<ul>
+<li>IDE：已在仲裁域中解释过，不再赘述</li>
+<li>r0,
+r1：保留位0和1，在目前的CAN总线规范中没有明确定义用途。一般用于隐性电平填充。</li>
+<li>DLC：数据段长度码；BCD编码，范围0~8</li>
+</ul></li>
+<li>数据域：MSB优先传输</li>
+<li>CRC域：数据检错，CRC校验值存放于CRC段</li>
+<li>应答域（ACK）：帧起始到CRC段之间的内容没有错误，则在ACK段发送显性电平
+<ul>
+<li>ACK槽：发送节点发送隐性电平；接收正确的节点发送显性电平 →
+总线与结果为显性电平。发送节点据此可判断发送成功</li>
+<li>ACK界定符：1个隐性电平</li>
+</ul></li>
+<li>帧结尾（EOF）：7个连续隐性位组成</li>
+</ul>
+<p>相信上述内容有许多专有名词难以理解，这些内容将在文末进行阐释。</p>
+<p><strong>标准帧格式</strong> 如下</p>
+<table>
+<tr>
+<th>
+</th>
+<th>
+帧起始
+</th>
+<th colspan="2">
+仲裁域
+</th>
+<th colspan="3">
+控制域
+</th>
+<th>
+数据域
+</th>
+<th colspan="2">
+CRC域
+</th>
+<th colspan="2">
+ACK域
+</th>
+<th>
+帧结束
+</th>
+</tr>
+<tr>
+<th>
+组成部分
+</th>
+<td>
+SOF
+</td>
+<td>
+ID[0:10]
+</td>
+<td>
+RTR
+</td>
+<td>
+IDE
+</td>
+<td>
+r0
+</td>
+<td>
+DLC
+</td>
+<td>
+Data:Byte0~Byte7
+</td>
+<td>
+CRC_Value[0:14]
+</td>
+<td>
+CRC界定符
+</td>
+<td>
+ACK槽
+</td>
+<td>
+ACK界定符
+</td>
+<td>
+EOF
+</td>
+</tr>
+<tr>
+<th>
+数据大小/bit
+</th>
+<td>
+1
+</td>
+<td>
+11
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+0~64
+</td>
+<td>
+15
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+7
+</td>
+</tr>
+</table>
+<p><strong>扩展帧格式</strong> 较 <strong>标准帧格式</strong>
+有如下区别</p>
+<table>
+<tr>
+<th>
+</th>
+<th>
+...
+</th>
+<th colspan="5">
+仲裁域
+</th>
+<th colspan="3">
+控制域
+</th>
+<th>
+...
+</th>
+</tr>
+<tr>
+<th>
+组成部分
+</th>
+<td>
+...
+</td>
+<td>
+ID[0:10]
+</td>
+<td>
+SRR
+</td>
+<td>
+IDE
+</td>
+<td>
+ID[11,28]
+</td>
+<td>
+RTR
+</td>
+<td>
+r1
+</td>
+<td>
+r0
+</td>
+<td>
+DLC
+</td>
+<td>
+...
+</td>
+</tr>
+<tr>
+<th>
+数据大小/bit
+</th>
+<td>
+...
+</td>
+<td>
+11
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+18
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+...
+</td>
+</tr>
+</table>
+<h4 id="远程帧">远程帧</h4>
+<p>与数据帧相比，远程帧无数据域，由6个部分组成，也有标准格式和扩展格式，且RTR为1（隐性电平）。</p>
+<p><strong>标准帧格式</strong> 如下</p>
+<table>
+<tr>
+<th>
+</th>
+<th>
+帧起始
+</th>
+<th colspan="2">
+仲裁域
+</th>
+<th colspan="3">
+控制域
+</th>
+<th colspan="2">
+CRC域
+</th>
+<th colspan="2">
+ACK域
+</th>
+<th>
+帧结束
+</th>
+</tr>
+<tr>
+<th>
+组成部分
+</th>
+<td>
+SOF
+</td>
+<td>
+ID[0:10]
+</td>
+<td>
+RTR
+</td>
+<td>
+IDE
+</td>
+<td>
+r0
+</td>
+<td>
+DLC
+</td>
+<td>
+CRC_Value[0:14]
+</td>
+<td>
+CRC界定符
+</td>
+<td>
+ACK槽
+</td>
+<td>
+ACK界定符
+</td>
+<td>
+EOF
+</td>
+</tr>
+<tr>
+<th>
+数据大小/bit
+</th>
+<td>
+1
+</td>
+<td>
+11
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+15
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+7
+</td>
+</tr>
+</table>
+<p><strong>扩展帧格式</strong> 较 <strong>标准帧格式</strong>
+有如下区别</p>
+<table>
+<tr>
+<th>
+</th>
+<th>
+...
+</th>
+<th colspan="5">
+仲裁域
+</th>
+<th colspan="3">
+控制域
+</th>
+<th>
+...
+</th>
+</tr>
+<tr>
+<th>
+组成部分
+</th>
+<td>
+...
+</td>
+<td>
+ID[0:10]
+</td>
+<td>
+SRR
+</td>
+<td>
+IDE
+</td>
+<td>
+ID[11,28]
+</td>
+<td>
+RTR
+</td>
+<td>
+r1
+</td>
+<td>
+r0
+</td>
+<td>
+DLC
+</td>
+<td>
+...
+</td>
+</tr>
+<tr>
+<th>
+数据大小/bit
+</th>
+<td>
+...
+</td>
+<td>
+11
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+18
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+...
+</td>
+</tr>
+</table>
+<h4 id="数据帧与远程帧的区别">数据帧与远程帧的区别</h4>
+<table>
+<thead>
+<tr>
+<th>比较内容</th>
+<th>数据帧</th>
+<th>远程帧</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ID</td>
+<td>发送节点的ID</td>
+<td>被请求发送节点的ID</td>
+</tr>
+<tr>
+<td>SRR</td>
+<td>0（显性电平）</td>
+<td>1（隐性电平）</td>
+</tr>
+<tr>
+<td>RTR</td>
+<td>0（显性电平）</td>
+<td>1（隐性电平）</td>
+</tr>
+<tr>
+<td>DLC</td>
+<td>发送数据长度</td>
+<td>请求的数据长度</td>
+</tr>
+<tr>
+<td>有无数据段</td>
+<td>有</td>
+<td>无</td>
+</tr>
+<tr>
+<td>CRC校验范围</td>
+<td>帧起始+仲裁域+控制域+数据域</td>
+<td>帧起始+仲裁域+控制域</td>
+</tr>
+</tbody>
+</table>
+<h4 id="错误帧">错误帧</h4>
+<p>CAN-bus 错误类型</p>
+<ul>
+<li>CRC错误：发送节点计算得到的CRC值与接收到的CRC值不匹配</li>
+<li>格式错误：传输的数据帧格式与任何一种合法帧格式不符</li>
+<li>应答错误：发送节点在ACK阶段没有接收到应答信号</li>
+<li>位发送错误：发送节点在发送时发现总线电平与发送电平不相同</li>
+<li>位填充错误：传输信号违反“位填充”规则</li>
+</ul>
+<p>当出现以上5种错误类型之一时，发送或接收节点将发送错误帧，结构为
+<code>错误标识 + 错误界定符</code></p>
+<p>主动错误标识：由处于主动错误状态的节点发送 ↓</p>
+<table>
+<tr>
+<th colspan="6">
+6个连续显性电平位
+</th>
+<th colspan="8">
+8个连续隐性电平位
+</th>
+</tr>
+<tr>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+</tr>
+</table>
+<p>被动错误标识：由处于被动错误状态的节点发送 ↓</p>
+<table>
+<tr>
+<th colspan="6">
+6个连续隐性电平位
+</th>
+<th colspan="8">
+8个连续隐性电平位
+</th>
+</tr>
+<tr>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+</tr>
+</table>
+<p>为防止无法正常接收的节点一直发送错误帧干扰通信，CAN-bus规定了节点的三种状态及行为</p>
+<ul>
+<li><p>REC：接收错误计数器</p></li>
+<li><p>TEC：发送错误计数器</p></li>
+</ul>
+<p>复位时二者都被清零</p>
+<figure>
+<img src="../images\CAN-bus_node_states.png"
+alt="CAN-bus_node_states" />
+<figcaption aria-hidden="true">CAN-bus_node_states</figcaption>
+</figure>
+<h4 id="过载帧">过载帧</h4>
+<p>当某接收节点没有做好接受下一帧数据准备时，将发送过载帧来通知发送节点</p>
+<p>过载帧结构 <code>过载标志 + 过载帧界定符</code></p>
+<table>
+<tr>
+<th colspan="6">
+6个连续显性电平位（过载标志）
+</th>
+<th colspan="8">
+8个连续隐性电平位（过载帧界定符）
+</th>
+</tr>
+<tr>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+</tr>
+</table>
+<p>由于存在多个节点同时过载且过载帧发送有时间差，可能出现叠加超6个位的情况</p>
+<figure>
+<img src="../images\Can-bus_overload.png" alt="Can-bus_overload" />
+<figcaption aria-hidden="true">Can-bus_overload</figcaption>
+</figure>
+<h4 id="帧间隔">帧间隔</h4>
+<p>用于将数据帧或远程帧和他们之前的帧分开，但过载帧和错误帧前不会插入帧间隔</p>
+<table>
+<tr>
+<td>
+...
+</td>
+<td>
+其他帧
+</td>
+<td>
+帧间隔
+</td>
+<td>
+数据帧或远程帧
+</td>
+<td>
+...
+</td>
+<td>
+其他帧
+</td>
+<td>
+数据帧或远程帧
+</td>
+<td>
+...
+</td>
+</tr>
+</table>
+<ul>
+<li>帧间隔过后，若无节点发送帧则总线进入空闲</li>
+</ul>
+<table>
+<tr>
+<td>
+...
+</td>
+<td>
+帧间隔
+</td>
+<td>
+0~∞
+</td>
+<td>
+...
+</td>
+</tr>
+</table>
+<ul>
+<li>帧间隔过后，如果被动错误节点要发送帧，则先发送8个隐性电平的传输延迟，再发送帧</li>
+</ul>
+<table>
+<tr>
+<td>
+...
+</td>
+<td>
+帧间隔
+</td>
+<td>
+传输延迟（8个隐性位）
+</td>
+<td>
+被动错误节点发送帧
+</td>
+<td>
+...
+</td>
+</tr>
+</table>
+<blockquote>
+<p>[!warning]</p>
+<p>保证主动错误节点优先发送，避免被动错误节点因硬件故障干扰整个网络</p>
+</blockquote>
+<h2 id="收发模式">收发模式</h2>
+<ul>
+<li><p>常规模式</p>
+<ul>
+<li><p>向总线发送</p></li>
+<li><p>从总线接收</p></li>
+</ul></li>
+<li><p>回环模式</p>
+<ul>
+<li><p>向总线和本机发送</p></li>
+<li><p>不从总线接收仅从本机接收</p></li>
+</ul></li>
+<li><p>静默模式</p>
+<ul>
+<li><p>不向总线发送仅向本机发送</p></li>
+<li><p>从总线和本机接收</p></li>
+</ul></li>
+<li><p>回环静默模式</p>
+<ul>
+<li><p>不向总线发送</p></li>
+<li><p>不从总线接收</p></li>
+<li><p>自收自发</p></li>
+</ul></li>
+</ul>
+<h2 id="一些疑惑及解答">一些疑惑及解答</h2>
+<h3
+id="何为显性电平何为隐性电平2"><em>何为显性电平？何为隐性电平[2]？</em></h3>
+<p><strong>答：</strong>显性电平在逻辑层面表现为0，隐性电平在逻辑层面表现为1；显性电平覆盖隐性电平；均为隐性电平时总线上才为隐性电平。CAN采用差分电压发送电平（
+<code>Vdiff</code> ） <code>V_diff = CAN_H - CAN_L</code></p>
+<p><strong>例</strong>
+CAN总线为“隐性”（逻辑1）时，CAN_H和CAN_L的电平为2.5V（电位差V_diff为0V）</p>
+<p><em>为什么要有120Ω的电阻？</em></p>
+<p>CAN_H与CAN_L通过120Ohm电阻连接在一起，防止总线上传输的高频信号存在反射振铃效应导致信号不稳定、寄生电容导致信号响应速度变慢等情况</p>
+<p><strong>图解</strong></p>
+<figure>
+<img src="../images\CAN_Bus_Line.png" alt="CAN_Bus_Line" />
+<figcaption aria-hidden="true">CAN_Bus_Line</figcaption>
+</figure>
+<figure>
+<img src="../images\CAN_electrical_level.png"
+alt="CAN_electrical_level" />
+<figcaption aria-hidden="true">CAN_electrical_level</figcaption>
+</figure>
+<h3
+id="can通信采用双绞线传输的优点"><em>CAN通信采用双绞线传输的优点？</em></h3>
+<p><strong>答：</strong>使外部干扰在两根导线上产生的噪声相同，以便后续的差分电路提取出有用信号</p>
+<h3 id="仲裁域如何实现仲裁功能"><em>仲裁域如何实现仲裁功能？</em></h3>
+<p><strong>答：</strong>CAN控制器在发送数据的同时监测数据线的电平是否与发送数据对应电平相同，如果不同则停止发送并做其他处理
+↓</p>
+<ol type="1">
+<li>如果该位处于仲裁域，则退出总线竞争</li>
+<li>如果处于其他域，则产生错误时间（ACK或被动错误标志传输期间除外）</li>
+</ol>
+<p>简而言之，显性电平覆盖隐性电平。同一位电平不相同时，显性电平继续发送，隐性电平的进入只听模式</p>
+<h3 id="数据帧与遥控帧的优先级"><em>数据帧与遥控帧的优先级</em></h3>
+<p><strong>答：</strong>数据帧优先级&gt;遥控帧优先级，因为数据帧仲裁段RTR为显性</p>
+<p><em>标准格式与扩展格式的优先级</em></p>
+<p><strong>答：</strong>标准格式优先级&gt;扩展格式优先级，因为标准格式IDE位为显性电平，扩展格式IDE位为隐性电平。</p>
+<blockquote>
+<p>[!warning]</p>
+<p>对于前11位ID相同的标准格式和扩展格式才适用于此规则，前11位ID不相同的适用于仲裁规则</p>
+</blockquote>
+<h3 id="r0-r1作用什么是隐性电平填充-3"><em>r0,
+r1作用？什么是隐性电平填充 [3]？</em></h3>
+<p><strong>答：</strong>r0与r1为保留位，在当前的CAN标准中，这些位的具体用途并未明确定义。之所以用于隐性电平填充是因为
+数字越大优先级越小，若为1（即隐性电平）则永远不会用得到它。</p>
+<h3 id="bcd编码-4"><em>BCD编码 [4]？</em></h3>
+<p><strong>答：</strong>BCD码（Binary-Coded
+Decimal‎），用4位二进制数来表示1位十进制中的0~9这10个数码，是一种二进制的数字编码形式，用二进制编码的十进制代码。</p>
+<table>
+<thead>
+<tr>
+<th>十进制</th>
+<th>BCD表达格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0001</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0010</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0011</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0100</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0101</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0110</td>
+</tr>
+<tr>
+<td>7</td>
+<td>0111</td>
+</tr>
+<tr>
+<td>8</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>9</td>
+<td>1001</td>
+</tr>
+</tbody>
+</table>
+<p>此处仅列出上文中所需要的知识，具体请查阅参考资料 [4]</p>
+<h3 id="什么是msb数据"><em>什么是MSB数据？</em></h3>
+<p><strong>答：</strong>最高有效位，二进制中代表最高值的比特位，这一位对数值的影响最大。</p>
+<p><strong>例</strong>
+以数字9为例子，其二进制为1001，若MSB发生错误，即最高位1变为0，则整个数字变为了1，误差为8。</p>
+<p>此处仅列出上文中所需要的知识，具体请查阅参考资料 [5]</p>
+<h3 id="crc如何计算-6-7"><em>CRC如何计算 [6] [7]？</em></h3>
+<p><strong>答：</strong>CRC全称为
+循环冗余校验。其根本思想是在要发送的帧后面附加一个数，作为数据校验码，并生成一个新帧发给接收端，用于验证数据是否损坏。</p>
+<p>从数学上讲，CRC是数据的模二多项式 (polynomial)
+除法的余数。因此，CRC可以写成 <code>CRC = data % 2 polynomial</code></p>
+<h4 id="计算过程">计算过程</h4>
+<ol type="1">
+<li><p>选定CRC生成多项式G(x)作为除数。G(x)决定了校验码的生成方式，常用的CRC多项式包括CRC-16（即除数共17位）、CRC-32。注意，G(x)的最高位和最低位必须为1。<strong>例</strong>
+以4位CRC（二进制共5位）作为示例 <code>11001</code> 表示的就是 <span
+class="math inline">\(G(x)=x^4+x^3+1\)</span></p>
+<blockquote>
+<p>[!warning]</p>
+<p>由于选择不同的多项式将导致相同数据产生不同的CRC，所以发送方和接收方需要使用共同的多项式。
+对于CRC来说，根据具体的使用场景，有些多项式比其他多项式更适合使用。例如，某些多项式可能更容易检测出连续位错误或交替位错误。</p>
+</blockquote></li>
+<li><p>看所选定的除数二进制位数（假设为k位），然后在要发送的数据帧（假设为m位）后面加上k-1位“0”，然后以这个加了k-1个“0“的新帧（一共是m+k-1位）以“模2除法”方式除以上面这个除数，所得到的余数（也是二进制的比特串）就是该帧的CRC校验码，也称之为FCS（帧校验序列）。</p>
+<blockquote>
+<p>[!warning]</p>
+<p>余数的位数一定要是比除数位数只能少一位，哪怕前面位是0，甚至是全为0（附带好整除时）也都不能省略。</p>
+</blockquote></li>
+<li><p>再把这个校验码附加在原数据帧（就是m位的帧，注意不是在后面形成的m+k-1位的帧）后面，构建一个新帧发送到接收端</p></li>
+<li><p>最后在接收端再把这个新帧以“模2除法”方式除以前面选择的除数，如果没有余数，则表明该帧在传输过程中没出错，否则出现了差错。</p></li>
+</ol>
+<h4 id="什么是模2除法">什么是模2除法</h4>
+<p><em>模2减法</em></p>
+<p><strong>答：</strong>模2运算是对二进制数逐位进行的运算，不存在进位或借位，每个位被视为独立的数。（其实就是C语言中的异或运算）</p>
+<p>下表为模2减法的数据表，其公式为 <span
+class="math inline">\(bit1-bit2=XOR\)</span></p>
+<table>
+<thead>
+<tr>
+<th>bit1</th>
+<th>bit2</th>
+<th>XOR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p><em>模2除法</em></p>
+<p>模二除法的执行类似于算术除法，唯一的区别是我们使用模二减法(XOR)而不是算术减法来计算每一步的余数。</p>
+<p><strong>例</strong> 假设被除数为 <code>100100</code> ，除数为
+<code>1101</code></p>
+<ol type="1">
+<li><p>计算除数长度为 <code>L</code> ，在示例中为
+<code>4</code></p></li>
+<li><p>在被除数后面加上 <code>L-1</code> 位，这里为 <code>3</code>
+（即CRC长度）</p></li>
+<li><p>用二进制模2进行计算，得到的余数即为CRC结果：<code>001</code></p>
+<figure>
+<img src="../images\mod2operation.png" alt="mod2operation" />
+<figcaption aria-hidden="true">mod2operation</figcaption>
+</figure></li>
+</ol>
+<p>关于 <strong>模2运算</strong> 的更多知识，请参阅<em>参考资料
+[8]</em></p>
+<p><em>何为主动错误状态？何为被动错误状态？</em></p>
+<p><strong>答：</strong>主动错误（Active
+Error）是指节点在发送数据帧时发现总线上存在错误，并且主动向其他节点通知该错误。
+主动错误通常是由于发送节点检测到仲裁场（Arbitration
+Field）或控制位（Control Field）上的错误而产生的。</p>
+<p>被动错误（Passive
+Error）是指节点在接收数据帧时检测到总线上存在错误，但不会主动通知其他节点。被动错误通常是由于接收节点检测到数据位（Data
+Field）或CRC（Cyclic Redundancy
+Check）校验错误而产生的。接收节点会将错误信息记录下来，但不会对其他节点进行任何主动干预。被动错误表示总线上存在一些问题，但并不影响其他节点的正常通信。</p>
+<p><em>主动错误和过载帧格式一致，如何区分[10]？</em></p>
+<p><strong>答：</strong>过载帧与主动错误帧具有相同的格式。但是，过载帧只能在帧间间隔产生，因此可通过这种方式区分过载帧和错误帧（错误帧是在帧传输时发出的）。</p>
+<p><em>CSMA/CD协议</em></p>
+<p>此部分内容较长，单开一节讲起</p>
+<h2 id="can在stm32-hal库中的应用11">CAN在stm32 HAL库中的应用[11]</h2>
+<h3 id="硬件实现">硬件实现</h3>
+<ul>
+<li>STM32自带CAN控制器，箭头表示收发关系，直线表示我们自行接到外部的总线</li>
+<li>发送方式：把发送的数据加到CAN收发器中，由它自主控制发送</li>
+<li>接收方式：从接收队列（FIFO队列）选择接收</li>
+</ul>
+<figure>
+<img src="../images\STM32_CAN_hardware.png" alt="STM32_CAN_hardware" />
+<figcaption aria-hidden="true">STM32_CAN_hardware</figcaption>
+</figure>
+<h3 id="软件配置">软件配置</h3>
+<ul>
+<li>查看原理图，明确元件与引脚的对应关系
+<ul>
+<li>在本实验中，明确LED和CAN即可</li>
+</ul></li>
+<li>配置STM32CubeMX
+<ul>
+<li>Serial Wire、外部时钟、时钟树</li>
+<li>配置LED引脚
+<ul>
+<li>初始状态为高电平表示灯灭</li>
+<li>上拉电阻，尽量别浮空</li>
+</ul></li>
+<li>配置CAN参数
+<ul>
+<li>Prescaler=9 即从APB1中分频出来</li>
+<li>Time Quanta in Bit Segment 1&amp;2 均为2，采样在两者间</li>
+<li>Operating Mode=Loopback 使用回环模式（自收自发）</li>
+<li>使能中断 Rx Tx</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="代码配置">代码配置</h3>
+<p>必要的自定义宏定义</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//滤波器编号</span></span><br><span class="line"><span class="comment">//将滤波器数值写入对应位</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> CAN_FILTER(x) ((x) &lt;&lt; 3)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//接收队列</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> CAN_FIFO_0 (0 &lt;&lt; 2)</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> CAN_FIFO_1 (1 &lt;&lt; 2)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//标准帧或扩展帧</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> CAN_STDIO (0 &lt;&lt; 1)</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> CAN_EXTID (1 &lt;&lt; 1)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//数据帧或遥控帧</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> CAN_DATA_TYPE (0 &lt;&lt; 0)</span></span><br><span class="line"><span class="meta"># <span class="keyword">define</span> CAN_REMOTE_TYPE (1 &lt;&lt; 0)</span></span><br></pre></td></tr></table></figure>
+<p>初始化CAN总线</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Private user code ---------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 初始化CAN总线</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param hcan CAN编号</span></span><br><span class="line"><span class="comment"> * @param Callback_Function 处理回调函数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">CAN_Init</span><span class="params">(CAN_HandleTypeDef *hcan)</span></span><br><span class="line">&#123;</span><br><span class="line">  HAL_CAN_Start(hcan);<span class="comment">//打开CAN</span></span><br><span class="line">  <span class="comment">//使能两个中断</span></span><br><span class="line">  __HAL_CAN_ENABLE_IT(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);</span><br><span class="line">  __HAL_CAN_ENABLE_IT(hcan, CAN_IT_RX_FIFO1_MSG_PENDING);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br></pre></td></tr></table></figure>
+<p>调用 <code>CAN_Init</code> 进行初始化</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* USER CODE BEGIN 2 */</span></span><br><span class="line">CAN_Init(&amp;hcan1);</span><br><span class="line"><span class="comment">/* USER CODE END 2 */</span></span><br></pre></td></tr></table></figure>
+<p>定义发送报文函数</p>
+<p>（关于 <code>CAN_TxHeaderTypeDef</code> 和
+<code>HAL_CAN_AddTxMessage()</code> 相关定义可自行在keil编译后使用
+<code>F12</code> 进行查看）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* Private user code ---------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">/* USER CODE BEGIN 0 */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 发送数据帧</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param hcan CAN编号</span></span><br><span class="line"><span class="comment"> * @param ID CAN_ID</span></span><br><span class="line"><span class="comment"> * @param Data 被发送的数据指针</span></span><br><span class="line"><span class="comment"> * @param Length 长度</span></span><br><span class="line"><span class="comment"> * @return uint8_t 执行状态</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">uint8_t</span> <span class="title function_">CAN_Send_Data</span><span class="params">(CAN_HandleTypeDef *hcan, <span class="type">uint16_t</span> ID, <span class="type">uint8_t</span> *Data, <span class="type">uint16_t</span> Length)</span></span><br><span class="line">&#123;</span><br><span class="line">  CAN_TxHeaderTypeDef tx_header;<span class="comment">//声明发送数据头</span></span><br><span class="line">  <span class="type">uint32_t</span> used_mailbox;<span class="comment">//使用的“邮箱”</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 检测关键传参</span></span><br><span class="line">  assert_param(hcan != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//写入数据</span></span><br><span class="line">  tx_header.StdId = ID;</span><br><span class="line">  tx_header.ExtId = <span class="number">0</span>;</span><br><span class="line">  tx_header.IDE = <span class="number">0</span>;</span><br><span class="line">  tx_header.RTR = <span class="number">0</span>;</span><br><span class="line">  tx_header.DLC = Length;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> (HAL_CAN_AddTxMessage(hcan, &amp;tx_header, Data, &amp;used_mailbox));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* USER CODE END 0 */</span></span><br></pre></td></tr></table></figure>
+<p>调用发送报文函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先定义</span></span><br><span class="line"><span class="type">uint8_t</span> Send_Data = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//以下添加在while(1)里</span></span><br><span class="line">Send_Data++;</span><br><span class="line">CAN_Send_Data(&amp;hcan1, <span class="number">0x114</span>, &amp;Send_Data, <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+<p>定义接收报文滤波器函数（规则按照上述讲解进行）</p>
+<p>（关于 <code>CAN_FilterTypeDef</code> 和
+<code>HAL_CAN_ConfigFilter();</code> 相关定义可自行在keil编译后使用
+<code>F12</code> 进行查看）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//配置滤波器</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief 配置CAN的滤波器</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param hcan CAN编号</span></span><br><span class="line"><span class="comment"> * @param Object_Para 编号 | FIFOx | ID类型 | 帧类型</span></span><br><span class="line"><span class="comment"> * @param ID ID</span></span><br><span class="line"><span class="comment"> * @param Mask_ID 屏蔽位(0x3ff, 0x1fffffff)</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">CAN_Filter_Mask_Config</span><span class="params">(CAN_HandleTypeDef *hcan, <span class="type">uint8_t</span> Object_Para, <span class="type">uint32_t</span> ID, <span class="type">uint32_t</span> Mask_ID)</span></span><br><span class="line">&#123;</span><br><span class="line">  CAN_FilterTypeDef can_filter_init_structure;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 检测关键传参</span></span><br><span class="line">  assert_param(hcan != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ((Object_Para &amp; <span class="number">0x02</span>)) <span class="comment">//判定标准帧或扩展帧</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 标准帧</span></span><br><span class="line">    <span class="comment">// 掩码后ID的高16bit</span></span><br><span class="line">    can_filter_init_structure.FilterIdHigh = ID &lt;&lt; <span class="number">3</span> &gt;&gt; <span class="number">16</span>;</span><br><span class="line">    <span class="comment">// 掩码后ID的低16bit</span></span><br><span class="line">    can_filter_init_structure.FilterIdLow = ID &lt;&lt; <span class="number">3</span> | ((Object_Para &amp; <span class="number">0x03</span>) &lt;&lt; <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// ID掩码值高16bit</span></span><br><span class="line">    can_filter_init_structure.FilterMaskIdHigh = Mask_ID &lt;&lt; <span class="number">3</span> &lt;&lt; <span class="number">16</span>;</span><br><span class="line">    <span class="comment">// ID掩码值低16bit</span></span><br><span class="line">    can_filter_init_structure.FilterMaskIdLow = Mask_ID &lt;&lt; <span class="number">3</span> | ((Object_Para &amp; <span class="number">0x03</span>) &lt;&lt; <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 扩展帧</span></span><br><span class="line">    <span class="comment">// 掩码后ID的高16bit</span></span><br><span class="line">    can_filter_init_structure.FilterIdHigh = ID &lt;&lt; <span class="number">5</span>;</span><br><span class="line">    <span class="comment">// 掩码后ID的低16bit</span></span><br><span class="line">    can_filter_init_structure.FilterIdLow = ((Object_Para &amp; <span class="number">0x03</span>) &lt;&lt; <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// ID掩码值高16bit</span></span><br><span class="line">    can_filter_init_structure.FilterMaskIdHigh = Mask_ID &lt;&lt; <span class="number">5</span>;</span><br><span class="line">    <span class="comment">// ID掩码值低16bit</span></span><br><span class="line">    can_filter_init_structure.FilterMaskIdLow = ((Object_Para &amp; <span class="number">0x03</span>) &lt;&lt; <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 滤波器序号, 0-27, 共28个滤波器, can1是0~13, can2是14~27</span></span><br><span class="line">  can_filter_init_structure.FilterBank = Object_Para &gt;&gt; <span class="number">3</span>;</span><br><span class="line">  <span class="comment">// 滤波器绑定FIFOx, 只能绑定一个</span></span><br><span class="line">  can_filter_init_structure.FilterFIFOAssignment = (Object_Para &gt;&gt; <span class="number">2</span>) &amp; <span class="number">0x01</span>;</span><br><span class="line">  <span class="comment">// 使能滤波器</span></span><br><span class="line">  can_filter_init_structure.FilterActivation = ENABLE;</span><br><span class="line">  <span class="comment">// 滤波器模式, 设置ID掩码模式</span></span><br><span class="line">  can_filter_init_structure.FilterMode = CAN_FILTERMODE_IDMASK;</span><br><span class="line">  <span class="comment">// 32位滤波</span></span><br><span class="line">  can_filter_init_structure.FilterScale = CAN_FILTERSCALE_32BIT;</span><br><span class="line">    <span class="comment">//从机模式选择开始单元</span></span><br><span class="line">  can_filter_init_structure.SlaveStartFilterBank = <span class="number">14</span>;</span><br><span class="line"></span><br><span class="line">  HAL_CAN_ConfigFilter(hcan, &amp;can_filter_init_structure);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用接收报文滤波器</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CAN_Filter_Mask_Config(&amp;hcan1, CAN_FILTER(<span class="number">13</span>) | CAN_FIFO_1 | CAN_STDID | CAN_DATA_TYPE, <span class="number">0x114</span>, <span class="number">0x7ff</span>);</span><br></pre></td></tr></table></figure>
+<p>定义接收报文中断回调函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * @brief HAL库CAN接收FIFO1中断</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * @param hcan CAN编号</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">HAL_CAN_RxFifo1MsgPendingCallback</span><span class="params">(CAN_HandleTypeDef *hcan)</span></span><br><span class="line">&#123;</span><br><span class="line">  CAN_RxHeaderTypeDef header;</span><br><span class="line">  <span class="type">uint8_t</span> data;</span><br><span class="line"></span><br><span class="line">  HAL_CAN_GetRxMessage(hcan, CAN_FILTER_FIFO1, &amp;header, &amp;data);</span><br><span class="line">  </span><br><span class="line">  LED_Control(data);<span class="comment">//点灯</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>点灯函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">LED_Control</span><span class="params">(<span class="type">uint8_t</span> data)</span></span><br><span class="line">&#123;</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1, ((data &amp; <span class="number">1</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_2, ((data &amp; <span class="number">2</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_3, ((data &amp; <span class="number">4</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_4, ((data &amp; <span class="number">8</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_5, ((data &amp; <span class="number">16</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6, ((data &amp; <span class="number">32</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, ((data &amp; <span class="number">64</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_8, ((data &amp; <span class="number">128</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料">参考资料</h2>
+<p>[1] <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/LEON1741/article/details/106199472">图解CAN总线数据的组成和帧格式_can总线帧头-CSDN博客</a></p>
+<p>[2] <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/skyxiao/article/details/116116018">CAN总线电平（隐性与显性）_can显性和隐性电平-CSDN博客</a></p>
+<p>[3] <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/kian9one/article/details/139899769">CAN总线基础（2）--数据帧深层解析_can数据帧-CSDN博客</a></p>
+<p>[4] <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/159070549">BCD码是什么 -
+知乎 (zhihu.com)</a></p>
+<p>[5] <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/wangyx1234/article/details/130352079">一文读懂大端、小端、字节序、MSB、LSB、MSBs、LSBs_msb和lsb是什么意思-CSDN博客</a></p>
+<p>[6] <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/resilient/article/details/117368600">CRC码计算及校验原理计算_crc校验码怎么算出来的-CSDN博客</a></p>
+<p>[7] <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/tilblackout/article/details/131195357">CRC校验(1)：CRC原理、计算例子和最优多项式的选择_crc多项式-CSDN博客</a></p>
+<p>[8] <a
+target="_blank" rel="noopener" href="https://blog.csdn.net/ljx1400052550/article/details/105929971">模2运算的加减乘除运算_模2乘法运算详解-CSDN博客</a></p>
+<p>[9] <a
+target="_blank" rel="noopener" href="https://wenku.csdn.net/answer/48m7g5d31t#:~:text=主动错误（Active%20Error）：主动错误是指节点在发送数据帧时发现总线上存在错误，并且主动向其他节点通知该错误。,主动错误通常是由于发送节点检测到仲裁场（Arbitration%20Field）或控制位（Control%20Field）上的错误而产生的。">CAN通讯中
+主动错误和被动错误的区别？ - CSDN文库</a></p>
+<p>[10] <a
+target="_blank" rel="noopener" href="https://www.cnblogs.com/alifpga/p/8655327.html">CAN总线过载帧 -
+alifpga - 博客园 (cnblogs.com)</a></p>
+<p>[11] <a
+target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1HY411D7Ar/?spm_id_from=333.788&amp;vd_source=2ee5fc1c6809e2f0f5d2bd967fead481">【中科大RM电控合集】小白也能看懂的CAN通信+STM32CubeMX编程_哔哩哔哩_bilibili</a></p>
+
+  </div>
+
+  
+    
+  <div class="sea-prev-next-wrapper">
+    
+    
+      <div class="next">
+        <a class="link" href="/PWM_light/">
+          PWM呼吸灯
+        </a>
+        <span>></span>
+      </div>
+    
+  </div>
+
+  
+</article>
+
+
+  </main>
+  <footer id="sea-footer-container">
+  <div class="sea-footer-row">
+    <div class="sea-footer-menu-link">
+      
+        <a
+          class="sea-footer-link"
+          
+            target="_blank"
+          
+          href="https://github.com/SkinCrab"
+        >
+          Github
+        </a>
+        <span class="sea-footer-link__dot">·</span>
+      
+        <a
+          class="sea-footer-link"
+          
+            target="_blank"
+          
+          href="https://t.me/aDeleted_user"
+        >
+          Telegram
+        </a>
+        <span class="sea-footer-link__dot">·</span>
+      
+    </div>
+  </div>
+  
+  
+  <div class="sea-footer-row">
+    <div class="sea-footer-copyright">
+      <span>©</span>
+      
+        2024
+      
+      <span>·</span>
+      GBYYY.
+    </div>
+    <span class="split-line">|</span>
+    <div class="sea-footer-theme-by">
+      Theme by <a class="theme" href="https://github.com/hai-zou/hexo-theme-sea" target="_blank">Sea</a>
+    </div>
+  </div>
+</footer>
+
+  
+<script src="/js/main.js"></script>
+
+
+<script src="/js/theme.js"></script>
+
+</body>
+</html>
