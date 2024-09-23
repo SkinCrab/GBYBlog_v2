@@ -32,7 +32,7 @@
 <meta property="og:image" content="https://skina.cn/images/mod2operation.png">
 <meta property="og:image" content="https://skina.cn/images/STM32_CAN_hardware.png">
 <meta property="article:published_time" content="2024-09-20T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-09-23T05:12:10.377Z">
+<meta property="article:modified_time" content="2024-09-23T05:15:24.227Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="STM32">
@@ -1212,17 +1212,20 @@ Check）校验错误而产生的。接收节点会将错误信息记录下来，
 <p>点灯函数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">LED_Control</span><span class="params">(<span class="type">uint8_t</span> data)</span></span><br><span class="line">&#123;</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_1, ((data &amp; <span class="number">1</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_2, ((data &amp; <span class="number">2</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_3, ((data &amp; <span class="number">4</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_4, ((data &amp; <span class="number">8</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_5, ((data &amp; <span class="number">16</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6, ((data &amp; <span class="number">32</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_7, ((data &amp; <span class="number">64</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">  HAL_GPIO_WritePin(GPIOG, GPIO_PIN_8, ((data &amp; <span class="number">128</span>) == <span class="number">0</span>) ? GPIO_PIN_SET : GPIO_PIN_RESET);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2><span id="can-kao-zi-liao">参考资料</span><a href="#can-kao-zi-liao" class="header-anchor">#</a></h2>
-<p>[1]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/LEON1741/article/details/106199472">图解CAN总线数据的组成和帧格式_can总线帧头-CSDN博客</a>
-[2]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/skyxiao/article/details/116116018">CAN总线电平（隐性与显性）_can显性和隐性电平-CSDN博客</a>
-[3]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/kian9one/article/details/139899769">CAN总线基础（2）--数据帧深层解析_can数据帧-CSDN博客</a>
-[4]: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/159070549">BCD码是什么 - 知乎
-(zhihu.com)</a> [5]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/wangyx1234/article/details/130352079">一文读懂大端、小端、字节序、MSB、LSB、MSBs、LSBs_msb和lsb是什么意思-CSDN博客</a>
-[6]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/resilient/article/details/117368600">CRC码计算及校验原理计算_crc校验码怎么算出来的-CSDN博客</a>
-[7]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/tilblackout/article/details/131195357">CRC校验(1)：CRC原理、计算例子和最优多项式的选择_crc多项式-CSDN博客</a>
-[8]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/ljx1400052550/article/details/105929971">模2运算的加减乘除运算_模2乘法运算详解-CSDN博客</a>
-[9]: <a target="_blank" rel="noopener" href="https://wenku.csdn.net/answer/48m7g5d31t">CAN通讯中
-主动错误和被动错误的区别？ - CSDN文库</a> [10]: <a target="_blank" rel="noopener" href="https://www.cnblogs.com/alifpga/p/8655327.html">CAN总线过载帧 -
-alifpga - 博客园 (cnblogs.com)</a> [11]: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1HY411D7Ar/?spm_id_from=333.788&amp;vd_source=2ee5fc1c6809e2f0f5d2bd967fead481">【中科大RM电控合集】小白也能看懂的CAN通信+STM32CubeMX编程_哔哩哔哩_bilibili</a></p>
+<p>[1]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/LEON1741/article/details/106199472">图解CAN总线数据的组成和帧格式_can总线帧头-CSDN博客</a></p>
+<p>[2]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/skyxiao/article/details/116116018">CAN总线电平（隐性与显性）_can显性和隐性电平-CSDN博客</a></p>
+<p>[3]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/kian9one/article/details/139899769">CAN总线基础（2）--数据帧深层解析_can数据帧-CSDN博客</a></p>
+<p>[4]: <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/159070549">BCD码是什么 -
+知乎 (zhihu.com)</a></p>
+<p>[5]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/wangyx1234/article/details/130352079">一文读懂大端、小端、字节序、MSB、LSB、MSBs、LSBs_msb和lsb是什么意思-CSDN博客</a></p>
+<p>[6]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/resilient/article/details/117368600">CRC码计算及校验原理计算_crc校验码怎么算出来的-CSDN博客</a></p>
+<p>[7]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/tilblackout/article/details/131195357">CRC校验(1)：CRC原理、计算例子和最优多项式的选择_crc多项式-CSDN博客</a></p>
+<p>[8]: <a target="_blank" rel="noopener" href="https://blog.csdn.net/ljx1400052550/article/details/105929971">模2运算的加减乘除运算_模2乘法运算详解-CSDN博客</a></p>
+<p>[9]: <a target="_blank" rel="noopener" href="https://wenku.csdn.net/answer/48m7g5d31t">CAN通讯中
+主动错误和被动错误的区别？ - CSDN文库</a></p>
+<p>[10]: <a target="_blank" rel="noopener" href="https://www.cnblogs.com/alifpga/p/8655327.html">CAN总线过载帧 -
+alifpga - 博客园 (cnblogs.com)</a></p>
+<p>[11]: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1HY411D7Ar/?spm_id_from=333.788&amp;vd_source=2ee5fc1c6809e2f0f5d2bd967fead481">【中科大RM电控合集】小白也能看懂的CAN通信+STM32CubeMX编程_哔哩哔哩_bilibili</a></p>
 
   </div>
 
