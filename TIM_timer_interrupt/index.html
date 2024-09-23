@@ -18,15 +18,15 @@
 
 
   
-  <meta name="description" content="2.4 定时器中断 TIM定时器分类 基本定时器  预分频、自动装载值、自定义计数方向、自定义触发事件 单个脉冲输出 可以产生DMA请求定期搬运数据（DMA在UART章节会提到）  通用定时器  基本定时器的全部功能 四个独立GPIO通道可以进行输入捕获、输出比较、PWM生成、编码器模式等  高级定时器  通用定时器的全部功能 八个GPIO通道可以支持反向或互补PW">
+  <meta name="description" content="目录#      TIM定时器分类  基本定时器 通用定时器 高级定时器  其他常用功能  预分频（Prescaler，PSC） 计数模式 自动装载值（Auto Reload Register，ARR）  Delay函数 配置定时器 使用TIM定时器 利用TIM定时器中断实现按键检测消抖  1. 修改定时器配置 2. 修改按键配置 3. 代码部分">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TIM定时器中断">
 <meta property="og:url" content="https://skina.cn/TIM_timer_interrupt/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="2.4 定时器中断 TIM定时器分类 基本定时器  预分频、自动装载值、自定义计数方向、自定义触发事件 单个脉冲输出 可以产生DMA请求定期搬运数据（DMA在UART章节会提到）  通用定时器  基本定时器的全部功能 四个独立GPIO通道可以进行输入捕获、输出比较、PWM生成、编码器模式等  高级定时器  通用定时器的全部功能 八个GPIO通道可以支持反向或互补PW">
+<meta property="og:description" content="目录#      TIM定时器分类  基本定时器 通用定时器 高级定时器  其他常用功能  预分频（Prescaler，PSC） 计数模式 自动装载值（Auto Reload Register，ARR）  Delay函数 配置定时器 使用TIM定时器 利用TIM定时器中断实现按键检测消抖  1. 修改定时器配置 2. 修改按键配置 3. 代码部分">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-04T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-09-12T13:40:43.939Z">
+<meta property="article:modified_time" content="2024-09-21T07:45:31.630Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="STM32">
@@ -137,37 +137,69 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="定时器中断">2.4 定时器中断</h1>
-<h2 id="tim定时器分类">TIM定时器分类</h2>
-<h3 id="基本定时器">基本定时器</h3>
+    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
+<div class="tocStart">
+
+</div>
+<!-- toc -->
+<ul>
+<li><a href="#tim-ding-shi-qi-fen-lei">TIM定时器分类</a>
+<ul>
+<li><a href="#ji-ben-ding-shi-qi">基本定时器</a></li>
+<li><a href="#tong-yong-ding-shi-qi">通用定时器</a></li>
+<li><a href="#gao-ji-ding-shi-qi">高级定时器</a></li>
+</ul></li>
+<li><a href="#qi-ta-chang-yong-gong-neng">其他常用功能</a>
+<ul>
+<li><a href="#yu-fen-pin-prescaler-psc">预分频（Prescaler，PSC）</a></li>
+<li><a href="#ji-shu-mo-shi">计数模式</a></li>
+<li><a href="#zi-dong-zhuang-zai-zhi-auto-reload-register-arr">自动装载值（Auto
+Reload Register，ARR）</a></li>
+</ul></li>
+<li><a href="#delay-han-shu">Delay函数</a></li>
+<li><a href="#pei-zhi-ding-shi-qi">配置定时器</a></li>
+<li><a href="#shi-yong-tim-ding-shi-qi">使用TIM定时器</a></li>
+<li><a href="#li-yong-tim-ding-shi-qi-zhong-duan-shi-xian-an-jian-jian-ce-xiao-dou">利用TIM定时器中断实现按键检测消抖</a>
+<ul>
+<li><a href="#1-xiu-gai-ding-shi-qi-pei-zhi">1. 修改定时器配置</a></li>
+<li><a href="#2-xiu-gai-an-jian-pei-zhi">2. 修改按键配置</a></li>
+<li><a href="#3-dai-ma-bu-fen">3. 代码部分</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<div class="tocEnd">
+
+</div>
+<h2><span id="tim-ding-shi-qi-fen-lei">TIM定时器分类</span><a href="#tim-ding-shi-qi-fen-lei" class="header-anchor">#</a></h2>
+<h3><span id="ji-ben-ding-shi-qi">基本定时器</span><a href="#ji-ben-ding-shi-qi" class="header-anchor">#</a></h3>
 <ul>
 <li><p>预分频、自动装载值、自定义计数方向、自定义触发事件</p></li>
 <li><p>单个脉冲输出</p></li>
 <li><p>可以产生DMA请求定期搬运数据（DMA在UART章节会提到）</p></li>
 </ul>
-<h3 id="通用定时器">通用定时器</h3>
+<h3><span id="tong-yong-ding-shi-qi">通用定时器</span><a href="#tong-yong-ding-shi-qi" class="header-anchor">#</a></h3>
 <ul>
 <li>基本定时器的全部功能</li>
 <li>四个独立GPIO通道可以进行输入捕获、输出比较、PWM生成、编码器模式等</li>
 </ul>
-<h3 id="高级定时器">高级定时器</h3>
+<h3><span id="gao-ji-ding-shi-qi">高级定时器</span><a href="#gao-ji-ding-shi-qi" class="header-anchor">#</a></h3>
 <ul>
 <li>通用定时器的全部功能</li>
 <li>八个GPIO通道可以支持反向或互补PWM输出</li>
 <li>一个GPIO通道可以支持外部输入信号引入刹车重启等功能</li>
 </ul>
-<h2 id="其他常用功能">其他常用功能</h2>
-<h3 id="预分频prescalerpsc">预分频（Prescaler，PSC）</h3>
+<h2><span id="qi-ta-chang-yong-gong-neng">其他常用功能</span><a href="#qi-ta-chang-yong-gong-neng" class="header-anchor">#</a></h2>
+<h3><span id="yu-fen-pin-prescaler-psc">预分频（Prescaler，PSC）</span><a href="#yu-fen-pin-prescaler-psc" class="header-anchor">#</a></h3>
 <ul>
 <li>定时器输入频率从时钟树上的APB总线获取，但定时器本身可能不需要太高频率，因此需要对定时器输入频率进行分频，得到定时器的主频</li>
 </ul>
-<h3 id="计数模式">计数模式</h3>
+<h3><span id="ji-shu-mo-shi">计数模式</span><a href="#ji-shu-mo-shi" class="header-anchor">#</a></h3>
 <ul>
 <li><p>定时器有个计数器（Counter，CNT），根据其主频每产生一次脉冲，计数器改变1</p></li>
 <li><p>向上计数，则+1；向下计数，则-1，双向计数则既可以+1也可以-1</p></li>
 </ul>
-<h3 id="自动装载值auto-reload-registerarr">自动装载值（Auto Reload
-Register，ARR）</h3>
+<h3><span id="zi-dong-zhuang-zai-zhi-auto-reload-register-arr">自动装载值（Auto Reload
+Register，ARR）</span><a href="#zi-dong-zhuang-zai-zhi-auto-reload-register-arr" class="header-anchor">#</a></h3>
 <ul>
 <li>定时器的计数器只能在0到ARR之间变动</li>
 <li>向上计数，则从0计数到ARR，然后再开启一轮循环</li>
@@ -175,12 +207,12 @@ Register，ARR）</h3>
 <li>双向计数，则从0计数到ARR-1，然后再从ARR计数到1，然后再开启一轮循环</li>
 <li>当计数器向上到达ARR或向下到达0时，下一个定时器主频周期会产生溢出中断</li>
 </ul>
-<h2 id="delay函数">Delay函数</h2>
+<h2><span id="delay-han-shu">Delay函数</span><a href="#delay-han-shu" class="header-anchor">#</a></h2>
 <ul>
 <li><p>Hal库利用 SysTick 定期维护变量 uwTick 以实现计时功能</p></li>
 <li><p>一般只在main中使用，不建议在中断中使用</p></li>
 </ul>
-<h2 id="配置定时器">配置定时器</h2>
+<h2><span id="pei-zhi-ding-shi-qi">配置定时器</span><a href="#pei-zhi-ding-shi-qi" class="header-anchor">#</a></h2>
 <ul>
 <li>配置RCC-HSE为外部晶振</li>
 <li>配置时钟树HSE输出主频50MHz（便于后续计算）</li>
@@ -190,20 +222,19 @@ Register，ARR）</h3>
 <li>溢出事件频率 $ frequency= $</li>
 </ul></li>
 </ul>
-<h2 id="使用tim定时器">使用TIM定时器</h2>
+<h2><span id="shi-yong-tim-ding-shi-qi">使用TIM定时器</span><a href="#shi-yong-tim-ding-shi-qi" class="header-anchor">#</a></h2>
 <p>使能定时器中断 <code>Hal_TIM_Base_Start_IT(&amp;htimx);</code></p>
 <p>定义中断回调函数的实函数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span> &#123;</span><br><span class="line">	<span class="keyword">if</span>(htim==&amp;htim5) &#123;</span><br><span class="line">        HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_5);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2
-id="利用tim定时器中断实现按键检测消抖">利用TIM定时器中断实现按键检测消抖</h2>
-<h3 id="修改定时器配置">1. 修改定时器配置</h3>
+<h2><span id="li-yong-tim-ding-shi-qi-zhong-duan-shi-xian-an-jian-jian-ce-xiao-dou">利用TIM定时器中断实现按键检测消抖</span><a href="#li-yong-tim-ding-shi-qi-zhong-duan-shi-xian-an-jian-jian-ce-xiao-dou" class="header-anchor">#</a></h2>
+<h3><span id="1-xiu-gai-ding-shi-qi-pei-zhi">1. 修改定时器配置</span><a href="#1-xiu-gai-ding-shi-qi-pei-zhi" class="header-anchor">#</a></h3>
 <p>HSE输出主频 50MHz</p>
 <p>PSC：999</p>
 <p>ARR：499</p>
 <p>此时检测频率为10ms</p>
-<h3 id="修改按键配置">2. 修改按键配置</h3>
+<h3><span id="2-xiu-gai-an-jian-pei-zhi">2. 修改按键配置</span><a href="#2-xiu-gai-an-jian-pei-zhi" class="header-anchor">#</a></h3>
 <p>依据原理图定义相关按键为上拉输入</p>
-<h3 id="代码部分">3. 代码部分</h3>
+<h3><span id="3-dai-ma-bu-fen">3. 代码部分</span><a href="#3-dai-ma-bu-fen" class="header-anchor">#</a></h3>
 <p>同上使能定时器中断，并定义实函数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">HAL_TIM_PeriodElapsedCallback</span><span class="params">(TIM_HandleTypeDef *htim)</span> &#123;</span><br><span class="line">	<span class="keyword">if</span>(htim==&amp;htim5)&#123;</span><br><span class="line">		<span class="type">static</span> GPIO_PinState pre_status = GPIO_PIN_SET;	<span class="comment">//记录上次检测时的电平状态</span></span><br><span class="line">		GPIO_PinState now_status= HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_3);	<span class="comment">//记录此次检测时的电平状态</span></span><br><span class="line">		<span class="keyword">if</span>(pre_status == GPIO_PIN_SET &amp;&amp; now_status == GPIO_PIN_RESET)&#123;	</span><br><span class="line">            <span class="comment">/* 	当上次为高电平（未被按下)</span></span><br><span class="line"><span class="comment">            	且此次为低电平（已被按下）*/</span></span><br><span class="line">			HAL_GPIO_TogglePin(GPIOE,GPIO_PIN_5); <span class="comment">//反转LED电平</span></span><br><span class="line">		&#125;</span><br><span class="line">		pre_status = now_status;	<span class="comment">//更新记录的电平状态</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 

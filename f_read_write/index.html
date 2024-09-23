@@ -18,15 +18,15 @@
 
 
   
-  <meta name="description" content="4 文件的读写 文件的打开与关闭 12FILE *fp;fp&#x3D;fopen(&quot;File name&quot;,&quot;Method&quot;);    Method 访问形式 说明     r 只读 只读不写，不存在则返回 NULL   w 只写 只写不读，若文件已存在则删去原有内容，否则新建   a 追加写 在文件尾部追加数据，若文">
+  <meta name="description" content="目录#      文件的打开与关闭 文件的读写 数据块读写（适用于二进制文件）  数据块读 fread() 数据块写 fwrite()  格式读写函数  fscanf() fprintf()  文件定位  rewind() fseek() ftell() 文件缓冲区清除 fflush() 其他  指针错误状态清除  clearerr()">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文件的读写">
 <meta property="og:url" content="https://skina.cn/f_read_write/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="4 文件的读写 文件的打开与关闭 12FILE *fp;fp&#x3D;fopen(&quot;File name&quot;,&quot;Method&quot;);    Method 访问形式 说明     r 只读 只读不写，不存在则返回 NULL   w 只写 只写不读，若文件已存在则删去原有内容，否则新建   a 追加写 在文件尾部追加数据，若文">
+<meta property="og:description" content="目录#      文件的打开与关闭 文件的读写 数据块读写（适用于二进制文件）  数据块读 fread() 数据块写 fwrite()  格式读写函数  fscanf() fprintf()  文件定位  rewind() fseek() ftell() 文件缓冲区清除 fflush() 其他  指针错误状态清除  clearerr()">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-14T02:57:20.000Z">
-<meta property="article:modified_time" content="2024-09-14T03:00:38.928Z">
+<meta property="article:modified_time" content="2024-09-21T07:45:15.640Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -137,8 +137,44 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="文件的读写">4 文件的读写</h1>
-<h2 id="文件的打开与关闭">文件的打开与关闭</h2>
+    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
+<div class="tocStart">
+
+</div>
+<!-- toc -->
+<ul>
+<li><a href="#wen-jian-de-da-kai-yu-guan-bi">文件的打开与关闭</a></li>
+<li><a href="#wen-jian-de-du-xie">文件的读写</a></li>
+<li><a href="#shu-ju-kuai-du-xie-gua-yong-yu-er-jin-zhi-wen-jian">数据块读写（适用于二进制文件）</a>
+<ul>
+<li><a href="#shu-ju-kuai-du-fread">数据块读 fread()</a></li>
+<li><a href="#shu-ju-kuai-xie-fwrite">数据块写 fwrite()</a></li>
+</ul></li>
+<li><a href="#ge-shi-du-xie-han-shu">格式读写函数</a>
+<ul>
+<li><a href="#fscanf">fscanf()</a></li>
+<li><a href="#fprintf">fprintf()</a></li>
+</ul></li>
+<li><a href="#wen-jian-ding-wei">文件定位</a>
+<ul>
+<li><a href="#rewind">rewind()</a></li>
+<li><a href="#fseek">fseek()</a></li>
+<li><a href="#ftell">ftell()</a></li>
+<li><a href="#wen-jian-huan-chong-qu-qing-chu">文件缓冲区清除</a></li>
+<li><a href="#fflush">fflush()</a></li>
+<li><a href="#qi-ta">其他</a></li>
+</ul></li>
+<li><a href="#zhi-zhen-cuo-wu-zhuang-tai-qing-chu">指针错误状态清除</a>
+<ul>
+<li><a href="#clearerr">clearerr()</a></li>
+<li><a href="#qi-ta-1">其他</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<div class="tocEnd">
+
+</div>
+<h2><span id="wen-jian-de-da-kai-yu-guan-bi">文件的打开与关闭</span><a href="#wen-jian-de-da-kai-yu-guan-bi" class="header-anchor">#</a></h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FILE *fp;</span><br><span class="line">fp=fopen(<span class="string">&quot;File name&quot;</span>,<span class="string">&quot;Method&quot;</span>);</span><br></pre></td></tr></table></figure>
 <table>
 <thead>
@@ -185,7 +221,7 @@
 <p>若在后面附加 b ，如 "rb", "wb", "r+b" 则以二进制打开</p>
 <p>使用完文件后必须关闭，否则可能导致数据丢失。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">fclose</span><span class="params">(FILE *p)</span>;</span><br></pre></td></tr></table></figure>
-<h2 id="文件的读写-1">文件的读写</h2>
+<h2><span id="wen-jian-de-du-xie">文件的读写</span><a href="#wen-jian-de-du-xie" class="header-anchor">#</a></h2>
 <ul>
 <li>字符读 <code>char c; c=fgetc(fp);</code></li>
 <li>字符写 <code>int fputc(int c, FILE *p);</code></li>
@@ -196,8 +232,8 @@
 则将字符串 c 写入 fp</li>
 <li>判断文件是否结束 <code>feof()</code> ，结束返回非0，否则返回0</li>
 </ul>
-<h2 id="数据块读写适用于二进制文件">数据块读写（适用于二进制文件）</h2>
-<h3 id="数据块读-fread">数据块读 fread()</h3>
+<h2><span id="shu-ju-kuai-du-xie-gua-yong-yu-er-jin-zhi-wen-jian">数据块读写（适用于二进制文件）</span><a href="#shu-ju-kuai-du-xie-gua-yong-yu-er-jin-zhi-wen-jian" class="header-anchor">#</a></h2>
+<h3><span id="shu-ju-kuai-du-fread">数据块读 fread()</span><a href="#shu-ju-kuai-du-fread" class="header-anchor">#</a></h3>
 <p><code>size_t fread(void *buffer, size_t size, size_t count,FILE *fp)</code></p>
 <p>解释：</p>
 <ul>
@@ -208,21 +244,21 @@
 </ul>
 <p><strong>例</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x[<span class="number">4</span>];</span><br><span class="line">FILE *fp;</span><br><span class="line">fp=fopen(<span class="string">&quot;test.bat&quot;</span>,<span class="string">&quot;rb&quot;</span>);</span><br><span class="line">fread(x,<span class="keyword">sizeof</span>(<span class="type">int</span>),<span class="number">4</span>,fp);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure>
-<h3 id="数据块写-fwrite">数据块写 fwrite()</h3>
+<h3><span id="shu-ju-kuai-xie-fwrite">数据块写 fwrite()</span><a href="#shu-ju-kuai-xie-fwrite" class="header-anchor">#</a></h3>
 <p><code>size_t fwrite(void *buffer, size_t size, size_t count,FILE *fp)</code></p>
 <p>解释同上</p>
 <p><strong>例</strong></p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x[<span class="number">5</span>]=&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;;</span><br><span class="line">FILE *fp;</span><br><span class="line">fp=fopen(<span class="string">&quot;test.bat&quot;</span>,<span class="string">&quot;rb&quot;</span>);</span><br><span class="line">fread(x,<span class="keyword">sizeof</span>(<span class="type">int</span>),<span class="number">5</span>,fp);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure>
-<h2 id="格式读写函数">格式读写函数</h2>
-<h3 id="fscanf">fscanf()</h3>
+<h2><span id="ge-shi-du-xie-han-shu">格式读写函数</span><a href="#ge-shi-du-xie-han-shu" class="header-anchor">#</a></h2>
+<h3><span id="fscanf">fscanf()</span><a href="#fscanf" class="header-anchor">#</a></h3>
 <p>类似 <code>scanf</code> 但多一个文件地址 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a,b;</span><br><span class="line">FILE *fp;</span><br><span class="line"><span class="keyword">if</span>((fp=fopen(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;r+&quot;</span>))==<span class="literal">NULL</span>)&#123;</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">fscanf</span>(fp,<span class="string">&quot;%d %d\n&quot;</span>,&amp;a,&amp;b);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure></p>
-<h3 id="fprintf">fprintf()</h3>
+<h3><span id="fprintf">fprintf()</span><a href="#fprintf" class="header-anchor">#</a></h3>
 <p>类似 <code>printf</code> 但多一个文件地址 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a=<span class="number">1</span>;</span><br><span class="line"><span class="type">double</span> b=<span class="number">2.33</span>;</span><br><span class="line">FILE *fp;</span><br><span class="line"><span class="keyword">if</span>((fp=fopen(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;w+&quot;</span>))==<span class="literal">NULL</span>)&#123;</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">fprintf</span>(fp,<span class="string">&quot;%d %lf\n&quot;</span>,&amp;a,&amp;b);</span><br><span class="line">fclose(fp);</span><br></pre></td></tr></table></figure></p>
-<h2 id="文件定位">文件定位</h2>
-<h3 id="rewind">rewind()</h3>
+<h2><span id="wen-jian-ding-wei">文件定位</span><a href="#wen-jian-ding-wei" class="header-anchor">#</a></h2>
+<h3><span id="rewind">rewind()</span><a href="#rewind" class="header-anchor">#</a></h3>
 <p><code>void rewind(FILE *fp)</code></p>
 <p>无返回值，将读写指针移动到开头</p>
-<h3 id="fseek">fseek()</h3>
+<h3><span id="fseek">fseek()</span><a href="#fseek" class="header-anchor">#</a></h3>
 <p><code>void fseek(FILE *fp, long offset, int origin)</code></p>
 <ul>
 <li><code>origin</code> 移动文件指针的相对起始位置
@@ -247,24 +283,24 @@
 被作为文件结束符，fopen打开时将会删除该字符，否则会导致<code>fseek()</code>
 和 <code>ftell()</code> 的定位失常</p>
 </blockquote>
-<h3 id="ftell">ftell()</h3>
+<h3><span id="ftell">ftell()</span><a href="#ftell" class="header-anchor">#</a></h3>
 <p>返回当前文件读写位置（出错则返回 -IL ）</p>
 <p><code>long ftell(FILE *fp)</code></p>
-<h3 id="文件缓冲区清除">文件缓冲区清除</h3>
-<h3 id="fflush">fflush()</h3>
+<h3><span id="wen-jian-huan-chong-qu-qing-chu">文件缓冲区清除</span><a href="#wen-jian-huan-chong-qu-qing-chu" class="header-anchor">#</a></h3>
+<h3><span id="fflush">fflush()</span><a href="#fflush" class="header-anchor">#</a></h3>
 <p><code>int fflush(FILE *fp)</code></p>
 <p>可用于文件缓冲区清除，也可以用于标准输入输出缓冲区清除</p>
 <p><em>why?</em></p>
 <p>文件输入输出要现在缓冲区存放才会写入文件，清除缓冲区的目的是让缓冲区数据写入磁盘文件中</p>
-<h3 id="其他">其他</h3>
+<h3><span id="qi-ta">其他</span><a href="#qi-ta" class="header-anchor">#</a></h3>
 <p><code>feek()</code> <code>rewind()</code> <code>fclose()</code>
 也具备清除缓冲区的功能</p>
-<h2 id="指针错误状态清除">指针错误状态清除</h2>
+<h2><span id="zhi-zhen-cuo-wu-zhuang-tai-qing-chu">指针错误状态清除</span><a href="#zhi-zhen-cuo-wu-zhuang-tai-qing-chu" class="header-anchor">#</a></h2>
 <p><em>为什么会出现这种情况？</em></p>
 <p>由于读写等操作失败引起文件输入输出缓冲区错误</p>
-<h3 id="clearerr">clearerr()</h3>
+<h3><span id="clearerr">clearerr()</span><a href="#clearerr" class="header-anchor">#</a></h3>
 <p><code>void clearerr(FILE *fp)</code></p>
-<h3 id="其他-1">其他</h3>
+<h3><span id="qi-ta">其他</span><a href="#qi-ta" class="header-anchor">#</a></h3>
 <p>建议 <code>clearerr</code> 和 <code>fflush</code> 配对使用</p>
 <blockquote>
 <p>[!warning]</p>

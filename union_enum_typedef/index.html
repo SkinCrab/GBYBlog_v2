@@ -18,15 +18,15 @@
 
 
   
-  <meta name="description" content="联合体&amp;枚举&amp;自定义类型 联合体 形如 1234567union Union_name &#123;    int a;    double b;    char c;&#125;;union Union_name demo; 和 结构体 struct 有什么区别？ 结构体 各成员各自拥有自己的内存，各自使用互不干涉，同时存在的，遵循内存对齐原则。一个struct变量的">
+  <meta name="description" content="目录#      联合体 枚举 自定义类别      联合体# 形如 1234567union Union_name &#123;    int a;    double b;    char c;&#125;;union Union_name demo; 和 结构体 struct 有什么区别？ 结构体 各成员各自拥有自己的内存，各自使用互不干涉，同时存在的，">
 <meta property="og:type" content="article">
 <meta property="og:title" content="联合体&amp;枚举&amp;自定义类型">
 <meta property="og:url" content="https://skina.cn/union_enum_typedef/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="联合体&amp;枚举&amp;自定义类型 联合体 形如 1234567union Union_name &#123;    int a;    double b;    char c;&#125;;union Union_name demo; 和 结构体 struct 有什么区别？ 结构体 各成员各自拥有自己的内存，各自使用互不干涉，同时存在的，遵循内存对齐原则。一个struct变量的">
+<meta property="og:description" content="目录#      联合体 枚举 自定义类别      联合体# 形如 1234567union Union_name &#123;    int a;    double b;    char c;&#125;;union Union_name demo; 和 结构体 struct 有什么区别？ 结构体 各成员各自拥有自己的内存，各自使用互不干涉，同时存在的，">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-13T14:14:23.000Z">
-<meta property="article:modified_time" content="2024-09-13T14:14:37.621Z">
+<meta property="article:modified_time" content="2024-09-21T07:45:38.402Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -137,8 +137,21 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="联合体枚举自定义类型">联合体&amp;枚举&amp;自定义类型</h1>
-<h2 id="联合体">联合体</h2>
+    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
+<div class="tocStart">
+
+</div>
+<!-- toc -->
+<ul>
+<li><a href="#lian-he-ti">联合体</a></li>
+<li><a href="#mei-ju">枚举</a></li>
+<li><a href="#zi-ding-yi-lei-bie">自定义类别</a></li>
+</ul>
+<!-- tocstop -->
+<div class="tocEnd">
+
+</div>
+<h2><span id="lian-he-ti">联合体</span><a href="#lian-he-ti" class="header-anchor">#</a></h2>
 <p>形如</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">Union_name</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">double</span> b;</span><br><span class="line">    <span class="type">char</span> c;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">union</span> <span class="title">Union_name</span> <span class="title">demo</span>;</span></span><br></pre></td></tr></table></figure>
 <p><em>和 结构体 <code>struct</code> 有什么区别？</em></p>
@@ -147,13 +160,13 @@
 <p><strong>联合体</strong></p>
 <p>各成员共用一块内存空间，并且同时只有一个成员可以得到这块内存的使用权(对该内存的读写)，各变量共用一个内存首地址。任一时刻只有一个成员的数据是有意义的，即
 a、b、c不能同时存在。</p>
-<h2 id="枚举">枚举</h2>
+<h2><span id="mei-ju">枚举</span><a href="#mei-ju" class="header-anchor">#</a></h2>
 <p>形如</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">color</span>&#123;</span>red,orange,yellow,green,blue,purple&#125;;</span><br><span class="line"><span class="class"><span class="keyword">enum</span> <span class="title">color</span> <span class="title">x</span>,<span class="title">y</span>,<span class="title">z</span>;</span></span><br></pre></td></tr></table></figure>
 <p>不可对枚举元素赋值，因为枚举元素本身就是常量。</p>
 <p>合法赋值 <code>x=red y=(enum color)4</code> 等价于
 <code>x=red y=green</code> 非法赋值 <code>z=Monday</code></p>
-<h2 id="自定义类别">自定义类别</h2>
+<h2><span id="zi-ding-yi-lei-bie">自定义类别</span><a href="#zi-ding-yi-lei-bie" class="header-anchor">#</a></h2>
 <p>形如 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> 原类型名 新类型名</span><br><span class="line"><span class="keyword">typedef</span> <span class="type">char</span> <span class="type">unint8_t</span>;</span><br></pre></td></tr></table></figure> 即 <code>char a;</code> 等价于
 <code>uint8_t a;</code></p>
 

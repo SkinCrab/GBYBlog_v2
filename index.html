@@ -234,12 +234,14 @@ mjx-container[display="true"] + br {
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        CAN通信
+        目录#
+
+
+
+
+
 何为CAN总线
-多电控单元间交换数据使用的多主机局部网络串行通信协议
-总的来说，就是一条通信线路上连接多个节点，各个节点都通过这条线路来发送信息，当一个节点发送消息时，其他节点监听；当多个节点发送消息是，按照优先级发送。
-可实现 点对点，点对多点，全局广播的功能。 一般认为有两个层级：
-数据链路层 和 物理层
+通信基础知识-链路
 
       </div>
       <div class="sea-post-meta">
@@ -267,12 +269,16 @@ mjx-container[display="true"] + br {
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        2.6 PWM呼吸灯
+        目录#
+
+
+
+
+
 理论知识
+
 何为PWM
-PWM (Pulse Width Modulation) 即
-脉宽调制，改变脉冲信号的宽度并输出。
-高频PWM波可以让设备进行频繁开关通断。
+PWM波的参数
 
       </div>
       <div class="sea-post-meta">
@@ -300,14 +306,16 @@ PWM (Pulse Width Modulation) 即
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        位运算
+        目录#
+
+
+
+
+
 二进制位运算
-（注：以下例子如无特别标注均为 short 类型）
+
 按位与 "&amp;"
-同1为1，否则为0
-也可以理解为 有0则0 or &amp;1得原值
-0&amp;0=0 0&amp;1=0 1&amp;0=0 1&amp;1=1
-用途
+按位或 "|"
 
       </div>
       <div class="sea-post-meta">
@@ -335,9 +343,15 @@ PWM (Pulse Width Modulation) 即
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        4 文件的读写
+        目录#
+
+
+
+
+
 文件的打开与关闭
-12FILE *fp;fp=fopen(
+文件的读写
+
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -364,10 +378,18 @@ PWM (Pulse Width Modulation) 即
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        联合体&amp;枚举&amp;自定义类型
+        目录#
+
+
+
+
+
 联合体
-形如
-1234
+枚举
+自定义类别
+
+
+
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -394,14 +416,14 @@ PWM (Pulse Width Modulation) 即
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        指针
-杂
+        目录#
 
-int (*p)[4] 是行指针变量， p[0]+1 指向的是
-p[1] ;
-int *p[4] 是指向4个元素的指针数组
-a[i]+j == &amp;a[i][j]
-a[i][j] == *(a[i]+j)
+
+
+
+
+杂
+动态内存的申请与释放
 
 
       </div>
@@ -430,13 +452,16 @@ a[i][j] == *(a[i]+j)
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        由于部分学习笔记的公式采用 LaTex
-进行编写，但hexo又不自带Latex渲染，多方查阅资料后作此文，希望能给与大家参考。
-注
-由于本人使用pnpm作为包管理器，故下述代码均以pnpm开头，若使用其他，请按照其规范安装插件。
+        目录#
+
+
+
+
+
 安装pandoc
-请访问官网安装Pandoc。
-安装...
+安装
+hexo-renderer-pandoc
+
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -463,16 +488,16 @@ a[i][j] == *(a[i]+j)
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        进制与编码
+        目录#
+
+
+
+
+
 进制转换
-10 -&gt; ？：整数部分用短除法，余数反着写；小数部分乘 ？
-，取整数部分，正着写
-？ -&gt; 10：例 (xyz)_n -&gt; x*n^2 + y*n^1 +
-z*n^0
-16 &lt;-&gt; 2 ：每四位分隔，8421
 原码、反码、补码和偏移码
-原码
-即...
+
+
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -499,17 +524,17 @@ z*n^0
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        2.5 UART通信
+        目录#
+
+
+
+
+
 理论知识
+
 物理信号
-硬件电路引脚
+链路传输
 
-实现模块点对点通信
-在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND）
-
-Rx，Receiver，接收端
-Tx，Transmitter，发送端
-GND，Ground，接地端：两模块需共地，以区分 Rx &amp;...
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -536,14 +561,15 @@ GND，Ground，接地端：两模块需共地，以区分 Rx &amp;...
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        2.4 定时器中断
+        目录#
+
+
+
+
+
 TIM定时器分类
+
 基本定时器
-
-预分频、自动装载值、自定义计数方向、自定义触发事件
-单个脉冲输出
-可以产生DMA请求定期搬运数据（DMA在UART章节会提到）
-
 
       </div>
       <div class="sea-post-meta">

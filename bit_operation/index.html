@@ -18,15 +18,15 @@
 
 
   
-  <meta name="description" content="位运算 二进制位运算 （注：以下例子如无特别标注均为 short 类型） 按位与 &quot;&amp;&quot; 同1为1，否则为0 也可以理解为 有0则0 or &amp;1得原值 0&amp;0&#x3D;0 0&amp;1&#x3D;0 1&amp;0&#x3D;0 1&amp;1&#x3D;1 用途  取指定位   取 short x 的低8位： x &amp; 0x00ff （ 0x00ff 为二进制 0000 00">
+  <meta name="description" content="目录#      二进制位运算  按位与 &quot;&amp;&quot; 按位或 &quot;|&quot; 按位异或&quot;^&quot; 按位取反&quot;~&quot; 左移&quot;&lt;&lt;&quot; 右移&quot;&gt;&gt;&quot;  位段  如何定义 位段 ？ 如何使用？ 注意       二进制位运算# （注：以下例子如无特别标注均为 short 类型） 按位与 &quot;&amp;&quot;# 同1为1，否则为0 也可以理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="位运算">
 <meta property="og:url" content="https://skina.cn/bit_operation/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="位运算 二进制位运算 （注：以下例子如无特别标注均为 short 类型） 按位与 &quot;&amp;&quot; 同1为1，否则为0 也可以理解为 有0则0 or &amp;1得原值 0&amp;0&#x3D;0 0&amp;1&#x3D;0 1&amp;0&#x3D;0 1&amp;1&#x3D;1 用途  取指定位   取 short x 的低8位： x &amp; 0x00ff （ 0x00ff 为二进制 0000 00">
+<meta property="og:description" content="目录#      二进制位运算  按位与 &quot;&amp;&quot; 按位或 &quot;|&quot; 按位异或&quot;^&quot; 按位取反&quot;~&quot; 左移&quot;&lt;&lt;&quot; 右移&quot;&gt;&gt;&quot;  位段  如何定义 位段 ？ 如何使用？ 注意       二进制位运算# （注：以下例子如无特别标注均为 short 类型） 按位与 &quot;&amp;&quot;# 同1为1，否则为0 也可以理">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-14T16:03:11.000Z">
-<meta property="article:modified_time" content="2024-09-14T16:11:28.706Z">
+<meta property="article:modified_time" content="2024-09-21T07:45:18.095Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -137,14 +137,39 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="位运算">位运算</h1>
-<h2 id="二进制位运算">二进制位运算</h2>
+    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
+<div class="tocStart">
+
+</div>
+<!-- toc -->
+<ul>
+<li><a href="#er-jin-zhi-wei-yun-suan">二进制位运算</a>
+<ul>
+<li><a href="#an-wei-yu">按位与 "&amp;"</a></li>
+<li><a href="#an-wei-huo">按位或 "|"</a></li>
+<li><a href="#an-wei-yi-huo">按位异或"^"</a></li>
+<li><a href="#an-wei-qu-fan">按位取反"~"</a></li>
+<li><a href="#zuo-yi">左移"&lt;&lt;"</a></li>
+<li><a href="#you-yi">右移"&gt;&gt;"</a></li>
+</ul></li>
+<li><a href="#wei-duan">位段</a>
+<ul>
+<li><a href="#ru-he-ding-yi-wei-duan">如何定义 位段 ？</a></li>
+<li><a href="#ru-he-shi-yong">如何使用？</a></li>
+<li><a href="#zhu-yi">注意</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<div class="tocEnd">
+
+</div>
+<h2><span id="er-jin-zhi-wei-yun-suan">二进制位运算</span><a href="#er-jin-zhi-wei-yun-suan" class="header-anchor">#</a></h2>
 <p>（注：以下例子如无特别标注均为 <code>short</code> 类型）</p>
-<h3 id="按位与">按位与 "&amp;"</h3>
+<h3><span id="an-wei-yu-amp">按位与 "&amp;"</span><a href="#an-wei-yu-amp" class="header-anchor">#</a></h3>
 <p>同1为1，否则为0</p>
 <p>也可以理解为 有0则0 or &amp;1得原值</p>
 <p><code>0&amp;0=0 0&amp;1=0 1&amp;0=0 1&amp;1=1</code></p>
-<h4 id="用途">用途</h4>
+<h4><span id="yong-tu">用途</span><a href="#yong-tu" class="header-anchor">#</a></h4>
 <ol type="1">
 <li><strong>取指定位</strong></li>
 </ol>
@@ -183,20 +208,20 @@
 <p>[!tip]</p>
 <p>清零第x位 就让 第x位&amp;0 其余位&amp;1</p>
 </blockquote>
-<h3 id="按位或">按位或 "|"</h3>
+<h3><span id="an-wei-huo">按位或 "|"</span><a href="#an-wei-huo" class="header-anchor">#</a></h3>
 <p>有1为1，否则为0</p>
 <p><code>0|0=0 0|1=1 1|0=0 1|1=1</code></p>
-<h4 id="用途-1">用途</h4>
+<h4><span id="yong-tu">用途</span><a href="#yong-tu" class="header-anchor">#</a></h4>
 <p>将指定位 置1，其余位不变 如
 <code>x = x|0x00ff or x|= 0x00ff</code></p>
 <blockquote>
 <p>[!tip]</p>
 <p>将第x位 置1，就让 第x位 |1</p>
 </blockquote>
-<h3 id="按位异或">按位异或"^"</h3>
+<h3><span id="an-wei-yi-huo">按位异或"^"</span><a href="#an-wei-yi-huo" class="header-anchor">#</a></h3>
 <p>相同为0，不同为1</p>
 <p><code>0^0=0 0^1=1 ,1^0=1 1^1=0</code></p>
-<h4 id="用途-2">用途</h4>
+<h4><span id="yong-tu">用途</span><a href="#yong-tu" class="header-anchor">#</a></h4>
 <ol type="1">
 <li><p><strong>某些位取反</strong></p>
 <ul>
@@ -215,16 +240,16 @@
 <li><p>若 <code>x y</code> 均为整型，可交换变量
 <code>x = x^y; y = x^y; x= x^y;</code></p></li>
 </ol>
-<h3 id="按位取反">按位取反"~"</h3>
+<h3><span id="an-wei-qu-fan">按位取反"~"</span><a href="#an-wei-qu-fan" class="header-anchor">#</a></h3>
 <p><code>~0 == 1, ~1 == 0</code></p>
 <p><em>只有这个用途了吗？取反后的数和原数有什么关系呢？</em></p>
 <p>我们之前讲了进制与编码，不难发现</p>
 <p>按位取反后得到的是这个数的反码，反码+1=相反数的补码</p>
 <p>故可知 <strong>一个数按位取反=该数的相反数 - 1</strong></p>
-<h3 id="左移">左移"&lt;&lt;"</h3>
+<h3><span id="zuo-yi-lt-lt">左移"&lt;&lt;"</span><a href="#zuo-yi-lt-lt" class="header-anchor">#</a></h3>
 <p>向左移动n位，多余的高位丢弃，低位补0</p>
 <p><strong>例</strong> <code>x&lt;&lt;3</code> 将x的二进制位左移3位</p>
-<h3 id="右移">右移"&gt;&gt;"</h3>
+<h3><span id="you-yi-gt-gt">右移"&gt;&gt;"</span><a href="#you-yi-gt-gt" class="header-anchor">#</a></h3>
 <p>向右移动n位，多余的低位丢弃，高位遵循以下规则增补</p>
 <ol type="1">
 <li>若右移对象为 无符号整数 ，高位补0</li>
@@ -238,7 +263,7 @@
 <p>[!warning]</p>
 <p>在32位微软编译系统中，采用“算术右移”的形式</p>
 </blockquote>
-<h2 id="位段">位段</h2>
+<h2><span id="wei-duan">位段</span><a href="#wei-duan" class="header-anchor">#</a></h2>
 <blockquote>
 <p>大家应该都接触过 <code>bool</code> 型变量，只存储 0 与 1，但是否想过
 <code>bool</code> 型所占空间是多少呢？</p>
@@ -256,19 +281,19 @@
 <blockquote>
 <p>怎么解决这个问题呢？C语言为此提供了位段（ bit-field ）操作。</p>
 </blockquote>
-<h3 id="如何定义-位段">如何定义 位段 ？</h3>
+<h3><span id="ru-he-ding-yi-wei-duan">如何定义 位段 ？</span><a href="#ru-he-ding-yi-wei-duan" class="header-anchor">#</a></h3>
 <p>与结构体类似的定义方式</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">name</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    member_list  </span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">e.g. </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">packed_d</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f1:<span class="number">1</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f2:<span class="number">2</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> f3:<span class="number">4</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如此定义，f1占用1个二进制位，f2占用2个二进制位，f3占用4个二进制位，以上位段共需占用1字节。</p>
 <p>定义了结构后便可定义位段结构类型的变量，<strong>如</strong>
 <code>struct packed_d x,y</code></p>
-<h3 id="如何使用">如何使用？</h3>
+<h3><span id="ru-he-shi-yong">如何使用？</span><a href="#ru-he-shi-yong" class="header-anchor">#</a></h3>
 <p>与结构体类似 <code>x.f1=1; x.f2=3;</code></p>
 <blockquote>
 <p>[!warning]</p>
 <p>所赋值需考虑所占用的二进制位数，若超出则取低位舍高位</p>
 </blockquote>
-<h3 id="注意">注意</h3>
+<h3><span id="zhu-yi">注意</span><a href="#zhu-yi" class="header-anchor">#</a></h3>
 <ol type="1">
 <li><p>位段成员需位 unsigned 型</p></li>
 <li><p>可定义无名位段

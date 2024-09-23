@@ -18,15 +18,15 @@
 
 
   
-  <meta name="description" content="指针 杂  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a[i]+j)  动态内存的申请与释放 malloc()函数 函数原型 void *malloc(bit_num) 从 内存堆 上申请指定字节数的内存块，并返回该内存块">
+  <meta name="description" content="目录#      杂 动态内存的申请与释放  malloc()函数 calloc()函数 realloc()函数 free()函数       杂#  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="指针">
 <meta property="og:url" content="https://skina.cn/c_ptr/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="指针 杂  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a[i]+j)  动态内存的申请与释放 malloc()函数 函数原型 void *malloc(bit_num) 从 内存堆 上申请指定字节数的内存块，并返回该内存块">
+<meta property="og:description" content="目录#      杂 动态内存的申请与释放  malloc()函数 calloc()函数 realloc()函数 free()函数       杂#  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-13T12:53:30.000Z">
-<meta property="article:modified_time" content="2024-09-13T14:21:24.951Z">
+<meta property="article:modified_time" content="2024-09-21T07:45:17.456Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
@@ -137,8 +137,26 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1 id="指针">指针</h1>
-<h2 id="杂">杂</h2>
+    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
+<div class="tocStart">
+
+</div>
+<!-- toc -->
+<ul>
+<li><a href="#za">杂</a></li>
+<li><a href="#dong-tai-nei-cun-de-shen-qing-yu-shi-fang">动态内存的申请与释放</a>
+<ul>
+<li><a href="#malloc-han-shu">malloc()函数</a></li>
+<li><a href="#calloc-han-shu">calloc()函数</a></li>
+<li><a href="#realloc-han-shu">realloc()函数</a></li>
+<li><a href="#free-han-shu">free()函数</a></li>
+</ul></li>
+</ul>
+<!-- tocstop -->
+<div class="tocEnd">
+
+</div>
+<h2><span id="za">杂</span><a href="#za" class="header-anchor">#</a></h2>
 <ul>
 <li><code>int (*p)[4]</code> 是行指针变量， <code>p[0]+1</code> 指向的是
 <code>p[1]</code> ;</li>
@@ -146,8 +164,8 @@
 <li><code>a[i]+j == &amp;a[i][j]</code>
 <code>a[i][j] == *(a[i]+j)</code></li>
 </ul>
-<h2 id="动态内存的申请与释放">动态内存的申请与释放</h2>
-<h3 id="malloc函数">malloc()函数</h3>
+<h2><span id="dong-tai-nei-cun-de-shen-qing-yu-shi-fang">动态内存的申请与释放</span><a href="#dong-tai-nei-cun-de-shen-qing-yu-shi-fang" class="header-anchor">#</a></h2>
+<h3><span id="malloc-han-shu">malloc()函数</span><a href="#malloc-han-shu" class="header-anchor">#</a></h3>
 <p>函数原型 <code>void *malloc(bit_num)</code></p>
 <p>从 内存堆 上申请指定字节数的内存块，并返回该内存块的首地址</p>
 <p>调用格式 <strong>例</strong></p>
@@ -155,12 +173,12 @@
 <p>一般需搭配 <code>free()</code> 在使用后倒序释放内存</p>
 <p><strong>注意：</strong> 若内存申请不成功 <code>malloc()</code>
 将返回空指针（ NULL ）以作标识</p>
-<h3 id="calloc函数">calloc()函数</h3>
+<h3><span id="calloc-han-shu">calloc()函数</span><a href="#calloc-han-shu" class="header-anchor">#</a></h3>
 <p>函数原型 <code>void *calloc(size_t n, size_t size);</code></p>
 <p>在内存的动态存储区申请 n 块长度为size的连续空间</p>
 <p>调用格式 <strong>例</strong>
 <code>指针名 = (数据类型 *)calloc(n, size);</code></p>
-<h3 id="realloc函数">realloc()函数</h3>
+<h3><span id="realloc-han-shu">realloc()函数</span><a href="#realloc-han-shu" class="header-anchor">#</a></h3>
 <p>函数原型
 <code>void *realloc(void *mem_address, size_t newsize);</code></p>
 <p>在原已申请的内存块 <code>mem_address</code> 上再申请一块内存块</p>
@@ -170,7 +188,7 @@
 <code>NULL</code></p>
 <p>调用格式 <strong>例</strong>
 <code>指针名 = (数据类型 *)realloc(指针名, 新内存长度);</code></p>
-<h3 id="free函数">free()函数</h3>
+<h3><span id="free-han-shu">free()函数</span><a href="#free-han-shu" class="header-anchor">#</a></h3>
 <p><code>void free(void *ptr)</code></p>
 <p>释放顺序最好与申请顺序相反，以免产生内存碎块。</p>
 
