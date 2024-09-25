@@ -18,21 +18,26 @@
 
 
   
-  <meta name="description" content="目录#      进制转换 原码、反码、补码和偏移码  原码 反码 补码 偏移码       进制转换# 10 -&gt; ？：整数部分用短除法，余数反着写；小数部分乘 ？ ，取整数部分，正着写 ？ -&gt; 10：例 (xyz)_n -&gt; x*n^2 + y*n^1 + z*n^0 16 &lt;-&gt; 2 ：每四位分隔，8421 原">
+  <meta name="description" content="进制转换# 10 -&gt; ？：整数部分用短除法，余数反着写；小数部分乘 ？ ，取整数部分，正着写 ？ -&gt; 10：例 (xyz)_n -&gt; x*n^2 + y*n^1 + z*n^0 16 &lt;-&gt; 2 ：每四位分隔，8421 原码、反码、补码和偏移码# 原码# 即 该数所对应的二进制编码 反码# 正数：反码 &#x3D; 原码 负数：反码 &#x3D; 除符号位外，其">
 <meta property="og:type" content="article">
 <meta property="og:title" content="进制与编码">
 <meta property="og:url" content="https://skina.cn/binary_and_code/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="目录#      进制转换 原码、反码、补码和偏移码  原码 反码 补码 偏移码       进制转换# 10 -&gt; ？：整数部分用短除法，余数反着写；小数部分乘 ？ ，取整数部分，正着写 ？ -&gt; 10：例 (xyz)_n -&gt; x*n^2 + y*n^1 + z*n^0 16 &lt;-&gt; 2 ：每四位分隔，8421 原">
+<meta property="og:description" content="进制转换# 10 -&gt; ？：整数部分用短除法，余数反着写；小数部分乘 ？ ，取整数部分，正着写 ？ -&gt; 10：例 (xyz)_n -&gt; x*n^2 + y*n^1 + z*n^0 16 &lt;-&gt; 2 ：每四位分隔，8421 原码、反码、补码和偏移码# 原码# 即 该数所对应的二进制编码 反码# 正数：反码 &#x3D; 原码 负数：反码 &#x3D; 除符号位外，其">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-09-21T07:45:18.564Z">
+<meta property="article:modified_time" content="2024-09-25T14:19:31.973Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
 <meta property="article:tag" content="计科">
 <meta name="twitter:card" content="summary">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -137,26 +142,7 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
-<div class="tocStart">
-
-</div>
-<!-- toc -->
-<ul>
-<li><a href="#jin-zhi-zhuan-huan">进制转换</a></li>
-<li><a href="#yuan-ma-fan-ma-bu-ma-he-pian-yi-ma">原码、反码、补码和偏移码</a>
-<ul>
-<li><a href="#yuan-ma">原码</a></li>
-<li><a href="#fan-ma">反码</a></li>
-<li><a href="#bu-ma">补码</a></li>
-<li><a href="#pian-yi-ma">偏移码</a></li>
-</ul></li>
-</ul>
-<!-- tocstop -->
-<div class="tocEnd">
-
-</div>
-<h2><span id="jin-zhi-zhuan-huan">进制转换</span><a href="#jin-zhi-zhuan-huan" class="header-anchor">#</a></h2>
+    <h2><span id="jin-zhi-zhuan-huan">进制转换</span><a href="#jin-zhi-zhuan-huan" class="header-anchor">#</a></h2>
 <p>10 -&gt; ？：整数部分用短除法，余数反着写；小数部分乘 ？
 ，取整数部分，正着写</p>
 <p>？ -&gt; 10：<strong>例</strong> (xyz)_n -&gt; x*n^2 + y*n^1 +

@@ -25,7 +25,12 @@
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="GBYYY.">
 <meta name="twitter:card" content="summary">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -127,17 +132,9 @@
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        目录#
-
-
-
-
-
-二进制位运算
-
+        二进制位运算#
+（注：以下例子如无特别标注均为 short 类型）
 按位与 "&amp;"
-按位或 "|"
-
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -164,15 +161,8 @@
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        目录#
-
-
-
-
-
-文件的打开与关闭
-文件的读写
-
+        文件的打开与关闭#
+12
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -199,18 +189,9 @@
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        目录#
-
-
-
-
-
-联合体
-枚举
-自定义类别
-
-
-
+        联合体#
+形如
+1234
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -237,16 +218,13 @@
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        目录#
+        杂#
 
-
-
-
-
-杂
-动态内存的申请与释放
-
-
+int (*p)[4] 是行指针变量， p[0]+1 指向的是
+p[1] ;
+int *p[4] 是指向4个元素的指针数组
+a[i]+j == &amp;a[i][j]
+a[i][j] ==...
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
@@ -273,15 +251,12 @@
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        目录#
-
-
-
-
-
-进制转换
-原码、反码、补码和偏移码
-
+        进制转换#
+10 -&gt; ？：整数部分用短除法，余数反着写；小数部分乘 ？
+，取整数部分，正着写
+？ -&gt; 10：例 (xyz)_n -&gt; x*n^2 + y*n^1 +
+z*n^0
+16 &lt;-&gt; 2 ：每四位分隔，8421
 
       </div>
       <div class="sea-post-meta">

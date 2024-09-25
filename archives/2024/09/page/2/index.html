@@ -25,7 +25,12 @@
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="GBYYY.">
 <meta name="twitter:card" content="summary">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -113,7 +118,7 @@
     <div class="sea-page-card-wrapper">
   <h1 class="sea-page-card-title">Archive</h1>
   <h2 class="sea-archive-total">
-    Total 15 articles!
+    Total 16 articles!
   </h2>
 
   <div class="sea-archive-list">
@@ -125,6 +130,20 @@
         <h3 class="sea-archive-year">
           2024
         </h3>
+      
+      <a
+        class="sea-archive-list-item"
+        href="/TIM_timer_interrupt/"
+      >
+        <span class="sea-archive-list-item-title" title="TIM定时器中断">
+          TIM定时器中断
+        </span>
+        <span class="sea-archive-list-item-date">
+          2024-09-05
+        </span>
+      </a>
+    
+      
       
       <a
         class="sea-archive-list-item"

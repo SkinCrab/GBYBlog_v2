@@ -18,21 +18,26 @@
 
 
   
-  <meta name="description" content="目录#      理论知识  物理信号 链路传输 通信方式 代码示例  总结      理论知识# 物理信号# 硬件电路引脚#  实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND）  Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx">
+  <meta name="description" content="理论知识# 物理信号# 硬件电路引脚#  实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND）  Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线   接地方式#">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UART通信">
 <meta property="og:url" content="https://skina.cn/UART/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="目录#      理论知识  物理信号 链路传输 通信方式 代码示例  总结      理论知识# 物理信号# 硬件电路引脚#  实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND）  Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx">
+<meta property="og:description" content="理论知识# 物理信号# 硬件电路引脚#  实现模块点对点通信 在两模块均已供电的情况下，只需3条线即可（ Rx，Tx，GND）  Rx，Receiver，接收端 Tx，Transmitter，发送端 GND，Ground，接地端：两模块需共地，以区分 Rx &amp; Tx 线上的电平高低 部分具有流控策略的设备还需 RTS &amp; CTS 两根线   接地方式#">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-09T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-09-21T07:45:34.365Z">
+<meta property="article:modified_time" content="2024-09-25T14:19:55.899Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="STM32">
 <meta property="article:tag" content="单片机">
 <meta name="twitter:card" content="summary">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -137,26 +142,7 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
-<div class="tocStart">
-
-</div>
-<!-- toc -->
-<ul>
-<li><a href="#li-lun-zhi-shi">理论知识</a>
-<ul>
-<li><a href="#wu-li-xin-hao">物理信号</a></li>
-<li><a href="#lian-lu-chuan-shu">链路传输</a></li>
-<li><a href="#tong-xin-fang-shi">通信方式</a></li>
-<li><a href="#dai-ma-shi-li">代码示例</a></li>
-</ul></li>
-<li><a href="#zong-jie">总结</a></li>
-</ul>
-<!-- tocstop -->
-<div class="tocEnd">
-
-</div>
-<h2><span id="li-lun-zhi-shi">理论知识</span><a href="#li-lun-zhi-shi" class="header-anchor">#</a></h2>
+    <h2><span id="li-lun-zhi-shi">理论知识</span><a href="#li-lun-zhi-shi" class="header-anchor">#</a></h2>
 <h3><span id="wu-li-xin-hao">物理信号</span><a href="#wu-li-xin-hao" class="header-anchor">#</a></h3>
 <h4><span id="ying-jian-dian-lu-yin-jiao">硬件电路引脚</span><a href="#ying-jian-dian-lu-yin-jiao" class="header-anchor">#</a></h4>
 <ul>

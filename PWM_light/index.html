@@ -18,23 +18,28 @@
 
 
   
-  <meta name="description" content="目录#      理论知识  何为PWM PWM波的参数 PWM波在TIM定时器中的形成方式  工程配置 具体实现      理论知识# 何为PWM# PWM (Pulse Width Modulation) 即 脉宽调制，改变脉冲信号的宽度并输出。 高频PWM波可以让设备进行频繁开关通断。 PWM波的参数#  周期：PWM波形中相邻的高低电平持">
+  <meta name="description" content="理论知识# 何为PWM# PWM (Pulse Width Modulation) 即 脉宽调制，改变脉冲信号的宽度并输出。 高频PWM波可以让设备进行频繁开关通断。 PWM波的参数#  周期：PWM波形中相邻的高低电平持续时间总和 频率：略 占空比：高电平持续时间占总时间的比值 电平：高低电平之间电压差  PWM波在TIM定时器中的形成方式#  先将输入频率依据PSC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PWM呼吸灯">
 <meta property="og:url" content="https://skina.cn/PWM_light/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="目录#      理论知识  何为PWM PWM波的参数 PWM波在TIM定时器中的形成方式  工程配置 具体实现      理论知识# 何为PWM# PWM (Pulse Width Modulation) 即 脉宽调制，改变脉冲信号的宽度并输出。 高频PWM波可以让设备进行频繁开关通断。 PWM波的参数#  周期：PWM波形中相邻的高低电平持">
+<meta property="og:description" content="理论知识# 何为PWM# PWM (Pulse Width Modulation) 即 脉宽调制，改变脉冲信号的宽度并输出。 高频PWM波可以让设备进行频繁开关通断。 PWM波的参数#  周期：PWM波形中相邻的高低电平持续时间总和 频率：略 占空比：高电平持续时间占总时间的比值 电平：高低电平之间电压差  PWM波在TIM定时器中的形成方式#  先将输入频率依据PSC">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://skina.cn/Public/Image/PWM&amp;CCR.png">
 <meta property="article:published_time" content="2024-09-16T15:59:59.000Z">
-<meta property="article:modified_time" content="2024-09-21T07:45:28.032Z">
+<meta property="article:modified_time" content="2024-09-25T14:19:49.374Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="STM32">
 <meta property="article:tag" content="单片机">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://skina.cn/Public/Image/PWM&amp;CCR.png">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -139,26 +144,7 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
-<div class="tocStart">
-
-</div>
-<!-- toc -->
-<ul>
-<li><a href="#li-lun-zhi-shi">理论知识</a>
-<ul>
-<li><a href="#he-wei-pwm">何为PWM</a></li>
-<li><a href="#pwm-bo-de-can-shu">PWM波的参数</a></li>
-<li><a href="#pwm-bo-zai-tim-ding-shi-qi-zhong-de-xing-cheng-fang-shi">PWM波在TIM定时器中的形成方式</a></li>
-</ul></li>
-<li><a href="#gong-cheng-pei-zhi">工程配置</a></li>
-<li><a href="#ju-ti-shi-xian">具体实现</a></li>
-</ul>
-<!-- tocstop -->
-<div class="tocEnd">
-
-</div>
-<h2><span id="li-lun-zhi-shi">理论知识</span><a href="#li-lun-zhi-shi" class="header-anchor">#</a></h2>
+    <h2><span id="li-lun-zhi-shi">理论知识</span><a href="#li-lun-zhi-shi" class="header-anchor">#</a></h2>
 <h3><span id="he-wei-pwm">何为PWM</span><a href="#he-wei-pwm" class="header-anchor">#</a></h3>
 <p>PWM (Pulse Width Modulation) 即
 脉宽调制，改变脉冲信号的宽度并输出。</p>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>RCC时钟 | GBY's Blog</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="">
+  <meta name="theme-color" content="#10b981">
+
+  <link rel="canonical" href="https://skina.cn/RCC_Timer/">
+
+  <link rel="shortcut icon" href="/">
+
+  
+  
+<link rel="stylesheet" href="/css/main.css">
+
+
+  
+  <meta name="description" content="为什么需要时钟？# 想必大家学习单片机的时候都有个疑问，为什么实现功能前都需要时钟？ 对相关知识又了解的同学都应该知道，单片机的内部数据计算是通过 与门 非门 等逻辑运算器进行的，数据经过这些单元进行运算后才被存入寄存器中供程序读写。而这些运算是需要时间的，如果在前一步运算还未进行的情况下，进行了下一步的运算，这会导致写入寄存器的数据出错，影响程序的运行。 以下图为例   RCC_">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RCC时钟">
+<meta property="og:url" content="https://skina.cn/RCC_Timer/index.html">
+<meta property="og:site_name" content="GBY&#39;s Blog">
+<meta property="og:description" content="为什么需要时钟？# 想必大家学习单片机的时候都有个疑问，为什么实现功能前都需要时钟？ 对相关知识又了解的同学都应该知道，单片机的内部数据计算是通过 与门 非门 等逻辑运算器进行的，数据经过这些单元进行运算后才被存入寄存器中供程序读写。而这些运算是需要时间的，如果在前一步运算还未进行的情况下，进行了下一步的运算，这会导致写入寄存器的数据出错，影响程序的运行。 以下图为例   RCC_">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://skina.cn/images/RCC_1.png">
+<meta property="og:image" content="https://skina.cn/images/RCC_2.png">
+<meta property="og:image" content="https://skina.cn/images/Square_Wave.png">
+<meta property="og:image" content="https://skina.cn/images/CLK.png">
+<meta property="og:image" content="https://skina.cn/images/RCC_3.png">
+<meta property="og:image" content="https://skina.cn/images/RCC_4.png">
+<meta property="og:image" content="https://skina.cn/images/RCC_5.png">
+<meta property="og:image" content="https://skina.cn/images/HSI_HSE.png">
+<meta property="og:image" content="https://skina.cn/images/PLL.png">
+<meta property="article:published_time" content="2024-09-25T14:14:11.000Z">
+<meta property="article:modified_time" content="2024-09-25T14:19:16.614Z">
+<meta property="article:author" content="GBYYY.">
+<meta property="article:tag" content="学习笔记">
+<meta property="article:tag" content="STM32">
+<meta property="article:tag" content="单片机">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://skina.cn/images/RCC_1.png">
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
+  <style>
+    :root {
+      --sea-color-primary: #10b981;
+    }
+  </style>
+
+  
+<script src="/js/theme_mode.js"></script>
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+<body>
+  <header class="sea-header">
+    <nav class="sea-nav-wrap">
+  <h1 class="sea-nav-logo" title="">
+    <a href="/">GBY's Blog</a>
+  </h1>
+  <div class="sea-nav-menus">
+    <div id="sea-nav-toggle">
+      <svg t="1716965724278" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10878" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M950.857143 768v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429v-73.142857c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z m0-292.571429v73.142858c0 20.004571-16.566857 36.571429-36.571429 36.571428H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571428v-73.142858c0-20.004571 16.566857-36.571429 36.571429-36.571428h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571428z m0-292.571428v73.142857c0 20.004571-16.566857 36.571429-36.571429 36.571429H109.714286c-20.004571 0-36.571429-16.566857-36.571429-36.571429V182.857143c0-20.004571 16.566857-36.571429 36.571429-36.571429h804.571428c20.004571 0 36.571429 16.566857 36.571429 36.571429z" p-id="10879"></path></svg>
+    </div>
+
+    <div class="sea-menu-wrap">
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/"
+    >
+      Home
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/links"
+    >
+      Links
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/archives/"
+    >
+      Archives
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/tags/"
+    >
+      Tags
+    </a>
+  
+    <a
+      class="sea-menu-link"
+      
+      href="/about"
+    >
+      About
+    </a>
+  
+
+  <span class="sea-menu-sep">|</span>
+
+  
+
+  <span class="sea-menu-icon" id="sea-theme-dark">
+    <svg t="1725413107294" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10118" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M557.553778 976.355556c-257.265778 0-466.56-207.160889-466.56-464.426667 0-253.923556 206.577778-464.284444 460.501333-464.284445h0.355556c10.766222 0 20.622222 3.953778 25.443555 13.610667 4.878222 9.756444 3.740444 20.394667-2.915555 29.027556-55.722667 72.220444-85.162667 158.108444-85.162667 249.372444 0 225.891556 183.779556 409.386667 409.671111 409.386667l5.248-0.256c10.325333-0.142222 20.977778 5.859556 25.841778 15.644444a28.302222 28.302222 0 0 1-2.915556 30.051556C837.902222 910.08 703.203556 976.355556 557.553778 976.355556zM495.274667 105.016889C299.192889 135.281778 147.882667 306.161778 147.882667 509.809778c0 225.877333 183.779556 409.656889 409.671111 409.656889 108.686222 0 210.403556-42.055111 286.577778-116.977778-231.566222-27.192889-411.804444-224.625778-411.804445-463.36 0-83.427556 21.617778-163.299556 62.947556-234.112z" fill="" p-id="10119"></path><path d="M578.830222 879.132444c-186.865778 0-345.784889-133.418667-377.841778-317.269333a14.222222 14.222222 0 1 1 28.017778-4.878222c29.681778 170.183111 176.810667 293.703111 349.824 293.703111a14.222222 14.222222 0 1 1 0 28.444444zM209.991111 531.2c-7.537778 0-13.838222-6.997333-14.193778-14.606222-0.312889-6.584889-0.483556-13.795556-0.483555-20.465778 0-7.864889 6.357333-14.492444 14.222222-14.492444s14.222222 6.229333 14.222222 14.094222c0 6.229333 0.170667 13.425778 0.455111 19.584 0.369778 7.850667-5.674667 15.886222-13.525333 15.886222h-0.696889z" fill="" p-id="10120"></path><path d="M622.350222 309.930667m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10121"></path><path d="M787.072 188.273778m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" fill="" p-id="10122"></path><path d="M731.960889 415.303111m-25.344 0a25.344 25.344 0 1 0 50.688 0 25.344 25.344 0 1 0-50.688 0Z" p-id="10123"></path></svg>
+  </span>
+  <span class="sea-menu-icon" id="sea-theme-light">
+    <svg t="1725410359322" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4274" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M512 768c-141.376 0-256-114.624-256-256s114.624-256 256-256 256 114.624 256 256-114.624 256-256 256z m0-85.333333a170.666667 170.666667 0 1 0 0-341.333334 170.666667 170.666667 0 0 0 0 341.333334zM469.333333 85.333333a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0V85.333333z m0 768a42.666667 42.666667 0 1 1 85.333334 0v85.333334a42.666667 42.666667 0 1 1-85.333334 0v-85.333334zM85.333333 554.666667a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334H85.333333z m768 0a42.666667 42.666667 0 1 1 0-85.333334h85.333334a42.666667 42.666667 0 1 1 0 85.333334h-85.333334zM161.834667 222.165333a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m576 576a42.666667 42.666667 0 0 1 60.330666-60.330666l64 64a42.666667 42.666667 0 0 1-60.330666 60.330666l-64-64z m-515.669334 64a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z m576-576a42.666667 42.666667 0 0 1-60.330666-60.330666l64-64a42.666667 42.666667 0 0 1 60.330666 60.330666l-64 64z" p-id="4275"></path></svg>
+  </span>
+
+  <span id="sea-menu-close-icon">
+    <svg t="1725435896874" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4408" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M556.8 512l265.6-265.6c12.8-12.8 12.8-32 0-44.8s-32-12.8-44.8 0L512 467.2 246.4 201.6c-12.8-12.8-32-12.8-44.8 0s-12.8 32 0 44.8l265.6 265.6-265.6 265.6c-12.8 12.8-12.8 32 0 44.8 6.4 6.4 12.8 9.6 22.4 9.6s16-3.2 22.4-9.6l265.6-265.6 265.6 265.6c6.4 6.4 16 9.6 22.4 9.6s16-3.2 22.4-9.6c12.8-12.8 12.8-32 0-44.8L556.8 512z" p-id="4409"></path></svg>
+  </span>
+</div>
+<div id="sea-nav-dimmer"></div>
+  </div>
+</nav>
+  </header>
+  <main id="sea-main-wrapper">
+    <article class="sea-page-card-wrapper">
+  <header class="sea-article-header">
+    <h1 class="sea-article-title">RCC时钟</h1>
+    
+      <div class="sea-post-meta sea-post-meta__center">
+        <div class="sea-post-time">
+  <svg t="1716964550804" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2621" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M805.49888 981.49888l-602.3168-0.76288c-86.59456-8.192-154.56768-81.3056-154.56768-170.01472L48.6144 291.73248c0-94.1568 76.60032-170.75712 170.7776-170.75712l586.10176 0c94.1568 0 170.73152 76.60032 170.73152 170.75712L976.22528 810.7008C976.2304 904.87296 899.63008 981.49888 805.49888 981.49888L805.49888 981.49888zM219.3664 190.57152c-55.79776 0-101.20192 45.38368-101.20192 101.18144l0 518.96832c0 55.79776 45.40416 101.20704 101.20192 101.20704l586.13248 0c55.77728 0 101.16096-45.40928 101.16096-101.20704L906.65984 291.73248c0-55.79776-45.38368-101.18656-101.16096-101.18656L219.3664 190.54592 219.3664 190.57152zM698.84416 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L745.22624 244.1216C745.22624 269.7472 724.46976 290.51904 698.84416 290.51904L698.84416 290.51904zM315.65824 290.51904c-25.60512 0-46.38208-20.77696-46.38208-46.38208l0-158.6688c0-25.6 20.77696-46.38208 46.38208-46.38208 25.6 0 46.38208 20.78208 46.38208 46.38208L362.04032 244.1216C362.04032 269.7472 341.28896 290.51904 315.65824 290.51904L315.65824 290.51904zM534.8864 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C581.26848 774.01088 560.4864 794.78784 534.8864 794.78784L534.8864 794.78784zM930.79552 452.608 121.24672 452.608c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l809.5744 0c25.6 0 46.38208 20.77696 46.38208 46.38208C977.2032 431.82592 956.42624 452.608 930.79552 452.608L930.79552 452.608zM327.92576 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208C374.30784 628.25472 353.52576 649.03168 327.92576 649.03168L327.92576 649.03168zM534.8864 649.03168l-44.27264 0c-25.6 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.77696 46.38208 46.38208S560.4864 649.03168 534.8864 649.03168L534.8864 649.03168zM741.27872 649.03168l-44.26752 0c-25.60512 0-46.38208-20.78208-46.38208-46.38208 0-25.60512 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.77696 46.38208 46.38208C787.6608 628.25472 766.90944 649.03168 741.27872 649.03168L741.27872 649.03168zM327.92576 794.78784l-44.27264 0c-25.6 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.78208-46.38208 46.38208-46.38208l44.27264 0c25.6 0 46.38208 20.78208 46.38208 46.38208C374.30784 774.01088 353.52576 794.78784 327.92576 794.78784L327.92576 794.78784zM741.27872 794.78784l-44.26752 0c-25.60512 0-46.38208-20.77696-46.38208-46.38208 0-25.6 20.77696-46.38208 46.38208-46.38208l44.26752 0c25.60512 0 46.38208 20.78208 46.38208 46.38208C787.6608 774.01088 766.90944 794.78784 741.27872 794.78784L741.27872 794.78784z" p-id="2622"></path></svg>
+  <time datetime="2024-09-25T14:14:11.000Z">2024-09-25</time>
+</div>
+        
+        
+  <div class="sea-post-tags">
+    <svg t="1716964811431" class="sea-svg-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6117" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M384 977.152c-20.5312 0-39.8336-7.9872-54.3232-22.4256l-260.4032-260.4032c-14.4896-14.4896-22.4256-33.7408-22.4256-54.3232s7.9872-39.8336 22.4256-54.3232l439.6032-439.6032c24.9344-24.9344 70.2464-43.7248 105.5232-43.7248h230.4c42.3424 0 76.8 34.4576 76.8 76.8v230.4c0 35.2256-18.7904 80.5888-43.6736 105.5232l-439.6032 439.6032a76.1856 76.1856 0 0 1-54.3232 22.4256zM614.4 153.6c-21.248 0-54.272 13.6704-69.2736 28.7232l-439.6032 439.6032c-4.8128 4.8128-7.424 11.2128-7.424 18.1248s2.6624 13.312 7.424 18.0736l260.4032 260.4032c4.8128 4.8128 11.2128 7.424 18.1248 7.424s13.312-2.6624 18.1248-7.424l439.6032-439.6032c15.0016-15.0016 28.7232-48.0768 28.7232-69.3248V179.2a25.6 25.6 0 0 0-25.6-25.6h-230.4z" p-id="6118"></path><path d="M742.4 358.4c-42.3424 0-76.8-34.4576-76.8-76.8S700.0576 204.8 742.4 204.8s76.8 34.4576 76.8 76.8S784.7424 358.4 742.4 358.4z m0-102.4a25.6 25.6 0 1 0 0 51.2 25.6 25.6 0 0 0 0-51.2z" p-id="6119"></path></svg>
+    <a class="tag-link" href="/tags/STM32/" rel="tag">STM32</a> , <a class="tag-link" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" rel="tag">单片机</a> , <a class="tag-link" href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag">学习笔记</a>
+  </div>
+
+      </div>
+    
+  </header>
+  <div class="sea-article-content sea-doc">
+    <h1><span id="wei-shi-me-xu-yao-shi-zhong">为什么需要时钟？</span><a href="#wei-shi-me-xu-yao-shi-zhong" class="header-anchor">#</a></h1>
+<p>想必大家学习单片机的时候都有个疑问，为什么实现功能前都需要时钟？</p>
+<p>对相关知识又了解的同学都应该知道，单片机的内部数据计算是通过 与门
+非门
+等逻辑运算器进行的，数据经过这些单元进行运算后才被存入寄存器中供程序读写。而这些运算是需要时间的，如果在前一步运算还未进行的情况下，进行了下一步的运算，这会导致写入寄存器的数据出错，影响程序的运行。</p>
+<p>以下图为例</p>
+<figure>
+<img src="../images\RCC_1.png" alt="RCC_1">
+<figcaption aria-hidden="true">RCC_1</figcaption>
+</figure>
+<p>我们记 <code>A</code> 处的输入为 <code>输入1</code> ， <code>B</code>
+处的输入为 <code>输入2</code> ， 与门的输出为 <code>输出1</code></p>
+<p>假设 <code>A</code> <code>B</code> 的输入皆为高电平 <code>1</code>
+，此时 与门 的输出也为高电平 <code>1</code>
+，在异或门的两条输入皆为高电平时，其输出就是低电平 <code>0</code> 。</p>
+<p>倘若由于外部影响，<code>B</code> 处电平变为低电平 <code>0</code>
+，在理想状态下 与门 由于电路转变而输出低电平
+<code>0</code>，经过异或门的运算，存入寄存器的值为 <code>0</code> 。</p>
+<p>乍一看好像没有问题是不是？</p>
+<p>但是要注意 与门
+的运算需要时间，在与门进行运算的这一段时间内，异或门两端输入的电平为
+<code>1 0</code> 此时输出的值变为了 <code>1</code> ，待与门运算完毕后
+异或门 两端 才会收到 <code>0 0</code> 两个低电平，进而才会计算得到低电平
+<code>0</code>。</p>
+<p>看吧这不就出事了？</p>
+<p>为了避免这种情况的出现，我们就必须引入边沿触发器，定期刷新寄存器的值，以弥补计算时间的影响。</p>
+<figure>
+<img src="../images\RCC_2.png" alt="RCC_2">
+<figcaption aria-hidden="true">RCC_2</figcaption>
+</figure>
+<p>该边沿触发器有一个输入端，一个输出端，和一个控制端，我们在边沿触发器的控制端输入一定频率的方波信号，当检测到方波的上升沿时，才会将左侧的运算刷新至右侧的寄存器中，其他时间不论左侧数据如何变化，右侧的寄存器数值将不会刷新。此方波即为时钟信号。</p>
+<figure>
+<img src="../images\Square_Wave.png" alt="Square_Wava">
+<figcaption aria-hidden="true">Square_Wava</figcaption>
+</figure>
+<p>不仅在电路的层面上需要时钟，在外设层面上也需要时钟进行控制。如
+串口：波特率；定时器：计时；IIC/SPI：时钟线；ADC：采样间隔。</p>
+<h1><span id="shi-zhong-shu">时钟树</span><a href="#shi-zhong-shu" class="header-anchor">#</a></h1>
+<h2><span id="chang-yong-zhi-shi-1">常用知识</span><a href="#chang-yong-zhi-shi-1" class="header-anchor">#</a></h2>
+<figure>
+<img src="../images\CLK.png" alt="CLK">
+<figcaption aria-hidden="true">CLK</figcaption>
+</figure>
+<p>STM32芯片内部有一条先进高性能总线AHB (Advances High Performance Bus)
+， 提供各个设备间的通信。</p>
+<p>在这条总线内部有一条时钟线HCLK，处理器、内存 和 DMA
+直接连接到HCLK上，使用其时钟信号。此时便有了第一条时钟线，其时钟频率与HCLK相同。</p>
+<figure>
+<img src="../images\RCC_3.png" alt="RCC_3">
+<figcaption aria-hidden="true">RCC_3</figcaption>
+</figure>
+<p>在处理内部有一个系统滴答定时器（ <code>SysTick</code>
+），<code>HAL_Delay();</code>
+函数便是使用该定时器实现的。<code>SysTick</code> 经过分频器与
+<code>HCLK</code> 相连。</p>
+<p><em>分频器的作用是什么呢？</em></p>
+<p>分频器相当于对时钟频率作除法，起到降频的作用，此处
+<code>SysTick</code> 的分频器有 <code>/1 /8</code>
+两个选项，也就是说，可以把 <code>HCLK</code> 的频率（假设为 72MHz）降为
+9MHz 或 保持72MHz 供 <code>SysTick</code> 使用。</p>
+<figure>
+<img src="../images\RCC_4.png" alt="RCC_4">
+<figcaption aria-hidden="true">RCC_4</figcaption>
+</figure>
+<p>而其他外设并非直接接入先进高性能总线，而是通过 <code>APB1</code> ,
+<code>APB2</code> 等先进外设总线间接接入 <code>AHB</code> 中。</p>
+<blockquote>
+<p>[!warning]</p>
+<p>各个外设实际接在APBx，请根据原理图进行查看，此处仅作参考。</p>
+</blockquote>
+<p><code>APB1</code> 与 <code>APB2</code> 采用的时钟线
+<code>PCLK1</code> <code>PCLK2</code> 由 <code>HCLK</code>
+经过分频得到（此处的分频器可选择 <code>/1 /2 /4 /8 /16</code>
+），并给各个外设使用。</p>
+<p>对于 通用/基本/高级定时器
+则又通过一个倍频器接入，用于重新提升频率。此处的倍频器有
+<code>*1 *2</code> 两个选项，当预分频器为 <code>/1</code> 时，倍频器为
+<code>*1</code> ，其他情况下倍频器的值皆为 <code>*2</code> 。</p>
+<p>值得注意的 <code>ADC</code> 有一个专属的分频器，其值可为
+<code>/2 /4 /6 /8</code> 。</p>
+<figure>
+<img src="../images\RCC_5.png" alt="RCC_5">
+<figcaption aria-hidden="true">RCC_5</figcaption>
+</figure>
+<p>到这儿我们已经完成了时钟树的右侧。</p>
+<p><em>那么HCLK中的时钟频率又是从哪里来的呢？</em></p>
+<figure>
+<img src="../images\HSI_HSE.png" alt="CLK">
+<figcaption aria-hidden="true">CLK</figcaption>
+</figure>
+<p>不难知道，HCLK主要来自
+高速外部时钟<code>HSE (High Speed External Clock)</code> 和
+高速内部时钟<code>HSI (High Speed Internal Clock)</code></p>
+<p><code>HCLK</code> 默认使用 <code>HSI</code>
+其时钟频率为8MHz，但其精度不够。</p>
+<p><code>HSE</code>
+则是从外部接入晶振产生脉冲，其时钟频率也为8MHz但精度远远高于
+<code>HSI</code> 。</p>
+<p><code>HSI</code> 和 <code>HSE</code>
+可任选其一作为<code>SYSCLK</code> 再经过分频后接入 <code>HCLK</code>
+，由于频率为8MHz，经过分频后其频率只能小于8HMz，那么该如何产生72MHz的频率呢？</p>
+<p>这时候就要引入一个新的器件 PLL锁相环 ，HSI通过一个固定值为
+<code>/2</code> 的分频器接入 PLL锁相环，而 <code>HSE</code> 通过
+<code>/1 or /2</code> 的分频器接入PLL。PLL锁相环可通过上图中的
+<code>*PLLMul</code> 将频率翻倍后作为 <code>SYSCLK</code>
+接入时钟树。</p>
+<blockquote>
+<p>[!warning]</p>
+<p>记得要点选相对应的选项，如上图选择的是
+HSE经过PLL锁相环倍频后接入时钟树。</p>
+</blockquote>
+<h2><span id="qi-ta-shi-zhong-zu-cheng-2">其他时钟组成</span><a href="#qi-ta-shi-zhong-zu-cheng-2" class="header-anchor">#</a></h2>
+<ul>
+<li><em>LSI&amp;LSE</em>
+<ul>
+<li>LSI是低速内部时钟，RC振荡器，频率为40kHz，提供低功耗时钟。　</li>
+<li>LSE是低速外部时钟，接频率为32.768kHz的石英晶体。</li>
+<li>其中LSI是作为IWDGCLK(独立看门狗)时钟源和RTC时钟源 而独立使用 。</li>
+</ul></li>
+<li><em>FCLK</em>
+<ul>
+<li>自由运行时钟，不受休眠影响。</li>
+<li>。时钟频率直接来自于 <code>SYSCLK</code> 后的预分频器。</li>
+</ul></li>
+<li>Enable CSS
+<ul>
+<li>时钟监视器，当 <code>HSE</code> 出现故障时将切换至
+<code>HSI。</code></li>
+</ul></li>
+<li>USB时钟
+<ul>
+<li>当需要使用USB模块时，PLL必须使能，并且时钟频率配置为48MHz或72MHz</li>
+</ul></li>
+</ul>
+<h1><span id="yi-xie-yi-wen-ji-jie-da">一些疑问及解答</span><a href="#yi-xie-yi-wen-ji-jie-da" class="header-anchor">#</a></h1>
+<p><em>ADC是什么？<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></em></p>
+<p><strong>答：</strong>将模拟信号转换为数字信号，由于具体应用较复杂，此处不再赘述，请查阅参考资料<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>。</p>
+<p><em>PLL锁相环的工作原理<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></em></p>
+<p><strong>答：</strong>PLL基本上是一个闭环的反馈控制系统，它可以使PLL输出与一个参考信号保持固定的相位关系。PLL一般由鉴相器、电荷放大器（Charge
+Pump）、低通滤波器、（电）压控振荡器、以及某种形式的输出转换器组成。为了使得PLL的输出频率是参考时钟的倍数关系，在PLL的反馈路径或（和）参考信号路径上还可以放置分频器。</p>
+<p>压控振荡器产生周期性的输出信号，如果其输出频率低于参考信号的频率，鉴相器通过电荷放大器改变控制电压使压控振荡器就的输出频率提高。如果压控振荡器的输出频率高于参考信号的频率，鉴相器通过电荷放大器改变控制电压使压控振荡器就的输出频率降低。低通滤波器的作用是平滑电荷放大器的输出，这样在鉴相器进行微小调整的时候，系统趋向一个稳态。</p>
+<figure>
+<img src="../images\PLL.png" alt="CLK">
+<figcaption aria-hidden="true">CLK</figcaption>
+</figure>
+<p><em>IWDG<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></em></p>
+<p><strong>答：</strong>一个能够产生复位信号的计数器。</p>
+<ul>
+<li><p>独立看门狗复位：这种方式使用独立的看门狗来监控单片机系统的工作状态，当单片机工作异常时，看门狗会产生复位信号，将单片机系统复位。</p></li>
+<li><p>特征：</p>
+<ol type="1">
+<li>独立看门狗是一个递减计数器产生的复位。</li>
+<li>时钟信号是有独立RC振荡器产生。</li>
+<li>可以在待机和停止模式下运行。</li>
+<li>当看门狗被激活后，当递减为0是产生复位。</li>
+</ol></li>
+<li><p>喂狗：如果在计数没减到 0
+之前，重置计数器的值的话，那么就不会产生复位信号，这个动作我们称为喂狗。</p></li>
+<li><p>作用：检测外界电磁干扰或硬件导致程序跑飞的问题。</p></li>
+</ul>
+<h1><span id="can-kao-zi-liao">参考资料</span><a href="#can-kao-zi-liao" class="header-anchor">#</a></h1>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1ph4y1e7Ey">【STM32】超清晰STM32时钟树动画讲解_bilibili</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37006625/article/details/138134997">【STM32】系统时钟RCC详解(超详细，超全面)_stm32
+rcc-CSDN博客</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/352424817">STM32
+ADC详解 - 知乎 (zhihu.com)</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/352424817">STM32
+ADC详解 - 知乎 (zhihu.com)</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zhandoushi1982/article/details/4590043">锁相环PLL原理
+&amp;&amp; 时钟产生方法_pll 参考时钟-CSDN博客</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_56399733/article/details/135430430">IWDG(独立看门狗)-CSDN博客</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+  </div>
+
+  
+    
+  <div class="sea-prev-next-wrapper">
+    
+    
+      <div class="next">
+        <a class="link" href="/CAN_communication/">
+          CAN通信
+        </a>
+        <span>></span>
+      </div>
+    
+  </div>
+
+  
+</article>
+
+
+  </main>
+  <footer id="sea-footer-container">
+  <div class="sea-footer-row">
+    <div class="sea-footer-menu-link">
+      
+        <a
+          class="sea-footer-link"
+          
+            target="_blank"
+          
+          href="https://github.com/SkinCrab"
+        >
+          Github
+        </a>
+        <span class="sea-footer-link__dot">·</span>
+      
+        <a
+          class="sea-footer-link"
+          
+            target="_blank"
+          
+          href="https://t.me/aDeleted_user"
+        >
+          Telegram
+        </a>
+        <span class="sea-footer-link__dot">·</span>
+      
+    </div>
+  </div>
+  
+  
+  <div class="sea-footer-row">
+    <div class="sea-footer-copyright">
+      <span>©</span>
+      
+        2024
+      
+      <span>·</span>
+      GBYYY.
+    </div>
+    <span class="split-line">|</span>
+    <div class="sea-footer-theme-by">
+      Theme by <a class="theme" href="https://github.com/hai-zou/hexo-theme-sea" target="_blank">Sea</a>
+    </div>
+  </div>
+</footer>
+
+  
+<script src="/js/main.js"></script>
+
+
+<script src="/js/theme.js"></script>
+
+</body>
+</html>

@@ -18,21 +18,26 @@
 
 
   
-  <meta name="description" content="目录#      文件的打开与关闭 文件的读写 数据块读写（适用于二进制文件）  数据块读 fread() 数据块写 fwrite()  格式读写函数  fscanf() fprintf()  文件定位  rewind() fseek() ftell() 文件缓冲区清除 fflush() 其他  指针错误状态清除  clearerr()">
+  <meta name="description" content="文件的打开与关闭# 12FILE *fp;fp&#x3D;fopen(&quot;File name&quot;,&quot;Method&quot;);    Method 访问形式 说明     r 只读 只读不写，不存在则返回 NULL   w 只写 只写不读，若文件已存在则删去原有内容，否则新建   a 追加写 在文件尾部追加数据，若文件不存在则新建">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文件的读写">
 <meta property="og:url" content="https://skina.cn/f_read_write/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="目录#      文件的打开与关闭 文件的读写 数据块读写（适用于二进制文件）  数据块读 fread() 数据块写 fwrite()  格式读写函数  fscanf() fprintf()  文件定位  rewind() fseek() ftell() 文件缓冲区清除 fflush() 其他  指针错误状态清除  clearerr()">
+<meta property="og:description" content="文件的打开与关闭# 12FILE *fp;fp&#x3D;fopen(&quot;File name&quot;,&quot;Method&quot;);    Method 访问形式 说明     r 只读 只读不写，不存在则返回 NULL   w 只写 只写不读，若文件已存在则删去原有内容，否则新建   a 追加写 在文件尾部追加数据，若文件不存在则新建">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-14T02:57:20.000Z">
-<meta property="article:modified_time" content="2024-09-21T07:45:15.640Z">
+<meta property="article:modified_time" content="2024-09-25T14:19:42.697Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
 <meta property="article:tag" content="计科">
 <meta name="twitter:card" content="summary">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -137,44 +142,7 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
-<div class="tocStart">
-
-</div>
-<!-- toc -->
-<ul>
-<li><a href="#wen-jian-de-da-kai-yu-guan-bi">文件的打开与关闭</a></li>
-<li><a href="#wen-jian-de-du-xie">文件的读写</a></li>
-<li><a href="#shu-ju-kuai-du-xie-gua-yong-yu-er-jin-zhi-wen-jian">数据块读写（适用于二进制文件）</a>
-<ul>
-<li><a href="#shu-ju-kuai-du-fread">数据块读 fread()</a></li>
-<li><a href="#shu-ju-kuai-xie-fwrite">数据块写 fwrite()</a></li>
-</ul></li>
-<li><a href="#ge-shi-du-xie-han-shu">格式读写函数</a>
-<ul>
-<li><a href="#fscanf">fscanf()</a></li>
-<li><a href="#fprintf">fprintf()</a></li>
-</ul></li>
-<li><a href="#wen-jian-ding-wei">文件定位</a>
-<ul>
-<li><a href="#rewind">rewind()</a></li>
-<li><a href="#fseek">fseek()</a></li>
-<li><a href="#ftell">ftell()</a></li>
-<li><a href="#wen-jian-huan-chong-qu-qing-chu">文件缓冲区清除</a></li>
-<li><a href="#fflush">fflush()</a></li>
-<li><a href="#qi-ta">其他</a></li>
-</ul></li>
-<li><a href="#zhi-zhen-cuo-wu-zhuang-tai-qing-chu">指针错误状态清除</a>
-<ul>
-<li><a href="#clearerr">clearerr()</a></li>
-<li><a href="#qi-ta-1">其他</a></li>
-</ul></li>
-</ul>
-<!-- tocstop -->
-<div class="tocEnd">
-
-</div>
-<h2><span id="wen-jian-de-da-kai-yu-guan-bi">文件的打开与关闭</span><a href="#wen-jian-de-da-kai-yu-guan-bi" class="header-anchor">#</a></h2>
+    <h2><span id="wen-jian-de-da-kai-yu-guan-bi">文件的打开与关闭</span><a href="#wen-jian-de-da-kai-yu-guan-bi" class="header-anchor">#</a></h2>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FILE *fp;</span><br><span class="line">fp=fopen(<span class="string">&quot;File name&quot;</span>,<span class="string">&quot;Method&quot;</span>);</span><br></pre></td></tr></table></figure>
 <table>
 <thead>

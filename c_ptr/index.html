@@ -18,21 +18,26 @@
 
 
   
-  <meta name="description" content="目录#      杂 动态内存的申请与释放  malloc()函数 calloc()函数 realloc()函数 free()函数       杂#  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a">
+  <meta name="description" content="杂#  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a[i]+j)  动态内存的申请与释放# malloc()函数# 函数原型 void *malloc(bit_num) 从 内存堆 上申请指定字节数的内存块，并返回该内存块的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="指针">
 <meta property="og:url" content="https://skina.cn/c_ptr/index.html">
 <meta property="og:site_name" content="GBY&#39;s Blog">
-<meta property="og:description" content="目录#      杂 动态内存的申请与释放  malloc()函数 calloc()函数 realloc()函数 free()函数       杂#  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a">
+<meta property="og:description" content="杂#  int (*p)[4] 是行指针变量， p[0]+1 指向的是 p[1] ; int *p[4] 是指向4个元素的指针数组 a[i]+j &#x3D;&#x3D; &amp;a[i][j] a[i][j] &#x3D;&#x3D; *(a[i]+j)  动态内存的申请与释放# malloc()函数# 函数原型 void *malloc(bit_num) 从 内存堆 上申请指定字节数的内存块，并返回该内存块的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-09-13T12:53:30.000Z">
-<meta property="article:modified_time" content="2024-09-21T07:45:17.456Z">
+<meta property="article:modified_time" content="2024-09-25T14:19:29.397Z">
 <meta property="article:author" content="GBYYY.">
 <meta property="article:tag" content="学习笔记">
 <meta property="article:tag" content="C&#x2F;C++">
 <meta property="article:tag" content="计科">
 <meta name="twitter:card" content="summary">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -137,26 +142,7 @@
     
   </header>
   <div class="sea-article-content sea-doc">
-    <h1><span id="mu-lu">目录</span><a href="#mu-lu" class="header-anchor">#</a></h1>
-<div class="tocStart">
-
-</div>
-<!-- toc -->
-<ul>
-<li><a href="#za">杂</a></li>
-<li><a href="#dong-tai-nei-cun-de-shen-qing-yu-shi-fang">动态内存的申请与释放</a>
-<ul>
-<li><a href="#malloc-han-shu">malloc()函数</a></li>
-<li><a href="#calloc-han-shu">calloc()函数</a></li>
-<li><a href="#realloc-han-shu">realloc()函数</a></li>
-<li><a href="#free-han-shu">free()函数</a></li>
-</ul></li>
-</ul>
-<!-- tocstop -->
-<div class="tocEnd">
-
-</div>
-<h2><span id="za">杂</span><a href="#za" class="header-anchor">#</a></h2>
+    <h2><span id="za">杂</span><a href="#za" class="header-anchor">#</a></h2>
 <ul>
 <li><code>int (*p)[4]</code> 是行指针变量， <code>p[0]+1</code> 指向的是
 <code>p[1]</code> ;</li>

@@ -25,7 +25,12 @@
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="GBYYY.">
 <meta name="twitter:card" content="summary">
-
+  <script src='https://unpkg.com/mermaid@7.1.2/dist/mermaid.min.js'></script>
+  <script>
+    if (window.mermaid) {
+      mermaid.initialize({theme: 'forest'});
+    }
+  </script>
   <style>
     :root {
       --sea-color-primary: #10b981;
@@ -127,15 +132,10 @@
       <div class="sea-post-line"></div>
       <div class="sea-post-abstract">
         
-        目录#
-
-
-
-
-
-何为CAN总线
-通信基础知识-链路
-
+        何为CAN总线#
+多电控单元间交换数据使用的多主机局部网络串行通信协议
+总的来说，就是一条通信线路上连接多个节点，各个节点都通过这条线路来发送信息，当一个节点发送消息时，其他节点监听；当多个节点发送消息是，按照优先级发送。
+可实现 点对点，点对多点，全局广播的功能。...
       </div>
       <div class="sea-post-meta">
         <div class="sea-post-time">
